@@ -1,0 +1,106 @@
+/*
+ * Business Content Widgets Stylesheet
+ *
+ */
+
+/* General Styles
+-------------------------------------------------------------- */
+
+/* Clearing Floats */
+.msw-clearfix:before, .msw-clearfix:after {  
+	content: " ";
+	display: table;  
+}  
+.msw-clearfix:after {  
+	clear: both;
+}  
+.msw-clearfix {
+    *zoom: 1; /* For IE 6/7 only */  
+}
+
+/* Buttons */
+.msw-button {
+	display: inline-block;
+	font-size: 0.95em;
+	margin: 0.5em 0 0;
+	padding: 0.5em 1em;
+	text-decoration: none !important;
+	color: #333;
+	background: #e5e5e5;
+}
+.msw-button:link, .msw-button:visited  {
+	color: #333 !important;
+}
+.msw-button:hover, .msw-button:active {
+	background: #d5d5d5;
+	text-decoration: none;
+}
+
+/* Text & Button Widget
+-------------------------------------------------------------- */
+
+
+/* Featured Page Widget
+-------------------------------------------------------------- */
+.msw-featured-page .wp-post-image {
+	margin: 0 0 1em 0;
+	max-width: 100%;
+	height: auto;
+}
+
+/* Recent & Popular Posts Widget
+-------------------------------------------------------------- */
+.msw-posts .msw-posts-list {
+	margin: 0;
+	padding: 0;
+}
+.msw-posts .msw-posts-list li {
+	list-style: none;
+	margin: 0 0 1em 0;
+	padding: 0;
+	overflow: auto;
+}
+.msw-posts .msw-posts-list .msw-excerpt p {
+	margin: 0;
+	padding: 0;
+}
+.msw-posts .msw-posts-list .wp-post-image {
+	float: left;
+	margin: 0.3em 0.8em 0.5em 0;
+	max-width: 75px;
+	height: auto;
+}
+.msw-posts .msw-posts-list .msw-postmeta {
+	color: #777;
+	margin: 0.3em 0;
+	font-size: 0.9em;
+}
+.msw-posts .msw-posts-list  .msw-postmeta .msw-meta-comment {
+	margin-left: 0.8em;
+}
+
+/* Recent Comments Widget
+-------------------------------------------------------------- */
+.msw-recent-comments .msw-comments-list {
+	margin: 0;
+	padding: 0;
+}
+.msw-recent-comments .msw-comments-list li {
+	list-style: none;
+	margin: 0 0 1em 0;
+	overflow: auto;
+}
+.msw-recent-comments .msw-comments-list .avatar {
+	float: left;
+	margin: 0.3em 0.8em 0.4em 0;
+}
+.msw-recent-comments .msw-comments-list .msw-comment-content {
+	font-size: 0.9em;
+	font-style: italic;
+}
+.msw-recent-comments .msw-comments-list .msw-comment-date {
+	padding: 0;
+	margin-top: 0.2em;
+	font-size: 0.9em;
+	color: #777;
+}
