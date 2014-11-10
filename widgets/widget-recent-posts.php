@@ -59,7 +59,7 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="msw-popular-posts msw-posts">
+		<div class="msw-recent-posts msw-posts">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
