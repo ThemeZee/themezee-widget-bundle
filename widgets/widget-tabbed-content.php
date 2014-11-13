@@ -1,129 +1,168 @@
 <?php
-// Add ThemeZee Recent Posts Widget
+
+// Recent Posts Widget
 class MSW_Tabbed_Content_Widget extends WP_Widget {
 
-	var $number = 7;
-	var $thumbs = 0;
-
 	function __construct() {
-		$widget_ops = array('classname' => 'msw_tabbed_content', 'description' => __('Show recent posts with post thumbnails.', 'magazine-sidebar-widgets') );
-		$control_ops = array('width' => 450, 'id_base' => 'msw_tabbed_content');
+		
+		// Setup Widget
+		$widget_ops = array(
+			'classname' => 'msw_tabbed_content', 
+			'description' => __('Displays various content with tabs.', 'magazine-sidebar-widgets')
+		);
+		$control_ops = array(
+			'width' => 450, 
+			'id_base' => 'msw_tabbed_content'
+		);
+		
 		$this->WP_Widget('msw_tabbed_content', 'Tabbed Content (ThemeZee)', $widget_ops, $control_ops);
-
+		
+		// Enqueue Javascript for Tabs
 		if ( is_active_widget(false, false, $this->id_base) )
-			add_action( 'wp_head', array(&$this, 'widget_tabbed_javascript') );
-
-		add_action( 'save_post', array(&$this, 'flush_widget_cache') );
-		add_action( 'deleted_post', array(&$this, 'flush_widget_cache') );
-		add_action( 'switch_theme', array(&$this, 'flush_widget_cache') );
-		add_action( 'comment_post', array(&$this, 'flush_widget_cache') );
-		add_action( 'transition_comment_status', array(&$this, 'flush_widget_cache') );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts') );
+		
+		// Delete Widget Cache on certain actions
+		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
+		add_action( 'deleted_post', array( $this, 'delete_widget_cache' ) );
+		add_action( 'switch_theme', array( $this, 'delete_widget_cache' ) );
+		add_action( 'comment_post', array( $this, 'delete_widget_cache' ) );
+		add_action( 'transition_comment_status', array( $this, 'delete_widget_cache' ) );
+		
 	}
+	
+	public function enqueue_scripts() {
 
-	function widget_tabbed_javascript($args) { ?>
-		<script type="text/javascript">
-			//<![CDATA[
-				jQuery(document).ready(function($) {
-
-					$.fn.tabbedWidget = function( options ) {
-
-						var instance = '#' + options.instance;
-
-						$(instance + ' .widget-tabnavi li a:first').addClass('current-tab'); //add active class to the first li
-						$(instance + ' .tabdiv').hide(); //hide all content classes.
-						$(instance + ' .tabdiv:first').show(); //show only first div content
-
-						$(instance + ' .widget-tabnavi li a').click(function(){ //add the click function
-							$(instance + ' .widget-tabnavi li a').removeClass('current-tab'); //remove current-tab class from previous li
-							$(this).addClass('current-tab'); //add current-tab class to the active li.
-							$(instance + ' .tabdiv').hide(); //hide all content classes
-							var activeTab = $(this).attr('href'); //find the href attribute of the active tab
-							$(activeTab).fadeIn('fast'); //fade in the content of active tab
-							return false;
-						});
-					};
-				});
-			//]]>
-		</script>
-<?php
+		wp_enqueue_script('msw-tabbed-content', plugins_url('/js/tabbed-content.js', dirname( __FILE__ ) ), array('jquery'));
+		
 	}
-
+	
+	public function delete_widget_cache() {
+		
+		delete_transient( $this->id );
+		
+	}
+	
+	private function default_settings() {
+	
+		$defaults = array(
+			'title'				=> '',
+			'number'			=> 5,
+			'thumbnails'		=> true,
+			'tab_titles'		=> array('', '', '', ''),
+			'tab_content'		=> array(0, 0, 0, 0)
+		);
+		
+		return $defaults;
+		
+	}
+	
+	// Display Widget
 	function widget($args, $instance) {
-		$cache = wp_cache_get('widget_msw_tabbed', 'widget');
 
-		if ( !is_array($cache) )
-			$cache = array();
-
-		if ( ! isset( $args['widget_id'] ) )
-			$args['widget_id'] = $this->id;
-
-		if ( isset( $cache[ $args['widget_id'] ] ) ) {
-			echo $cache[ $args['widget_id'] ];
-			return;
-		}
-
-		ob_start();
+		// Get Sidebar Arguments
 		extract($args);
-
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-
-		// Tab Titles
-		$tab_one_title = empty( $instance['tab_one_title'] ) ? 'Tab 1' : $instance['tab_one_title'];
-		$tab_two_title = empty( $instance['tab_two_title'] ) ? 'Tab 2' : $instance['tab_two_title'];
-		$tab_three_title = empty( $instance['tab_three_title'] ) ? 'Tab 3' : $instance['tab_three_title'];
-		$tab_four_title = empty( $instance['tab_four_title'] ) ? 'Tab 4' : $instance['tab_four_title'];
-
-		// Tab Contents
-		$tab_one_content = empty( $instance['tab_one_content'] ) ? 0 : $instance['tab_one_content'];
-		$tab_two_content = empty( $instance['tab_two_content'] ) ? 0 : $instance['tab_two_content'];
-		$tab_three_content = empty( $instance['tab_three_content'] ) ? 0 : $instance['tab_three_content'];
-		$tab_four_content = empty( $instance['tab_four_content'] ) ? 0 : $instance['tab_four_content'];
-
-		// Other Variables
-		if ( empty( $instance['number'] ) || ! $this->number = absint( $instance['number'] ) )
- 			$this->number = 10;
-
-		$this->thumbs = (int)$instance['thumbnails'];
-
-		// Output Widget
+		
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
+		
+		// Add Widget Title Filter
+		$widget_title = apply_filters('widget_title', $title, $instance, $this->id_base);
+		
+		// Output
 		echo $before_widget;
-		if ( $title ) echo $before_title . $title . $after_title;
-
-		$i = $args['widget_id'];
-		echo "<script type=\"text/javascript\">
-				//<![CDATA[
-					jQuery(document).ready(function($) {
-						$('body').tabbedWidget({'instance'  :  '".$i."'});
-					});
-				//]]>
-				</script>";
 	?>
-		<div class="widget-tabbed">
-			<div class="widget-tabnavi">
-				<ul class="widget-tabnav">
-				<?php if ( $tab_one_content != 0 ) : ?><li><a href="#<?php echo $i; ?>-tabbed-1"><?php echo $tab_one_title; ?></a></li><?php endif; ?>
-				<?php if ( $tab_two_content != 0 ) : ?><li><a href="#<?php echo $i; ?>-tabbed-2"><?php echo $tab_two_title; ?></a></li><?php endif; ?>
-				<?php if ( $tab_three_content != 0 ) : ?><li><a href="#<?php echo $i; ?>-tabbed-3"><?php echo $tab_three_title; ?></a></li><?php endif; ?>
-				<?php if ( $tab_four_content != 0 ) : ?><li><a href="#<?php echo $i; ?>-tabbed-4"><?php echo $tab_four_title; ?></a></li><?php endif; ?>
-				</ul>
+		<div class="msw-tabbed-content">
+		
+			<?php // Display Title
+			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+			
+			<div class="msw-content msw-clearfix">
+				
+				<?php echo $this->render($args, $instance); ?>
+				
 			</div>
-
-
-			<?php if ( $tab_one_content != 0 ) : ?><div id="<?php echo $i; ?>-tabbed-1" class="tabdiv"><?php echo $this->widget_content($tab_one_content); ?></div><?php endif; ?>
-			<?php if ( $tab_two_content != 0 ) : ?><div id="<?php echo $i; ?>-tabbed-2" class="tabdiv"><?php echo $this->widget_content($tab_two_content); ?></div><?php endif; ?>
-			<?php if ( $tab_three_content != 0 ) : ?><div id="<?php echo $i; ?>-tabbed-3" class="tabdiv"><?php echo $this->widget_content($tab_three_content); ?></div><?php endif; ?>
-			<?php if ( $tab_four_content != 0 ) : ?><div id="<?php echo $i; ?>-tabbed-4" class="tabdiv"><?php echo $this->widget_content($tab_four_content); ?></div><?php endif; ?>
-
+			
 		</div>
-
 	<?php
 		echo $after_widget;
-
-		$cache[$args['widget_id']] = ob_get_flush();
-		wp_cache_set('widget_msw_tabbed', $cache, 'widget');
+	
 	}
+	
+	// Render Widget Content
+	function render($args, $instance) {
+		
+		// Get Output from Cache
+		$output = get_transient( $this->id );
+		$output = false;
+		
+		// Generate output if not cached
+		if( $output === false ) :
 
-	function widget_content($tab) {
+			// Get Widget Settings
+			$defaults = $this->default_settings();
+			extract( wp_parse_args( $instance, $defaults ) );
+
+			// Start Output Buffering
+			ob_start();
+				
+			?>
+			
+			<div class="msw-tabnavi-wrap msw-clearfix">
+			
+				<ul class="msw-tabnavi">
+				
+					<?php // Display Tab Titles
+					for( $i = 0; $i <= 3; $i++ ) : 
+
+						// Only display title when tab content was selected
+						if ( $tab_content[$i] == 0 )
+							continue;
+					?>
+					
+						<li><a href="#<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>"><?php echo esc_html($tab_titles[$i]); ?></a></li>
+						
+					<?php endfor; ?>
+					
+				</ul>
+				
+			</div>
+				
+			<?php // Display Tab Content
+			for( $i = 0; $i <= 3; $i++ ) : 
+
+				// Only display title when tab content was selected
+				if ( $tab_content[$i] == 0 )
+					continue;
+			?>
+				
+					<div id="<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>" class="msw-tabcontent">
+					
+						<?php echo $this->tab_content($instance, $tab_content[$i]); ?>
+						
+					</div>
+					
+			<?php endfor; ?>
+
+	<?php
+			// Get Buffer Content
+			$output = ob_get_clean();
+			
+			// Set Cache
+			set_transient( $this->id, $output, YEAR_IN_SECONDS );
+			
+		endif;
+		
+		return $output;
+		
+	}
+	
+	// Display Tab Content
+	function tab_content($instance, $tab) {
+	
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
 
 		switch($tab) {
 
@@ -236,106 +275,87 @@ class MSW_Tabbed_Content_Widget extends WP_Widget {
 		return $content;
 	}
 
-	function update( $new_instance, $old_instance ) {
+	function update($new_instance, $old_instance) {
+
 		$instance = $old_instance;
-		$instance['title'] = isset($new_instance['title']) ? esc_attr($new_instance['title']) : '';
-
-		$instance['tab_one_title'] = strip_tags($new_instance['tab_one_title']);
-		$instance['tab_two_title'] = strip_tags($new_instance['tab_two_title']);
-		$instance['tab_three_title'] = strip_tags($new_instance['tab_three_title']);
-		$instance['tab_four_title'] = strip_tags($new_instance['tab_four_title']);
-
-		$instance['tab_one_content'] = $new_instance['tab_one_content'] ? (int)$new_instance['tab_one_content'] : 0;
-		$instance['tab_two_content'] = $new_instance['tab_two_content'] ? (int)$new_instance['tab_two_content'] : 0;
-		$instance['tab_three_content'] = $new_instance['tab_three_content'] ? (int)$new_instance['tab_three_content'] : 0;
-		$instance['tab_four_content'] = $new_instance['tab_four_content'] ? (int)$new_instance['tab_four_content'] : 0;
-
-		$instance['number'] = (int) $new_instance['number'];
-		$instance['thumbnails'] = $new_instance['thumbnails'] ? 1 : 0;
-
-		$this->flush_widget_cache();
-
+		$instance['title'] = esc_attr($new_instance['title']);
+		$instance['number'] = (int)$new_instance['number'];
+		$instance['thumbnails'] = isset($new_instance['thumbnails']);
+		
+		// Validate Tab Settings
+		$instance['tab_content'] = array();
+		$instance['tab_titles'] = array();
+		
+		for( $i = 0; $i <= 3; $i++ ) :
+		
+			$instance['tab_content'][$i] = (int)$new_instance['tab_content-'.$i];
+			$instance['tab_titles'][$i] = sanitize_text_field($new_instance['tab_titles-'.$i]);
+			
+		endfor;
+		
+		$this->delete_widget_cache();
+		
 		return $instance;
 	}
 
-	function flush_widget_cache() {
-		wp_cache_delete('widget_msw_tabbed', 'widget');
-	}
-
-	function widget_select_options($tab) {
-		$options = '<option ' . selected( $tab, 0 ) .' value="0"></option>
-					<option ' . selected( $tab, 1 ) .' value="1">'. __('Archives', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 2 ) .' value="2">'. __('Categories', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 3 ) .' value="3">'. __('Links', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 4 ) .' value="4">'. __('Meta', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 5 ) .' value="5">'. __('Pages', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 6 ) .' value="6">'. __('Popular Posts', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 7 ) .' value="7">'. __('Recent Comments', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 8 ) .' value="8">'. __('Recent Posts', 'magazine-sidebar-widgets') . '</option>
-					<option ' . selected( $tab, 9 ) .' value="9">'. __('Tag Cloud', 'magazine-sidebar-widgets') . '</option>';
-		return $options;
-	}
 	function form( $instance ) {
-		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
+		
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
 
-		$tab_one_title = isset($instance['tab_one_title']) ? esc_attr($instance['tab_one_title']) : '';
-		$tab_two_title = isset($instance['tab_two_title']) ? esc_attr($instance['tab_two_title']) : '';
-		$tab_three_title = isset($instance['tab_three_title']) ? esc_attr($instance['tab_three_title']) : '';
-		$tab_four_title = isset($instance['tab_four_title']) ? esc_attr($instance['tab_four_title']) : '';
-
-		$current_tab_one_content = isset($instance['tab_one_content']) ? (int)$instance['tab_one_content'] : 0;
-		$current_tab_two_content = isset($instance['tab_two_content']) ? (int)$instance['tab_two_content'] : 0;
-		$current_tab_three_content = isset($instance['tab_three_content']) ? (int)$instance['tab_three_content'] : 0;
-		$current_tab_four_content = isset($instance['tab_four_content']) ? (int)$instance['tab_four_content'] : 0;
-
-		$number = isset($instance['number']) ? absint($instance['number']) : 7;
-		$thumbnails = (isset($instance['thumbnails']) and $instance['thumbnails'] == 1) ? 'checked="checked"' : '';
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
-
-		<div style="background: #f5f5f5; padding: 5px 10px; margin-bottom: 10px;">
-			<p><label for="<?php echo $this->get_field_id('tab_one_content'); ?>"><strong><?php _e('Tab 1:', 'magazine-sidebar-widgets') ?></strong></label>
-				<select id='<?php echo $this->get_field_id('tab_one_content'); ?>' name='<?php echo $this->get_field_name('tab_one_content'); ?>'>
-					<?php echo $this->widget_select_options($current_tab_one_content); ?>
+		<p>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?>
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+			</label>
+		</p>
+		
+		
+		<div style="background: #f5f5f5; padding: 3px 10px; margin-bottom: 10px;">
+			
+		<?php // Display Tab Options
+		for( $i = 0; $i <= 3; $i++ ) : ?>
+					
+			<p>
+				<label for="<?php echo $this->get_field_id('tab_content-'.$i); ?>">
+					<?php _e('Tab 1:', 'magazine-sidebar-widgets') ?>
+				</label>
+				<select id="<?php echo $this->get_field_id('tab_content-'.$i); ?>" name="<?php echo $this->get_field_name('tab_content-'.$i); ?>">
+					<option value="0" <?php selected($tab_content[$i], 0); ?>></option>
+					<option value="1" <?php selected($tab_content[$i], 1); ?>><?php _e('Archives', 'magazine-sidebar-widgets'); ?></option>
+					<option value="2" <?php selected($tab_content[$i], 2); ?>><?php _e('Categories', 'magazine-sidebar-widgets'); ?></option>
+					<option value="3" <?php selected($tab_content[$i], 3); ?>><?php _e('Meta', 'magazine-sidebar-widgets'); ?></option>
+					<option value="4" <?php selected($tab_content[$i], 4); ?>><?php _e('Pages', 'magazine-sidebar-widgets'); ?></option>
+					<option value="5" <?php selected($tab_content[$i], 5); ?>><?php _e('Popular Posts', 'magazine-sidebar-widgets'); ?></option>
+					<option value="6" <?php selected($tab_content[$i], 6); ?>><?php _e('Recent Comments', 'magazine-sidebar-widgets'); ?></option>
+					<option value="7" <?php selected($tab_content[$i], 7); ?>><?php _e('Recent Posts', 'magazine-sidebar-widgets'); ?></option>
+					<option value="8" <?php selected($tab_content[$i], 8); ?>><?php _e('Tag Cloud', 'magazine-sidebar-widgets'); ?></option>
 				</select>
-				<label for="<?php echo $this->get_field_id('tab_one_title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?></label>
-				<input id="<?php echo $this->get_field_id('tab_one_title'); ?>" name="<?php echo $this->get_field_name('tab_one_title'); ?>" type="text" value="<?php echo $tab_one_title; ?>" /></p>
+				
+				<label for="<?php echo $this->get_field_id('tab_titles-'.$i); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?>
+					<input id="<?php echo $this->get_field_id('tab_titles-'.$i); ?>" name="<?php echo $this->get_field_name('tab_titles-'.$i); ?>" type="text" value="<?php echo $tab_titles[$i]; ?>" />
+				</label>
 			</p>
+						
+		<?php endfor; ?>
+				
+		</div>	
 
-			<p><label for="<?php echo $this->get_field_id('tab_one_content'); ?>"><strong><?php _e('Tab 2:', 'magazine-sidebar-widgets') ?></strong></label>
-				<select id='<?php echo $this->get_field_id('tab_two_content'); ?>' name='<?php echo $this->get_field_name('tab_two_content'); ?>'>
-					<?php echo $this->widget_select_options($current_tab_two_content); ?>
-				</select>
-				<label for="<?php echo $this->get_field_id('tab_two_title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?></label>
-				<input id="<?php echo $this->get_field_id('tab_two_title'); ?>" name="<?php echo $this->get_field_name('tab_two_title'); ?>" type="text" value="<?php echo $tab_two_title; ?>" /></p>
-			</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'magazine-sidebar-widgets'); ?>
+				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+			</label>
+		</p>
 
-			<p><label for="<?php echo $this->get_field_id('tab_one_content'); ?>"><strong><?php _e('Tab 3:', 'magazine-sidebar-widgets') ?></strong></label>
-				<select id='<?php echo $this->get_field_id('tab_three_content'); ?>' name='<?php echo $this->get_field_name('tab_three_content'); ?>'>
-					<?php echo $this->widget_select_options($current_tab_three_content); ?>
-				</select>
-				<label for="<?php echo $this->get_field_id('tab_three_title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?></label>
-				<input id="<?php echo $this->get_field_id('tab_three_title'); ?>" name="<?php echo $this->get_field_name('tab_three_title'); ?>" type="text" value="<?php echo $tab_three_title; ?>" /></p>
-			</p>
-
-			<p><label for="<?php echo $this->get_field_id('tab_one_content'); ?>"><strong><?php _e('Tab 4:', 'magazine-sidebar-widgets') ?></strong></label>
-				<select id='<?php echo $this->get_field_id('tab_four_content'); ?>' name='<?php echo $this->get_field_name('tab_four_content'); ?>'>
-					<?php echo $this->widget_select_options($current_tab_four_content); ?>
-				</select>
-				<label for="<?php echo $this->get_field_id('tab_four_title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?></label>
-				<input id="<?php echo $this->get_field_id('tab_four_title'); ?>" name="<?php echo $this->get_field_name('tab_four_title'); ?>" type="text" value="<?php echo $tab_four_title; ?>" /></p>
-			</p>
-		</div>
-
-		<strong><?php _e('Settings for Recent/Popular Posts and Recent Comments', 'magazine-sidebar-widgets'); ?></strong>
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of entries:', 'magazine-sidebar-widgets'); ?></label>
-		<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
-		<input class="checkbox" type="checkbox" <?php echo $thumbnails; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
-		<label for="<?php echo $this->get_field_id('thumbnails'); ?>"><?php _e('Show Thumbnails?', 'magazine-sidebar-widgets'); ?></label></p>
+		<p>
+			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
+				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
+				<?php _e('Show Post Thumbnails?', 'magazine-sidebar-widgets'); ?>
+			</label>
+		</p>
 <?php
 	}
 }
-
 
 ?>

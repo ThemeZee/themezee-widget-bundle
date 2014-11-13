@@ -18,36 +18,6 @@
     *zoom: 1; /* For IE 6/7 only */  
 }
 
-/* Buttons */
-.msw-button {
-	display: inline-block;
-	font-size: 0.95em;
-	margin: 0.5em 0 0;
-	padding: 0.5em 1em;
-	text-decoration: none !important;
-	color: #333;
-	background: #e5e5e5;
-}
-.msw-button:link, .msw-button:visited  {
-	color: #333 !important;
-}
-.msw-button:hover, .msw-button:active {
-	background: #d5d5d5;
-	text-decoration: none;
-}
-
-/* Text & Button Widget
--------------------------------------------------------------- */
-
-
-/* Featured Page Widget
--------------------------------------------------------------- */
-.msw-featured-page .wp-post-image {
-	margin: 0 0 1em 0;
-	max-width: 100%;
-	height: auto;
-}
-
 /* Recent & Popular Posts Widget
 -------------------------------------------------------------- */
 .msw-posts .msw-posts-list {
@@ -72,11 +42,10 @@
 }
 .msw-posts .msw-posts-list .msw-postmeta {
 	color: #777;
-	margin: 0.3em 0;
 	font-size: 0.9em;
 }
-.msw-posts .msw-posts-list  .msw-postmeta .msw-meta-comment {
-	margin-left: 0.8em;
+.msw-posts .msw-posts-list  .msw-postmeta span {
+	margin: 0.3em;
 }
 
 /* Recent Comments Widget
@@ -106,9 +75,79 @@
 }
 
 
+/* Tabbed Content Widget
+-------------------------------------------------------------- */
+.msw-tabbed-content .msw-tabnavi-wrap {
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	list-style: none;
+}
+.msw-tabbed-content .msw-tabnavi {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	list-style-position: outside;
+	position: relative;
+}
+.msw-tabbed-content .msw-tabnavi li {
+	float:left;
+	list-style: none;
+	position: relative;
+	margin: 0;
+	padding: 0;
+}
+.msw-tabbed-content .msw-tabnavi li a {
+	display: block;
+	margin: 0 1px 1px 0;
+	padding: 0.5em 1em;
+	font-size: 0.9em;
+	text-decoration: none;
+	background-color: #e84747;
+}
+.msw-tabbed-content .msw-tabnavi li a:link, .msw-tabbed-content .msw-tabnavi li a:visited  {
+	color: #fff;
+}
+.msw-tabbed-content .msw-tabnavi li a:hover, .msw-tabbed-content .msw-tabnavi li a:active {
+	background-color: #303030;
+	text-decoration: none;
+}
+.msw-tabbed-content .msw-tabnavi li a.current-tab{
+	text-decoration: underline;
+}
+.msw-tabbed-content .msw-tabcontent {
+	padding: 0;
+	margin: 1em 0 0 0;
+}
+.msw-tabbed-content .msw-tabcontent li.widget-thumb {
+	list-style: none;
+	margin: 0 0 0.5em 0;
+	overflow: auto;
+}
+.msw-tabbed-content .msw-tabcontent  li.widget-thumb .wp-post-image {
+	float: left;
+	margin: 0.3em 0.8em 0.5em 0;
+	max-width: 75px;
+	height: auto;
+}
+.msw-tabbed-content .msw-tabcontent li.widget-avatar{
+	list-style: none;
+	margin: 0 0 0.3em 0;
+	overflow: auto;
+}
+.msw-tabbed-content .msw-tabcontent li.widget-avatar img {
+	float: left;
+	margin: 0.3em 0.8em 0.3em 0;
+}
+.msw-tabbed-content .msw-tabcontent ul li .widget-postmeta {
+	margin: 0.1em 0;
+	padding: 0;
+	font-size: 0.8em;
+	color: #777;
+}
+
 /* Social Icons Widget
 -------------------------------------------------------------- */
-
 .msw-social-icons .msw-social-icons-menu {
 	list-style-type: none;
 	list-style-position: outside;

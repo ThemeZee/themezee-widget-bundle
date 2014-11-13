@@ -36,7 +36,9 @@ class MSW_Popular_Posts_Widget extends WP_Widget {
 			'number'			=> 5,
 			'thumbnails'		=> true,
 			'excerpt_length' 	=> 0,
-			'postmeta'			=> false
+			'meta_date'			=> false,
+			'meta_author'		=> false,
+			'meta_comments'		=> false
 		);
 		
 		return $defaults;
@@ -138,15 +140,39 @@ class MSW_Popular_Posts_Widget extends WP_Widget {
 					
 					<?php endif; ?>
 
-					<?php // Display Postmeta
-					if ( $postmeta == 1 ) : ?>
 						
 						<div class="msw-postmeta">
+							
+						<?php // Display Date
+						if ( $meta_date == 1 ) : ?>
+							
 							<span class="msw-meta-date"><?php the_time(get_option('date_format')); ?></span>
-							<span class="msw-meta-comment"><a href="<?php the_permalink() ?>#comments"><?php comments_number(__('No comments', 'magazine-sidebar-widgets'),__('One comment','magazine-sidebar-widgets'),__('% comments','magazine-sidebar-widgets')); ?></a></span>
-						</div>
+							
+						<?php endif; ?>
 						
-					<?php endif; ?>
+						<?php // Display Author
+						if ( $meta_author == 1 ) : ?>
+							
+							<span class="msw-meta-author">
+								<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
+									esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
+									esc_attr( sprintf( __( 'View all posts by %s', 'magazine-sidebar-widgets' ), get_the_author() ) ),
+									get_the_author()
+								);?>
+							</span>
+							
+						<?php endif; ?>
+						
+						<?php // Display Comments
+						if ( $meta_comments == 1 and comments_open() ) : ?>
+						
+							<span class="msw-meta-comments">
+								<?php comments_popup_link( __('No comments', 'magazine-sidebar-widgets'),__('One comment','magazine-sidebar-widgets'),__('% comments','magazine-sidebar-widgets') ); ?>
+							</span>
+							
+						<?php endif; ?>
+						
+						</div>
 					
 				<?php
 				endwhile;
@@ -178,7 +204,9 @@ class MSW_Popular_Posts_Widget extends WP_Widget {
 		$instance['number'] = (int)$new_instance['number'];
 		$instance['thumbnails'] = isset($new_instance['thumbnails']);
 		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
-		$instance['postmeta'] = isset($new_instance['postmeta']);
+		$instance['meta_date'] = isset($new_instance['meta_date']);
+		$instance['meta_author'] = isset($new_instance['meta_author']);
+		$instance['meta_comments'] = isset($new_instance['meta_comments']);
 		
 		$this->delete_widget_cache();
 		
@@ -218,9 +246,23 @@ class MSW_Popular_Posts_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('postmeta'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $postmeta ) ; ?> id="<?php echo $this->get_field_id('postmeta'); ?>" name="<?php echo $this->get_field_name('postmeta'); ?>" />
-				<?php _e('Show Postmeta(Date, Comments)?', 'magazine-sidebar-widgets'); ?>
+			<label for="<?php echo $this->get_field_id('meta_date'); ?>">
+				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
+				<?php _e('Show Post Date?', 'magazine-sidebar-widgets'); ?>
+			</label>
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
+				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
+				<?php _e('Show Author of Post?', 'magazine-sidebar-widgets'); ?>
+			</label>
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('meta_comments'); ?>">
+				<input class="checkbox" type="checkbox" <?php checked( $meta_comments ) ; ?> id="<?php echo $this->get_field_id('meta_comments'); ?>" name="<?php echo $this->get_field_name('meta_comments'); ?>" />
+				<?php _e('Show Post Comments?', 'magazine-sidebar-widgets'); ?>
 			</label>
 		</p>
 <?php

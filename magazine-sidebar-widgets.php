@@ -22,12 +22,15 @@ if ( ! class_exists('Magazine_Sidebar_Widgets') ) :
 
 class Magazine_Sidebar_Widgets {
 
-	/* Setup the Business Content Widgets plugin */
+	/* Setup the Magazine Sidebar Widgets plugin */
 	static function setup() {
 
+		/* Include Admin settings page Class */
+		require( dirname( __FILE__ ) . '/admin/msw-admin.php' );
+		
 		/* Include Widget Classes */
-		require( dirname( __FILE__ ) . '/widgets/widget-button-text.php' );
-		require( dirname( __FILE__ ) . '/widgets/widget-featured-page.php' );
+		require( dirname( __FILE__ ) . '/widgets/widget-author-posts.php' );
+		require( dirname( __FILE__ ) . '/widgets/widget-category-posts.php' );
 		require( dirname( __FILE__ ) . '/widgets/widget-popular-posts.php' );
 		require( dirname( __FILE__ ) . '/widgets/widget-recent-comments.php' );
 		require( dirname( __FILE__ ) . '/widgets/widget-recent-posts.php' );
@@ -53,8 +56,8 @@ class Magazine_Sidebar_Widgets {
 	/* Register Widgets */
 	static function register_widgets() {
 
-		register_widget('MSW_Button_Text_Widget');
-		register_widget('MSW_Featured_Page_Widget');
+		register_widget('MSW_Author_Posts_Widget');
+		register_widget('MSW_Category_Posts_Widget');
 		register_widget('MSW_Popular_Posts_Widget');
 		register_widget('MSW_Recent_Comments_Widget');
 		register_widget('MSW_Recent_Posts_Widget');
@@ -67,8 +70,8 @@ class Magazine_Sidebar_Widgets {
 	static function enqueue_styles() {
 	
 		// Load stylesheet only if widgets are active
-		if ( is_active_widget('MSW_Button_Widget', false, 'msw_button')
-			or is_active_widget('MSW_Featured_Page_Widget', false, 'msw_featured_page')
+		if ( is_active_widget('MSW_Author_Posts_Widget', false, 'msw_author_posts')
+			or is_active_widget('MSW_Category_Posts_Widget', false, 'msw_category_posts')
 			or is_active_widget('MSW_Popular_Posts_Widget', false, 'msw_popular_posts')
 			or is_active_widget('MSW_Recent_Comments_Widget', false, 'msw_recent_comments')
 			or is_active_widget('MSW_Recent_Posts_Widget', false, 'msw_recent_posts')

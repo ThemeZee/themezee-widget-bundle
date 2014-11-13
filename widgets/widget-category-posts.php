@@ -1,26 +1,22 @@
 <?php
 
-// Recent Posts Widget
-class MSW_Recent_Posts_Widget extends WP_Widget {
+// Popular Posts Widget
+class MSW_Category_Posts_Widget extends WP_Widget {
 
 	function __construct() {
 		
 		// Setup Widget
 		$widget_ops = array(
-			'classname' => 'msw_recent_posts', 
-			'description' => __('Displays recent posts.', 'magazine-sidebar-widgets')
+			'classname' => 'msw_category_posts', 
+			'description' => __('Displays recents posts from a chosen category.', 'magazine-sidebar-widgets')
 		);
-		$this->WP_Widget('msw_recent_posts', 'Recent Posts (ThemeZee)', $widget_ops);
+		$this->WP_Widget('msw_category_posts', 'Category Posts (ThemeZee)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
 		add_action( 'deleted_post', array( $this, 'delete_widget_cache' ) );
 		add_action( 'switch_theme', array( $this, 'delete_widget_cache' ) );
 		
-	}
-
-	function excerpt_length($length) {
-		return $this->excerpt_length;
 	}
 	
 	public function delete_widget_cache() {
@@ -34,8 +30,8 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 		$defaults = array(
 			'title'				=> '',
 			'number'			=> 5,
+			'category'			=> 0,
 			'thumbnails'		=> true,
-			'excerpt_length' 	=> 0,
 			'meta_date'			=> false,
 			'meta_author'		=> false,
 			'meta_comments'		=> false
@@ -61,7 +57,7 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="msw-recent-posts msw-posts">
+		<div class="msw-category-posts msw-posts">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
@@ -96,7 +92,8 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 			// Get latest popular posts from database
 			$query_arguments = array(
 				'posts_per_page' => (int)$number,
-				'ignore_sticky_posts' => true
+				'ignore_sticky_posts' => true,
+				'cat' => (int)$category
 			);
 			$posts_query = new WP_Query($query_arguments);
 
@@ -106,10 +103,6 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 			// Check if there are posts
 			if( $posts_query->have_posts() ) :
 			
-				// Limit the number of words for the excerpt
-				$this->excerpt_length = (int)$excerpt_length;
-				add_filter('excerpt_length', array(&$this, 'excerpt_length') );	
-				
 				// Display Posts
 				while( $posts_query->have_posts() ) :
 					
@@ -132,14 +125,7 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 							<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 						</a>
 
-					<?php // Display Post Content
-					if ( $excerpt_length > 0 ) : ?>
-						
-						<span class="msw-excerpt"><?php the_excerpt(); ?></span>
-					
-					<?php endif; ?>
 
-					
 						<div class="msw-postmeta">
 							
 						<?php // Display Date
@@ -176,9 +162,6 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 				<?php
 				endwhile;
 				
-				// Remove excerpt filter
-				remove_filter('excerpt_length', array(&$this, 'excerpt_length') );	
-				
 			endif;
 			
 			// Reset Postdata
@@ -201,8 +184,8 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['number'] = (int)$new_instance['number'];
+		$instance['category'] = (int)$new_instance['category'];
 		$instance['thumbnails'] = isset($new_instance['thumbnails']);
-		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
 		$instance['meta_date'] = isset($new_instance['meta_date']);
 		$instance['meta_author'] = isset($new_instance['meta_author']);
 		$instance['meta_comments'] = isset($new_instance['meta_comments']);
@@ -230,17 +213,24 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Select Category:', 'magazine-sidebar-widgets'); ?></label><br/>
+			<?php // Display Category Select
+				$args = array(
+					'show_option_all'    => __('All Categories', 'magazine-sidebar-widgets'),
+					'selected'           => $category,
+					'name'               => $this->get_field_name('category'),
+					'id'                 => $this->get_field_id('category')
+				);
+				wp_dropdown_categories( $args ); 
+			?>
+		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
 				<?php _e('Show Post Thumbnails?', 'magazine-sidebar-widgets'); ?>
-			</label>
-		</p>
-
-		<p>
-			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e('Excerpt length in number of words:', 'magazine-sidebar-widgets'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" />
 			</label>
 		</p>
 
@@ -253,7 +243,7 @@ class MSW_Recent_Posts_Widget extends WP_Widget {
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $meta_author ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
 				<?php _e('Show Author of Post?', 'magazine-sidebar-widgets'); ?>
 			</label>
 		</p>
