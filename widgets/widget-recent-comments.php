@@ -183,10 +183,10 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['number'] = (int)$new_instance['number'];
-		$instance['avatar'] = isset($new_instance['avatar']);
-		$instance['post_title'] = isset($new_instance['post_title']);
+		$instance['avatar'] = !empty($new_instance['avatar']);
+		$instance['post_title'] = !empty($new_instance['post_title']);
 		$instance['comment_length'] = (int)$new_instance['comment_length'];
-		$instance['comment_date'] = isset($new_instance['comment_date']);
+		$instance['comment_date'] = !empty($new_instance['comment_date']);
 		
 		$this->delete_widget_cache();
 		

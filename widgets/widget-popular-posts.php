@@ -202,11 +202,11 @@ class MSW_Popular_Posts_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['number'] = (int)$new_instance['number'];
-		$instance['thumbnails'] = isset($new_instance['thumbnails']);
+		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
 		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
-		$instance['meta_date'] = isset($new_instance['meta_date']);
-		$instance['meta_author'] = isset($new_instance['meta_author']);
-		$instance['meta_comments'] = isset($new_instance['meta_comments']);
+		$instance['meta_date'] = !empty($new_instance['meta_date']);
+		$instance['meta_author'] = !empty($new_instance['meta_author']);
+		$instance['meta_comments'] = !empty($new_instance['meta_comments']);
 		
 		$this->delete_widget_cache();
 		

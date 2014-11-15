@@ -55,14 +55,36 @@ class Magazine_Sidebar_Widgets {
 
 	/* Register Widgets */
 	static function register_widgets() {
-
-		register_widget('MSW_Author_Posts_Widget');
-		register_widget('MSW_Category_Posts_Widget');
-		register_widget('MSW_Popular_Posts_Widget');
-		register_widget('MSW_Recent_Comments_Widget');
-		register_widget('MSW_Recent_Posts_Widget');
-		register_widget('MSW_Social_Icons_Widget');
-		register_widget('MSW_Tabbed_Content_Widget');
+		
+		$options = MSW_Admin::get_options();
+		
+		if( isset($options['active_widgets']['enable_msw_author_posts']) and $options['active_widgets']['enable_msw_author_posts'] == true) :
+			register_widget('MSW_Author_Posts_Widget');
+		endif;
+		
+		if( isset($options['active_widgets']['enable_msw_category_posts']) and $options['active_widgets']['enable_msw_category_posts'] == true) :
+			register_widget('MSW_Category_Posts_Widget');
+		endif;
+		
+		if( isset($options['active_widgets']['enable_msw_popular_posts']) and $options['active_widgets']['enable_msw_popular_posts'] == true) :
+			register_widget('MSW_Popular_Posts_Widget');
+		endif;
+		
+		if( isset($options['active_widgets']['enable_msw_recent_comments']) and $options['active_widgets']['enable_msw_recent_comments'] == true) :
+			register_widget('MSW_Recent_Comments_Widget');
+		endif;
+		
+		if( isset($options['active_widgets']['enable_msw_recent_posts']) and $options['active_widgets']['enable_msw_recent_posts'] == true) :
+			register_widget('MSW_Recent_Posts_Widget');
+		endif;
+		
+		if( isset($options['active_widgets']['enable_msw_social_icons']) and $options['active_widgets']['enable_msw_social_icons'] == true) :
+			register_widget('MSW_Social_Icons_Widget');
+		endif;
+		
+		if( isset($options['active_widgets']['enable_msw_tabbed_content']) and $options['active_widgets']['enable_msw_tabbed_content'] == true) :
+			register_widget('MSW_Tabbed_Content_Widget');
+		endif;
 		
 	}
 	

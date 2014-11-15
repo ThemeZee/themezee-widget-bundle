@@ -20,54 +20,54 @@
 
 /* Recent & Popular Posts Widget
 -------------------------------------------------------------- */
-.msw-posts .msw-posts-list {
+.msw-posts-list {
 	margin: 0;
 	padding: 0;
 }
-.msw-posts .msw-posts-list li {
+.msw-posts-list li {
 	list-style: none;
 	margin: 0 0 1em 0;
 	padding: 0;
 	overflow: auto;
 }
-.msw-posts .msw-posts-list .msw-excerpt p {
+.msw-posts-list .msw-excerpt p {
 	margin: 0;
 	padding: 0;
 }
-.msw-posts .msw-posts-list .wp-post-image {
+.msw-posts-list .wp-post-image {
 	float: left;
 	margin: 0.3em 0.8em 0.5em 0;
 	max-width: 75px;
 	height: auto;
 }
-.msw-posts .msw-posts-list .msw-postmeta {
+.msw-posts-list .msw-postmeta {
 	color: #777;
 	font-size: 0.9em;
 }
-.msw-posts .msw-posts-list  .msw-postmeta span {
+.msw-posts-list  .msw-postmeta span {
 	margin: 0.3em;
 }
 
 /* Recent Comments Widget
 -------------------------------------------------------------- */
-.msw-recent-comments .msw-comments-list {
+.msw-comments-list {
 	margin: 0;
 	padding: 0;
 }
-.msw-recent-comments .msw-comments-list li {
+.msw-comments-list li {
 	list-style: none;
 	margin: 0 0 1em 0;
 	overflow: auto;
 }
-.msw-recent-comments .msw-comments-list .avatar {
+.msw-comments-list .avatar {
 	float: left;
 	margin: 0.3em 0.8em 0.4em 0;
 }
-.msw-recent-comments .msw-comments-list .msw-comment-content {
+.msw-comments-list .msw-comment-content {
 	font-size: 0.9em;
 	font-style: italic;
 }
-.msw-recent-comments .msw-comments-list .msw-comment-date {
+.msw-comments-list .msw-comment-date {
 	padding: 0;
 	margin-top: 0.2em;
 	font-size: 0.9em;

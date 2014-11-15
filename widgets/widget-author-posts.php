@@ -171,9 +171,9 @@ class MSW_Author_Posts_Widget extends WP_Widget {
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['number'] = (int)$new_instance['number'];
 		$instance['author'] = (int)$new_instance['author'];
-		$instance['thumbnails'] = isset($new_instance['thumbnails']);
-		$instance['meta_date'] = isset($new_instance['meta_date']);
-		$instance['meta_comments'] = isset($new_instance['meta_comments']);
+		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
+		$instance['meta_date'] = !empty($new_instance['meta_date']);
+		$instance['meta_comments'] = !empty($new_instance['meta_comments']);
 		
 		$this->delete_widget_cache();
 		

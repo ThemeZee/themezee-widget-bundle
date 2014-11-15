@@ -185,10 +185,10 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['number'] = (int)$new_instance['number'];
 		$instance['category'] = (int)$new_instance['category'];
-		$instance['thumbnails'] = isset($new_instance['thumbnails']);
-		$instance['meta_date'] = isset($new_instance['meta_date']);
-		$instance['meta_author'] = isset($new_instance['meta_author']);
-		$instance['meta_comments'] = isset($new_instance['meta_comments']);
+		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
+		$instance['meta_date'] = !empty($new_instance['meta_date']);
+		$instance['meta_author'] = !empty($new_instance['meta_author']);
+		$instance['meta_comments'] = !empty($new_instance['meta_comments']);
 		
 		$this->delete_widget_cache();
 		
