@@ -1,16 +1,16 @@
 <?php
 
 // Popular Posts Widget
-class MSW_Category_Posts_Widget extends WP_Widget {
+class TZWB_Category_Posts_Widget extends WP_Widget {
 
 	function __construct() {
 		
 		// Setup Widget
 		$widget_ops = array(
-			'classname' => 'msw_category_posts', 
-			'description' => __('Displays recents posts from a chosen category.', 'magazine-sidebar-widgets')
+			'classname' => 'tzwb_category_posts', 
+			'description' => __('Displays recents posts from a chosen category.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('msw_category_posts', 'Category Posts (ThemeZee)', $widget_ops);
+		$this->WP_Widget('tzwb_category_posts', 'Category Posts (ThemeZee)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
@@ -57,14 +57,14 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="msw-category-posts msw-posts">
+		<div class="tzwb-category-posts tzwb-posts">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
 			
-			<div class="msw-content msw-clearfix">
+			<div class="tzwb-content tzwb-clearfix">
 				
-				<ul class="msw-posts-list">
+				<ul class="tzwb-posts-list">
 					<?php echo $this->render($instance); ?>
 				</ul>
 				
@@ -110,9 +110,9 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 					
 					if ( $thumbnails == 1 ) : ?>
 				
-						<li class="msw-has-thumbnail">
+						<li class="tzwb-has-thumbnail">
 							<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
-								<?php the_post_thumbnail('msw-thumbnail'); ?>
+								<?php the_post_thumbnail('tzwb-thumbnail'); ?>
 							</a>
 				
 					<?php else: ?>
@@ -126,22 +126,22 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 						</a>
 
 
-						<div class="msw-postmeta">
+						<div class="tzwb-postmeta">
 							
 						<?php // Display Date
 						if ( $meta_date == 1 ) : ?>
 							
-							<span class="msw-meta-date"><?php the_time(get_option('date_format')); ?></span>
+							<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
 							
 						<?php endif; ?>
 						
 						<?php // Display Author
 						if ( $meta_author == 1 ) : ?>
 							
-							<span class="msw-meta-author">
+							<span class="tzwb-meta-author">
 								<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
 									esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-									esc_attr( sprintf( __( 'View all posts by %s', 'magazine-sidebar-widgets' ), get_the_author() ) ),
+									esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
 									get_the_author()
 								);?>
 							</span>
@@ -151,8 +151,8 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 						<?php // Display Comments
 						if ( $meta_comments == 1 and comments_open() ) : ?>
 						
-							<span class="msw-meta-comments">
-								<?php comments_popup_link( __('No comments', 'magazine-sidebar-widgets'),__('One comment','magazine-sidebar-widgets'),__('% comments','magazine-sidebar-widgets') ); ?>
+							<span class="tzwb-meta-comments">
+								<?php comments_popup_link( __('No comments', 'themezee-widget-bundle'),__('One comment','themezee-widget-bundle'),__('% comments','themezee-widget-bundle') ); ?>
 							</span>
 							
 						<?php endif; ?>
@@ -203,22 +203,22 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 
 ?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'magazine-sidebar-widgets'); ?>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Select Category:', 'magazine-sidebar-widgets'); ?></label><br/>
+			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Select Category:', 'themezee-widget-bundle'); ?></label><br/>
 			<?php // Display Category Select
 				$args = array(
-					'show_option_all'    => __('All Categories', 'magazine-sidebar-widgets'),
+					'show_option_all'    => __('All Categories', 'themezee-widget-bundle'),
 					'selected'           => $category,
 					'name'               => $this->get_field_name('category'),
 					'id'                 => $this->get_field_id('category')
@@ -230,28 +230,28 @@ class MSW_Category_Posts_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
-				<?php _e('Show Post Thumbnails?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show Post Thumbnails?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_date'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
-				<?php _e('Show Post Date?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show Post Date?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_author ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
-				<?php _e('Show Author of Post?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show Author of Post?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_comments'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_comments ) ; ?> id="<?php echo $this->get_field_id('meta_comments'); ?>" name="<?php echo $this->get_field_name('meta_comments'); ?>" />
-				<?php _e('Show Post Comments?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show Post Comments?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 <?php

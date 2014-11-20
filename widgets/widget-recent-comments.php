@@ -1,16 +1,16 @@
 <?php
 
 // Recent Comments Widget
-class MSW_Recent_Comments_Widget extends WP_Widget {
+class TZWB_Recent_Comments_Widget extends WP_Widget {
 
 	function __construct() {
 		
 		// Setup Widget
 		$widget_ops = array(
-			'classname' => 'msw_recent_comments', 
-			'description' => __('Displays latest comments with Gravatar.', 'magazine-sidebar-widgets')
+			'classname' => 'tzwb_recent_comments', 
+			'description' => __('Displays latest comments with Gravatar.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('msw_recent_comments', 'Recent Comments (ThemeZee)', $widget_ops);
+		$this->WP_Widget('tzwb_recent_comments', 'Recent Comments (ThemeZee)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'comment_post', array( $this, 'delete_widget_cache' ) );
@@ -61,14 +61,14 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="msw-recent-comments">
+		<div class="tzwb-recent-comments">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
 			
-			<div class="msw-content msw-clearfix">
+			<div class="tzwb-content tzwb-clearfix">
 				
-				<ul class="msw-comments-list">
+				<ul class="tzwb-comments-list">
 					<?php echo $this->render($instance); ?>
 				</ul>
 				
@@ -112,7 +112,7 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 					<?php // Display Gravatar
 					if ( $avatar == 1 ) : ?>
 				
-						<li class="msw-has-avatar">
+						<li class="tzwb-has-avatar">
 							<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
 								<?php echo get_avatar( $comment, 55 ); ?>
 							</a>
@@ -128,7 +128,7 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 					if ( $post_title == 1 ) : 
 				
 						echo get_comment_author_link($comment->comment_ID);
-						_e(' on', 'magazine-sidebar-widgets'); ?>
+						_e(' on', 'themezee-widget-bundle'); ?>
 						
 						<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
 							<?php echo get_the_title($comment->comment_post_ID); ?>
@@ -146,7 +146,7 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 					<?php // Display Comment Content
 					if ( $comment_length > 0 ) :  ?>
 						
-						<div class="msw-comment-content"><?php echo $this->comment_length($comment->comment_content, $comment_length); ?></div>
+						<div class="tzwb-comment-content"><?php echo $this->comment_length($comment->comment_content, $comment_length); ?></div>
 
 					<?php endif; ?>
 					
@@ -157,7 +157,7 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 						$time_format = get_option( 'time_format' );
 					?>
 						
-						<div class="msw-comment-date"><?php echo date($date_format . ' ' . $time_format , strtotime($comment->comment_date)); ?></div>
+						<div class="tzwb-comment-date"><?php echo date($date_format . ' ' . $time_format , strtotime($comment->comment_date)); ?></div>
 
 					<?php endif; ?>
 					
@@ -201,13 +201,13 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 
 ?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'magazine-sidebar-widgets'); ?>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
@@ -215,20 +215,20 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('avatar'); ?>">
 				<input class="checkbox" type="checkbox"  <?php checked( $avatar ) ; ?> id="<?php echo $this->get_field_id('avatar'); ?>" name="<?php echo $this->get_field_name('avatar'); ?>" />
-				<?php _e('Show avatar of comment author?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show avatar of comment author?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('post_title'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $post_title ) ; ?> id="<?php echo $this->get_field_id('post_title'); ?>" name="<?php echo $this->get_field_name('post_title'); ?>" />
-				<?php _e('Show post title of commented post?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show post title of commented post?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('comment_length'); ?>">
-				<?php _e('Comment Excerpt length in number of characters:', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Comment Excerpt length in number of characters:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('comment_length'); ?>" name="<?php echo $this->get_field_name('comment_length'); ?>" type="text" value="<?php echo $comment_length; ?>" />
 			</label>
 		</p>	
@@ -236,7 +236,7 @@ class MSW_Recent_Comments_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('comment_date'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $comment_date ) ; ?> id="<?php echo $this->get_field_id('comment_date'); ?>" name="<?php echo $this->get_field_name('comment_date'); ?>" />
-				<?php _e('Show date of comment?', 'magazine-sidebar-widgets'); ?>
+				<?php _e('Show date of comment?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		

@@ -1,16 +1,16 @@
 <?php
 
 // Social Icons Widget
-class MSW_Social_Icons_Widget extends WP_Widget {
+class TZWB_Social_Icons_Widget extends WP_Widget {
 
 	function __construct() {
 		
 		// Setup Widget
 		$widget_ops = array(
-			'classname' => 'msw_social_icons', 
-			'description' => __('Displays your Social Icons.', 'magazine-sidebar-widgets')
+			'classname' => 'tzwb_social_icons', 
+			'description' => __('Displays your Social Icons.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('msw_social_icons', 'Social Icons (ThemeZee)', $widget_ops);
+		$this->WP_Widget('tzwb_social_icons', 'Social Icons (ThemeZee)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'wp_update_nav_menu', array( $this, 'delete_widget_cache' ) );
@@ -52,12 +52,12 @@ class MSW_Social_Icons_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="msw-social-icons">
+		<div class="tzwb-social-icons">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
 			
-			<div class="msw-content msw-clearfix">
+			<div class="tzwb-content tzwb-clearfix">
 				
 				<?php echo $this->render($instance); ?>
 				
@@ -92,7 +92,7 @@ class MSW_Social_Icons_Widget extends WP_Widget {
 				$menu_args = array(
 					'menu' => (int)$menu,
 					'container' => false,
-					'menu_class' => 'msw-social-icons-menu',
+					'menu_class' => 'tzwb-social-icons-menu',
 					'echo' => true,
 					'fallback_cb' => '',
 					'before' => '',
@@ -107,8 +107,8 @@ class MSW_Social_Icons_Widget extends WP_Widget {
 				
 			else: // Display Hint how to configure Social Icons ?>
 
-				<p class="msw-social-icons-hint">
-					<?php _e('Please go to WP-Admin -> Appearance -> Menus and create a new custom menu with custom links to all your social networks. Then select your created menu on the "Social Icons" widget settings.', 'magazine-sidebar-widgets'); ?>
+				<p class="tzwb-social-icons-hint">
+					<?php _e('Please go to WP-Admin -> Appearance -> Menus and create a new custom menu with custom links to all your social networks. Then select your created menu on the "Social Icons" widget settings.', 'themezee-widget-bundle'); ?>
 				</p>
 				
 		<?php
@@ -147,13 +147,13 @@ class MSW_Social_Icons_Widget extends WP_Widget {
 
 ?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'magazine-sidebar-widgets'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('menu'); ?>"><?php _e('Select Social Menu:', 'magazine-sidebar-widgets'); ?></label><br/>
+			<label for="<?php echo $this->get_field_id('menu'); ?>"><?php _e('Select Social Menu:', 'themezee-widget-bundle'); ?></label><br/>
 			<select id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>">
 				<option value="0" <?php selected($menu, 0, false); ?>> </option>
 				<?php // Display Menu Select Options
