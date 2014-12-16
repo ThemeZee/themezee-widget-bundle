@@ -21,7 +21,7 @@ class TZWB_Category_Posts_Widget extends WP_Widget {
 	
 	public function delete_widget_cache() {
 		
-		delete_transient( $this->id );
+		wp_cache_delete('widget_tzwb_category_posts', 'widget');
 		
 	}
 	
@@ -44,6 +44,23 @@ class TZWB_Category_Posts_Widget extends WP_Widget {
 	// Display Widget
 	function widget($args, $instance) {
 
+		// Get Widget Object Cache
+		if ( ! $this->is_preview() ) {
+			$cache = wp_cache_get( 'widget_tzwb_category_posts', 'widget' );
+		}
+		if ( ! is_array( $cache ) ) {
+			$cache = array();
+		}
+
+		// Display Widget from Cache if exists
+		if ( isset( $cache[ $this->id ] ) ) {
+			echo $cache[ $this->id ];
+			return;
+		}
+		
+		// Start Output Buffering
+		ob_start();
+		
 		// Get Sidebar Arguments
 		extract($args);
 		
@@ -73,109 +90,98 @@ class TZWB_Category_Posts_Widget extends WP_Widget {
 		</div>
 	<?php
 		echo $after_widget;
+		
+		// Set Cache
+		if ( ! $this->is_preview() ) {
+			$cache[ $this->id ] = ob_get_flush();
+			wp_cache_set( 'widget_tzwb_category_posts', $cache, 'widget' );
+		} else {
+			ob_end_flush();
+		}
 	
 	}
 	
 	// Render Widget Content
 	function render($instance) {
 		
-		// Get Output from Cache
-		$output = get_transient( $this->id );
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
+	
+		// Get latest popular posts from database
+		$query_arguments = array(
+			'posts_per_page' => (int)$number,
+			'ignore_sticky_posts' => true,
+			'cat' => (int)$category
+		);
+		$posts_query = new WP_Query($query_arguments);
 		
-		// Generate output if not cached
-		if( $output === false ) :
-
-			// Get Widget Settings
-			$defaults = $this->default_settings();
-			extract( wp_parse_args( $instance, $defaults ) );
+		// Check if there are posts
+		if( $posts_query->have_posts() ) :
 		
-			// Get latest popular posts from database
-			$query_arguments = array(
-				'posts_per_page' => (int)$number,
-				'ignore_sticky_posts' => true,
-				'cat' => (int)$category
-			);
-			$posts_query = new WP_Query($query_arguments);
+			// Display Posts
+			while( $posts_query->have_posts() ) :
+				
+				$posts_query->the_post(); 
+				
+				if ( $thumbnails == 1 ) : ?>
+			
+					<li class="tzwb-has-thumbnail">
+						<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
+							<?php the_post_thumbnail('tzwb-thumbnail'); ?>
+						</a>
+			
+				<?php else: ?>
+					
+					<li>
+					
+				<?php endif; ?>
+			
+					<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
+						<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
+					</a>
 
-			// Start Output Buffering
-			ob_start();
-			
-			// Check if there are posts
-			if( $posts_query->have_posts() ) :
-			
-				// Display Posts
-				while( $posts_query->have_posts() ) :
-					
-					$posts_query->the_post(); 
-					
-					if ( $thumbnails == 1 ) : ?>
-				
-						<li class="tzwb-has-thumbnail">
-							<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
-								<?php the_post_thumbnail('tzwb-thumbnail'); ?>
-							</a>
-				
-					<?php else: ?>
+
+					<div class="tzwb-postmeta">
 						
-						<li>
+					<?php // Display Date
+					if ( $meta_date == 1 ) : ?>
+						
+						<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
 						
 					<?php endif; ?>
-				
-						<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
-							<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
-						</a>
-
-
-						<div class="tzwb-postmeta">
-							
-						<?php // Display Date
-						if ( $meta_date == 1 ) : ?>
-							
-							<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
-							
-						<?php endif; ?>
-						
-						<?php // Display Author
-						if ( $meta_author == 1 ) : ?>
-							
-							<span class="tzwb-meta-author">
-								<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
-									esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-									esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
-									get_the_author()
-								);?>
-							</span>
-							
-						<?php endif; ?>
-						
-						<?php // Display Comments
-						if ( $meta_comments == 1 and comments_open() ) : ?>
-						
-							<span class="tzwb-meta-comments">
-								<?php comments_popup_link( __('No comments', 'themezee-widget-bundle'),__('One comment','themezee-widget-bundle'),__('% comments','themezee-widget-bundle') ); ?>
-							</span>
-							
-						<?php endif; ?>
-						
-						</div>
 					
-				<?php
-				endwhile;
+					<?php // Display Author
+					if ( $meta_author == 1 ) : ?>
+						
+						<span class="tzwb-meta-author">
+							<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
+								esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
+								esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
+								get_the_author()
+							);?>
+						</span>
+						
+					<?php endif; ?>
+					
+					<?php // Display Comments
+					if ( $meta_comments == 1 and comments_open() ) : ?>
+					
+						<span class="tzwb-meta-comments">
+							<?php comments_popup_link( __('No comments', 'themezee-widget-bundle'),__('One comment','themezee-widget-bundle'),__('% comments','themezee-widget-bundle') ); ?>
+						</span>
+						
+					<?php endif; ?>
+					
+					</div>
 				
-			endif;
-			
-			// Reset Postdata
-			wp_reset_postdata();
-			
-			// Get Buffer Content
-			$output = ob_get_clean();
-			
-			// Set Cache
-			set_transient( $this->id, $output, YEAR_IN_SECONDS );
+			<?php
+			endwhile;
 			
 		endif;
 		
-		return $output;
+		// Reset Postdata
+		wp_reset_postdata();
 		
 	}
 

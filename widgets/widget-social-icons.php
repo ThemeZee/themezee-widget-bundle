@@ -20,7 +20,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 
 	public function delete_widget_cache() {
 		
-		delete_transient( $this->id );
+		wp_cache_delete('widget_tzwb_social_icons', 'widget');
 		
 	}
 	
@@ -39,6 +39,23 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	// Display Widget
 	function widget($args, $instance) {
 
+		// Get Widget Object Cache
+		if ( ! $this->is_preview() ) {
+			$cache = wp_cache_get( 'widget_tzwb_social_icons', 'widget' );
+		}
+		if ( ! is_array( $cache ) ) {
+			$cache = array();
+		}
+
+		// Display Widget from Cache if exists
+		if ( isset( $cache[ $this->id ] ) ) {
+			echo $cache[ $this->id ];
+			return;
+		}
+		
+		// Start Output Buffering
+		ob_start();
+		
 		// Get Sidebar Arguments
 		extract($args);
 		
@@ -66,64 +83,52 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		</div>
 	<?php
 		echo $after_widget;
+		
+		// Set Cache
+		if ( ! $this->is_preview() ) {
+			$cache[ $this->id ] = ob_get_flush();
+			wp_cache_set( 'widget_tzwb_social_icons', $cache, 'widget' );
+		} else {
+			ob_end_flush();
+		}
 	
 	}
 	
 	// Render Widget Content
 	function render($instance) {
 		
-		// Get Output from Cache
-		$output = get_transient( $this->id );
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
 		
-		// Generate output if not cached
-		if( $output === false ) :
+		// Check if there is a social_icons menu
+		if( isset($menu) and $menu > 0 ) :
+		
+			// Set Social Menu Arguments
+			$menu_args = array(
+				'menu' => (int)$menu,
+				'container' => false,
+				'menu_class' => 'tzwb-social-icons-menu',
+				'echo' => true,
+				'fallback_cb' => '',
+				'before' => '',
+				'after' => '',
+				'link_before' => '<span class="screen-reader-text">',
+				'link_after' => '</span>',
+				'depth' => 1
+			);
+			
+			// Display Social Icons Menu
+			wp_nav_menu( $menu_args );
+			
+		else: // Display Hint how to configure Social Icons ?>
 
-			// Get Widget Settings
-			$defaults = $this->default_settings();
-			extract( wp_parse_args( $instance, $defaults ) );
-
-			// Start Output Buffering
-			ob_start();
+			<p class="tzwb-social-icons-hint">
+				<?php _e('Please go to WP-Admin -> Appearance -> Menus and create a new custom menu with custom links to all your social networks. Then select your created menu on the "Social Icons" widget settings.', 'themezee-widget-bundle'); ?>
+			</p>
 			
-			// Check if there is a social_icons menu
-			if( isset($menu) and $menu > 0 ) :
-			
-				// Set Social Menu Arguments
-				$menu_args = array(
-					'menu' => (int)$menu,
-					'container' => false,
-					'menu_class' => 'tzwb-social-icons-menu',
-					'echo' => true,
-					'fallback_cb' => '',
-					'before' => '',
-					'after' => '',
-					'link_before' => '<span class="screen-reader-text">',
-					'link_after' => '</span>',
-					'depth' => 1
-				);
-				
-				// Display Social Icons Menu
-				wp_nav_menu( $menu_args );
-				
-			else: // Display Hint how to configure Social Icons ?>
-
-				<p class="tzwb-social-icons-hint">
-					<?php _e('Please go to WP-Admin -> Appearance -> Menus and create a new custom menu with custom links to all your social networks. Then select your created menu on the "Social Icons" widget settings.', 'themezee-widget-bundle'); ?>
-				</p>
-				
-		<?php
-			endif;
-
-			
-			// Get Buffer Content
-			$output = ob_get_clean();
-			
-			// Set Cache
-			set_transient( $this->id, $output, YEAR_IN_SECONDS );
-			
+	<?php
 		endif;
-		
-		return $output;
 		
 	}
 

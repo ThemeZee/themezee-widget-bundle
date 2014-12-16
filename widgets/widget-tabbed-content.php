@@ -38,7 +38,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	
 	public function delete_widget_cache() {
 		
-		delete_transient( $this->id );
+		wp_cache_delete('widget_tzwb_tabbed_content', 'widget');
 		
 	}
 	
@@ -59,6 +59,23 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	// Display Widget
 	function widget($args, $instance) {
 
+		// Get Widget Object Cache
+		if ( ! $this->is_preview() ) {
+			$cache = wp_cache_get( 'widget_tzwb_tabbed_content', 'widget' );
+		}
+		if ( ! is_array( $cache ) ) {
+			$cache = array();
+		}
+
+		// Display Widget from Cache if exists
+		if ( isset( $cache[ $this->id ] ) ) {
+			echo $cache[ $this->id ];
+			return;
+		}
+		
+		// Start Output Buffering
+		ob_start();
+		
 		// Get Sidebar Arguments
 		extract($args);
 		
@@ -86,69 +103,56 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		</div>
 	<?php
 		echo $after_widget;
+		
+		// Set Cache
+		if ( ! $this->is_preview() ) {
+			$cache[ $this->id ] = ob_get_flush();
+			wp_cache_set( 'widget_tzwb_tabbed_content', $cache, 'widget' );
+		} else {
+			ob_end_flush();
+		}
 	
 	}
 	
 	// Render Widget Content
 	function render($args, $instance) {
 		
-		// Get Output from Cache
-		$output = get_transient( $this->id );
-		$output = false;
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
+			
+		?>
 		
-		// Generate output if not cached
-		if( $output === false ) :
-
-			// Get Widget Settings
-			$defaults = $this->default_settings();
-			extract( wp_parse_args( $instance, $defaults ) );
-
-			// Start Output Buffering
-			ob_start();
-				
-			?>
-			
-			<div class="tzwb-tabnavi-wrap tzwb-clearfix">
-			
-				<ul class="tzwb-tabnavi">
-				
-					<?php // Display Tab Titles
-					for( $i = 0; $i <= 3; $i++ ) : 
-
-						// Do not display empty tabs
-						if ( $tab_titles[$i] == '' and $tab_content[$i] == 0)
-							continue;
-					?>
-					
-						<li><a href="#<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>"><?php echo esc_html($tab_titles[$i]); ?></a></li>
-						
-					<?php endfor; ?>
-					
-				</ul>
-				
-			</div>
-				
-			<?php // Display Tab Content
-			for( $i = 0; $i <= 3; $i++ ) : ?>
-				
-					<div id="<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>" class="tzwb-tabcontent">
-					
-						<?php echo $this->tab_content($instance, $tab_content[$i]); ?>
-						
-					</div>
-					
-			<?php endfor; ?>
-
-	<?php
-			// Get Buffer Content
-			$output = ob_get_clean();
-			
-			// Set Cache
-			set_transient( $this->id, $output, YEAR_IN_SECONDS );
-			
-		endif;
+		<div class="tzwb-tabnavi-wrap tzwb-clearfix">
 		
-		return $output;
+			<ul class="tzwb-tabnavi">
+			
+				<?php // Display Tab Titles
+				for( $i = 0; $i <= 3; $i++ ) : 
+
+					// Do not display empty tabs
+					if ( $tab_titles[$i] == '' and $tab_content[$i] == 0)
+						continue;
+				?>
+				
+					<li><a href="#<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>"><?php echo esc_html($tab_titles[$i]); ?></a></li>
+					
+				<?php endfor; ?>
+				
+			</ul>
+			
+		</div>
+			
+		<?php // Display Tab Content
+		for( $i = 0; $i <= 3; $i++ ) : ?>
+			
+				<div id="<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>" class="tzwb-tabcontent">
+				
+					<?php echo $this->tab_content($instance, $tab_content[$i]); ?>
+					
+				</div>
+				
+		<?php endfor;
 		
 	}
 	

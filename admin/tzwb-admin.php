@@ -16,10 +16,13 @@ class TZWB_Admin {
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 		
 		/* Add settings page to admin menu */
-		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ), 8 );
+		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ), 9 );
 
 		/* Enqueue Admin Page Styles */
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_styles' ) );
+		
+		/* Add Widget Bundle Box to Add-on Overview Page */
+		add_action('themezee_addons_overview_page', array( __CLASS__, 'display_plugin_on_addon_overview_page' ) );
 
 	}
 	
@@ -187,23 +190,6 @@ class TZWB_Admin {
 	/* Add Settings Page to Admin menu */
 	static function add_settings_page() {
 			
-		add_menu_page(
-			__( 'ThemeZee Add-ons', 'themezee-widget-bundle' ),
-			__( 'Add-ons', 'themezee-widget-bundle' ),
-			'manage_options',
-			'themezee-add-ons',
-			array( __CLASS__, 'display_settings_page' ),
-			'dashicons-index-card'
-		);
-		add_submenu_page(
-			'themezee-add-ons',
-			__( 'ThemeZee Add-ons', 'themezee-widget-bundle' ),
-			__( 'Overview', 'themezee-widget-bundle' ),
-			'manage_options',
-			'themezee-add-ons',
-			array( __CLASS__, 'display_settings_page' )
-		);
-
 		add_submenu_page(
 			'themezee-add-ons',
 			__( 'ThemeZee Widget Bundle Settings', 'themezee-widget-bundle' ),
@@ -273,6 +259,62 @@ class TZWB_Admin {
 
 	<?php
 	}
+	
+	/* Display TZWB on Addon Overview Page */
+	static function display_plugin_on_addon_overview_page() { ?>
+
+		<dl><dt><h4><?php _e('Quick Links', 'themezee-widget-bundle'); ?></h4></dt>
+			<dd>
+				<ul>
+					<li><a href="http://themezee.com/themes/zeedynamic/#PROVersion-1" target="_blank"><?php _e('Learn more about the PRO Version', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://themezee.com/docs/" target="_blank"><?php _e('Theme Documentation', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://wordpress.org/support/view/theme-reviews/zeedynamic" target="_blank"><?php _e('Rate zeeDynamic on wordpress.org', 'themezee-widget-bundle'); ?></a></li>
+				</ul>
+			</dd>
+		</dl>
+		
+		<dl><dt><h4><?php _e('Quick Links', 'themezee-widget-bundle'); ?></h4></dt>
+			<dd>
+				<ul>
+					<li><a href="http://themezee.com/themes/zeedynamic/#PROVersion-1" target="_blank"><?php _e('Learn more about the PRO Version', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://themezee.com/docs/" target="_blank"><?php _e('Theme Documentation', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://wordpress.org/support/view/theme-reviews/zeedynamic" target="_blank"><?php _e('Rate zeeDynamic on wordpress.org', 'themezee-widget-bundle'); ?></a></li>
+				</ul>
+			</dd>
+		</dl>
+		
+		<dl><dt><h4><?php _e('Quick Links', 'themezee-widget-bundle'); ?></h4></dt>
+			<dd>
+				<ul>
+					<li><a href="http://themezee.com/themes/zeedynamic/#PROVersion-1" target="_blank"><?php _e('Learn more about the PRO Version', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://themezee.com/docs/" target="_blank"><?php _e('Theme Documentation', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://wordpress.org/support/view/theme-reviews/zeedynamic" target="_blank"><?php _e('Rate zeeDynamic on wordpress.org', 'themezee-widget-bundle'); ?></a></li>
+				</ul>
+			</dd>
+		</dl>
+		
+		<dl><dt><h4><?php _e('Quick Links', 'themezee-widget-bundle'); ?></h4></dt>
+			<dd>
+				<ul>
+					<li><a href="http://themezee.com/themes/zeedynamic/#PROVersion-1" target="_blank"><?php _e('Learn more about the PRO Version', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://themezee.com/docs/" target="_blank"><?php _e('Theme Documentation', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://wordpress.org/support/view/theme-reviews/zeedynamic" target="_blank"><?php _e('Rate zeeDynamic on wordpress.org', 'themezee-widget-bundle'); ?></a></li>
+				</ul>
+			</dd>
+		</dl>
+		
+		<dl><dt><h4><?php _e('Quick Links', 'themezee-widget-bundle'); ?></h4></dt>
+			<dd>
+				<ul>
+					<li><a href="http://themezee.com/themes/zeedynamic/#PROVersion-1" target="_blank"><?php _e('Learn more about the PRO Version', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://themezee.com/docs/" target="_blank"><?php _e('Theme Documentation', 'themezee-widget-bundle'); ?></a></li>
+					<li><a href="http://wordpress.org/support/view/theme-reviews/zeedynamic" target="_blank"><?php _e('Rate zeeDynamic on wordpress.org', 'themezee-widget-bundle'); ?></a></li>
+				</ul>
+			</dd>
+		</dl>
+
+	<?php
+	}
 
 	/* Enqueue Admin Styles */
 	static function enqueue_admin_styles( $hook ) {
@@ -292,4 +334,6 @@ class TZWB_Admin {
 TZWB_Admin::setup();
 
 endif;
+
+
 ?>

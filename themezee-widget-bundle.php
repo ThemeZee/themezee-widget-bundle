@@ -25,7 +25,8 @@ class ThemeZee_Widget_Bundle {
 	/* Setup the ThemeZee Widget Bundle plugin */
 	static function setup() {
 
-		/* Include Admin settings page Class */
+		/* Include Admin settings page Classes */
+		require( dirname( __FILE__ ) . '/admin/themezee-addons-overview.php' );
 		require( dirname( __FILE__ ) . '/admin/tzwb-admin.php' );
 		
 		/* Include Widget Classes */

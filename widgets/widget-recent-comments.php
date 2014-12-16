@@ -21,7 +21,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 
 	public function delete_widget_cache() {
 		
-		delete_transient( $this->id );
+		wp_cache_delete('widget_tzwb_recent_comments', 'widget');
 		
 	}
 	
@@ -48,6 +48,23 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 	// Display Widget
 	function widget($args, $instance) {
 
+		// Get Widget Object Cache
+		if ( ! $this->is_preview() ) {
+			$cache = wp_cache_get( 'widget_tzwb_recent_comments', 'widget' );
+		}
+		if ( ! is_array( $cache ) ) {
+			$cache = array();
+		}
+
+		// Display Widget from Cache if exists
+		if ( isset( $cache[ $this->id ] ) ) {
+			echo $cache[ $this->id ];
+			return;
+		}
+		
+		// Start Output Buffering
+		ob_start();
+		
 		// Get Sidebar Arguments
 		extract($args);
 		
@@ -77,104 +94,93 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		</div>
 	<?php
 		echo $after_widget;
+		
+		// Set Cache
+		if ( ! $this->is_preview() ) {
+			$cache[ $this->id ] = ob_get_flush();
+			wp_cache_set( 'widget_tzwb_recent_comments', $cache, 'widget' );
+		} else {
+			ob_end_flush();
+		}
 	
 	}
 	
 	// Render Widget Content
 	function render($instance) {
 		
-		// Get Output from Cache
-		$output = get_transient( $this->id );
-		
-		// Generate output if not cached
-		if( $output === false ) :
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
+	
+		// Get latest comments from database
+		$comments = get_comments( array( 
+			'number' => (int)$number, 
+			'status' => 'approve', 
+			'post_status' => 'publish' 
+		) );
 
-			// Get Widget Settings
-			$defaults = $this->default_settings();
-			extract( wp_parse_args( $instance, $defaults ) );
-		
-			// Get latest comments from database
-			$comments = get_comments( array( 
-				'number' => (int)$number, 
-				'status' => 'approve', 
-				'post_status' => 'publish' 
-			) );
+		// Check if there are comments
+		if ( $comments ) :
 
-			// Start Output Buffering
-			ob_start();
+			// Display Comments
+			foreach ( (array) $comments as $comment) : ?>
+				
+				<?php // Display Gravatar
+				if ( $avatar == 1 ) : ?>
 			
-			// Check if there are comments
-			if ( $comments ) :
-
-				// Display Comments
-				foreach ( (array) $comments as $comment) : ?>
-					
-					<?php // Display Gravatar
-					if ( $avatar == 1 ) : ?>
-				
-						<li class="tzwb-has-avatar">
-							<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
-								<?php echo get_avatar( $comment, 55 ); ?>
-							</a>
-				
-					<?php else: ?>
-						
-						<li>
-						
-					<?php endif; ?>
-					
-					
-					<?php // Display Post Title
-					if ( $post_title == 1 ) : 
-				
-						echo get_comment_author_link($comment->comment_ID);
-						_e(' on', 'themezee-widget-bundle'); ?>
-						
+					<li class="tzwb-has-avatar">
 						<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
-							<?php echo get_the_title($comment->comment_post_ID); ?>
+							<?php echo get_avatar( $comment, 55 ); ?>
 						</a>
-
-					<?php else: ?>
-						
-						<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
-							<?php echo get_comment_author_link($comment->comment_ID); ?>
-						</a>
-
-					<?php endif; ?>
-					
-					
-					<?php // Display Comment Content
-					if ( $comment_length > 0 ) :  ?>
-						
-						<div class="tzwb-comment-content"><?php echo $this->comment_length($comment->comment_content, $comment_length); ?></div>
-
-					<?php endif; ?>
-					
-					<?php // Display Comment Date
-					if ( $comment_date == 1 ) : 
-
-						$date_format = get_option( 'date_format' );
-						$time_format = get_option( 'time_format' );
-					?>
-						
-						<div class="tzwb-comment-date"><?php echo date($date_format . ' ' . $time_format , strtotime($comment->comment_date)); ?></div>
-
-					<?php endif; ?>
-					
-				<?php
-				endforeach;
-				
-			endif;
-
-			// Get Buffer Content
-			$output = ob_get_clean();
 			
-			// Set Cache
-			set_transient( $this->id, $output, YEAR_IN_SECONDS );
+				<?php else: ?>
+					
+					<li>
+					
+				<?php endif; ?>
+				
+				
+				<?php // Display Post Title
+				if ( $post_title == 1 ) : 
+			
+					echo get_comment_author_link($comment->comment_ID);
+					_e(' on', 'themezee-widget-bundle'); ?>
+					
+					<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
+						<?php echo get_the_title($comment->comment_post_ID); ?>
+					</a>
+
+				<?php else: ?>
+					
+					<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
+						<?php echo get_comment_author_link($comment->comment_ID); ?>
+					</a>
+
+				<?php endif; ?>
+				
+				
+				<?php // Display Comment Content
+				if ( $comment_length > 0 ) :  ?>
+					
+					<div class="tzwb-comment-content"><?php echo $this->comment_length($comment->comment_content, $comment_length); ?></div>
+
+				<?php endif; ?>
+				
+				<?php // Display Comment Date
+				if ( $comment_date == 1 ) : 
+
+					$date_format = get_option( 'date_format' );
+					$time_format = get_option( 'time_format' );
+				?>
+					
+					<div class="tzwb-comment-date"><?php echo date($date_format . ' ' . $time_format , strtotime($comment->comment_date)); ?></div>
+
+				<?php endif; ?>
+				
+			<?php
+			endforeach;
 			
 		endif;
-		
-		return $output;
 		
 	}
 
