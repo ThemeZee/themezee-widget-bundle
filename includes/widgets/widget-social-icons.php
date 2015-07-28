@@ -10,7 +10,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			'classname' => 'tzwb_social_icons', 
 			'description' => __('Displays your Social Icons.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('tzwb_social_icons', 'Social Icons (ThemeZee)', $widget_ops);
+		$this->WP_Widget('tzwb_social_icons', 'ThemeZee: Social Icons (Widget Bundle)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'wp_update_nav_menu', array( $this, 'delete_widget_cache' ) );

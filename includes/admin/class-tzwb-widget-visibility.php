@@ -384,5 +384,3 @@ class TZWB_Widget_Visibility {
 TZWB_Widget_Visibility::init();
 
 endif;
-
-?>

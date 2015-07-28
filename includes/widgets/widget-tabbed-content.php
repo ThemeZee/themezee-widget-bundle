@@ -15,7 +15,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			'id_base' => 'tzwb_tabbed_content'
 		);
 		
-		$this->WP_Widget('tzwb_tabbed_content', 'Tabbed Content (ThemeZee)', $widget_ops, $control_ops);
+		$this->WP_Widget('tzwb_tabbed_content', 'ThemeZee: Tabbed Content (Widget Bundle)', $widget_ops, $control_ops);
 		
 		// Enqueue Javascript for Tabs
 		if ( is_active_widget(false, false, $this->id_base) )

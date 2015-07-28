@@ -77,4 +77,3 @@ class ThemeZee_Addons_Overview {
 ThemeZee_Addons_Overview::setup();
 
 endif;
-?>

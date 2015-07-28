@@ -1,16 +1,16 @@
 <?php
 
-// Recent Posts Widget
-class TZWB_Recent_Posts_Widget extends WP_Widget {
+// Popular Posts Widget
+class TZWB_Popular_Posts_Widget extends WP_Widget {
 
 	function __construct() {
 		
 		// Setup Widget
 		$widget_ops = array(
-			'classname' => 'tzwb_recent_posts', 
-			'description' => __('Displays recent posts.', 'themezee-widget-bundle')
+			'classname' => 'tzwb_popular_posts', 
+			'description' => __('Displays popular posts by comment count.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('tzwb_recent_posts', 'Recent Posts (ThemeZee)', $widget_ops);
+		$this->WP_Widget('tzwb_popular_posts', 'ThemeZee: Popular Posts (Widget Bundle)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
@@ -25,7 +25,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	
 	public function delete_widget_cache() {
 		
-		wp_cache_delete('widget_tzwb_recent_posts', 'widget');
+		wp_cache_delete('widget_tzwb_popular_posts', 'widget');
 		
 	}
 	
@@ -50,7 +50,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
-			$cache = wp_cache_get( 'widget_tzwb_recent_posts', 'widget' );
+			$cache = wp_cache_get( 'widget_tzwb_popular_posts', 'widget' );
 		}
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -78,7 +78,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="tzwb-recent-posts tzwb-posts">
+		<div class="tzwb-popular-posts tzwb-posts">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
@@ -98,7 +98,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		// Set Cache
 		if ( ! $this->is_preview() ) {
 			$cache[ $this->id ] = ob_get_flush();
-			wp_cache_set( 'widget_tzwb_recent_posts', $cache, 'widget' );
+			wp_cache_set( 'widget_tzwb_popular_posts', $cache, 'widget' );
 		} else {
 			ob_end_flush();
 		}
@@ -107,15 +107,16 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	
 	// Render Widget Content
 	function render($instance) {
-		
+
 		// Get Widget Settings
 		$defaults = $this->default_settings();
 		extract( wp_parse_args( $instance, $defaults ) );
 	
-		// Get latest posts from database
+		// Get latest popular posts from database
 		$query_arguments = array(
 			'posts_per_page' => (int)$number,
-			'ignore_sticky_posts' => true
+			'ignore_sticky_posts' => true,
+			'orderby' => 'comment_count'
 		);
 		$posts_query = new WP_Query($query_arguments);
 		
@@ -155,7 +156,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 				
 				<?php endif; ?>
 
-				
+					
 					<div class="tzwb-postmeta">
 						
 					<?php // Display Date

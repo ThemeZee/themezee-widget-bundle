@@ -1,16 +1,16 @@
 <?php
 
 // Popular Posts Widget
-class TZWB_Popular_Posts_Widget extends WP_Widget {
+class TZWB_Author_Posts_Widget extends WP_Widget {
 
 	function __construct() {
 		
 		// Setup Widget
 		$widget_ops = array(
-			'classname' => 'tzwb_popular_posts', 
-			'description' => __('Displays popular posts by comment count.', 'themezee-widget-bundle')
+			'classname' => 'tzwb_author_posts', 
+			'description' => __('Displays recents posts from a chosen author.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('tzwb_popular_posts', 'Popular Posts (ThemeZee)', $widget_ops);
+		$this->WP_Widget('tzwb_author_posts', 'ThemeZee: Author Posts (Widget Bundle)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
@@ -18,14 +18,10 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		add_action( 'switch_theme', array( $this, 'delete_widget_cache' ) );
 		
 	}
-
-	function excerpt_length($length) {
-		return $this->excerpt_length;
-	}
 	
 	public function delete_widget_cache() {
 		
-		wp_cache_delete('widget_tzwb_popular_posts', 'widget');
+		wp_cache_delete('widget_tzwb_author_posts', 'widget');
 		
 	}
 	
@@ -34,10 +30,9 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		$defaults = array(
 			'title'				=> '',
 			'number'			=> 5,
+			'author'			=> 0,
 			'thumbnails'		=> true,
-			'excerpt_length' 	=> 0,
 			'meta_date'			=> false,
-			'meta_author'		=> false,
 			'meta_comments'		=> false
 		);
 		
@@ -50,7 +45,7 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
-			$cache = wp_cache_get( 'widget_tzwb_popular_posts', 'widget' );
+			$cache = wp_cache_get( 'widget_tzwb_author_posts', 'widget' );
 		}
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -78,7 +73,7 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		// Output
 		echo $before_widget;
 	?>
-		<div class="tzwb-popular-posts tzwb-posts">
+		<div class="tzwb-author-posts tzwb-posts">
 		
 			<?php // Display Title
 			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
@@ -98,7 +93,7 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		// Set Cache
 		if ( ! $this->is_preview() ) {
 			$cache[ $this->id ] = ob_get_flush();
-			wp_cache_set( 'widget_tzwb_popular_posts', $cache, 'widget' );
+			wp_cache_set( 'widget_tzwb_author_posts', $cache, 'widget' );
 		} else {
 			ob_end_flush();
 		}
@@ -107,7 +102,7 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 	
 	// Render Widget Content
 	function render($instance) {
-
+		
 		// Get Widget Settings
 		$defaults = $this->default_settings();
 		extract( wp_parse_args( $instance, $defaults ) );
@@ -116,17 +111,13 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		$query_arguments = array(
 			'posts_per_page' => (int)$number,
 			'ignore_sticky_posts' => true,
-			'orderby' => 'comment_count'
+			'author' => (int)$author
 		);
 		$posts_query = new WP_Query($query_arguments);
-		
+
 		// Check if there are posts
 		if( $posts_query->have_posts() ) :
 		
-			// Limit the number of words for the excerpt
-			$this->excerpt_length = (int)$excerpt_length;
-			add_filter('excerpt_length', array(&$this, 'excerpt_length') );	
-			
 			// Display Posts
 			while( $posts_query->have_posts() ) :
 				
@@ -149,33 +140,13 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 						<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 					</a>
 
-				<?php // Display Post Content
-				if ( $excerpt_length > 0 ) : ?>
-					
-					<span class="tzwb-excerpt"><?php the_excerpt(); ?></span>
-				
-				<?php endif; ?>
 
-					
 					<div class="tzwb-postmeta">
 						
 					<?php // Display Date
 					if ( $meta_date == 1 ) : ?>
 						
 						<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
-						
-					<?php endif; ?>
-					
-					<?php // Display Author
-					if ( $meta_author == 1 ) : ?>
-						
-						<span class="tzwb-meta-author">
-							<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
-								esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-								esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
-								get_the_author()
-							);?>
-						</span>
 						
 					<?php endif; ?>
 					
@@ -193,9 +164,6 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 			<?php
 			endwhile;
 			
-			// Remove excerpt filter
-			remove_filter('excerpt_length', array(&$this, 'excerpt_length') );	
-			
 		endif;
 		
 		// Reset Postdata
@@ -208,10 +176,9 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['number'] = (int)$new_instance['number'];
+		$instance['author'] = (int)$new_instance['author'];
 		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
-		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
 		$instance['meta_date'] = !empty($new_instance['meta_date']);
-		$instance['meta_author'] = !empty($new_instance['meta_author']);
 		$instance['meta_comments'] = !empty($new_instance['meta_comments']);
 		
 		$this->delete_widget_cache();
@@ -237,6 +204,20 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('author'); ?>"><?php _e('Select Author:', 'themezee-widget-bundle'); ?></label><br/>
+			<select id="<?php echo $this->get_field_id('author'); ?>" name="<?php echo $this->get_field_name('author'); ?>">
+				<option value="0" <?php selected($author, 0, false); ?>> </option>
+				<?php // Display Author Select Options
+					$users = get_users(array('who' => 'authors'));
+					
+					foreach ( $users as $user ) :
+						printf('<option value="%s" %s>%s</option>', $user->data->ID, selected($author, $user->data->ID, false), $user->data->display_name);
+					endforeach;
+				?>
+			</select>
+		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
@@ -246,22 +227,9 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" />
-			</label>
-		</p>
-
-		<p>
 			<label for="<?php echo $this->get_field_id('meta_date'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
 				<?php _e('Show Post Date?', 'themezee-widget-bundle'); ?>
-			</label>
-		</p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
-				<?php _e('Show Author of Post?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
