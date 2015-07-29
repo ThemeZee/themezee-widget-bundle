@@ -67,7 +67,7 @@ class ThemeZee_Addons_Overview {
 			return;
 				
 		// Enqueue Admin CSS
-		wp_enqueue_style( 'themezee-addons-stylesheet', plugins_url('/css/themezee-addons.css', dirname( __FILE__ ) ), array(), '20140604' );
+		wp_enqueue_style( 'themezee-addons-stylesheet', TZWB_PLUGIN_URL . '/assets/css/themezee-addons.css', array(), TZWB_VERSION );
 		
 	}
 	

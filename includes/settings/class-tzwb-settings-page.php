@@ -38,10 +38,7 @@ class TZWB_Settings_Page {
 	/* Display Settings Page */
 	static function display_settings_page() { 
 	
-		$options = TZWB_Settings::get_options();
-		
-		
-
+		ob_start();
 	?>
 		
 		<div id="tzwb-admin-wrap" class="wrap">
@@ -58,9 +55,6 @@ class TZWB_Settings_Page {
 							settings_fields('tzwb_settings');
 							do_settings_sections('tzwb_settings');
 							submit_button();
-
-							print_r($options[ 'license_status' ]);
-							echo 'test';
 						?>
 					</form>
 					
@@ -73,7 +67,8 @@ class TZWB_Settings_Page {
 			</div>
 			
 		</div>
-<?php	
+<?php
+		echo ob_get_clean();
 	}
 	
 	/* Display TZWB Admin Sidebar */
@@ -108,7 +103,7 @@ class TZWB_Settings_Page {
 			return;
 				
 		// Enqueue Admin CSS
-		wp_enqueue_style( 'tzwb-admin-stylesheet', TZWB_PLUGIN_URL . '/assets/css/tzwb-admin.css', array(), '20140604' );
+		wp_enqueue_style( 'tzwb-admin-stylesheet', TZWB_PLUGIN_URL . '/assets/css/tzwb-admin.css', array(), TZWB_VERSION );
 		
 	}
 	

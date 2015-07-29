@@ -54,7 +54,7 @@ class ThemeZee_Widget_Bundle {
 		
 		// Load Translation File
 		load_plugin_textdomain( 'themezee-widget-bundle', false, dirname(plugin_basename(__FILE__)) );
-
+		
 	}
 	
 	
@@ -71,6 +71,9 @@ class ThemeZee_Widget_Bundle {
 
 		// Define Version Number
 		define( 'TZWB_VERSION', '1.0' );
+		
+		// Define Plugin Name
+		define( 'TZWB_PRODUCT_ID', 'ThemeZee Widget Bundle');
 
 		// Define Update API URL
 		define( 'TZWB_STORE_API_URL', 'https://themezee.com' ); 
@@ -95,8 +98,8 @@ class ThemeZee_Widget_Bundle {
 	static function includes() {
 
 		// Include Admin Classes
-		require_once TZWB_PLUGIN_DIR . '/includes/admin/class-themezee-addons-overview.php';
-		require_once TZWB_PLUGIN_DIR . '/includes/admin/class-tzwb-plugin-updater.php';
+		require_once TZWB_PLUGIN_DIR . '/includes/class-themezee-addons-overview.php';
+		require_once TZWB_PLUGIN_DIR . '/includes/class-tzwb-plugin-updater.php';
 		
 		// Include Settings Classes
 		require_once TZWB_PLUGIN_DIR . '/includes/settings/class-tzwb-settings.php';
@@ -142,36 +145,38 @@ class ThemeZee_Widget_Bundle {
 		
 	}
 
+
 	/* Register Widgets */
 	static function register_widgets() {
 		
-		$options = TZWB_Settings::get_options();
+		$options = TZWB_Settings::instance();
+		$widget_options = $options->get('active_widgets');
 		
-		if( isset($options['active_widgets']['tzwb_author_posts']) and $options['active_widgets']['tzwb_author_posts'] == true) :
+		if( isset($widget_options['tzwb_author_posts']) and $widget_options['tzwb_author_posts'] == true) :
 			register_widget('TZWB_Author_Posts_Widget');
 		endif;
 		
-		if( isset($options['active_widgets']['tzwb_category_posts']) and $options['active_widgets']['tzwb_category_posts'] == true) :
+		if( isset($widget_options['tzwb_category_posts']) and $widget_options['tzwb_category_posts'] == true) :
 			register_widget('TZWB_Category_Posts_Widget');
 		endif;
 		
-		if( isset($options['active_widgets']['tzwb_popular_posts']) and $options['active_widgets']['tzwb_popular_posts'] == true) :
+		if( isset($widget_options['tzwb_popular_posts']) and $widget_options['tzwb_popular_posts'] == true) :
 			register_widget('TZWB_Popular_Posts_Widget');
 		endif;
 		
-		if( isset($options['active_widgets']['tzwb_recent_comments']) and $options['active_widgets']['tzwb_recent_comments'] == true) :
+		if( isset($widget_options['tzwb_recent_comments']) and $widget_options['tzwb_recent_comments'] == true) :
 			register_widget('TZWB_Recent_Comments_Widget');
 		endif;
 		
-		if( isset($options['active_widgets']['tzwb_recent_posts']) and $options['active_widgets']['tzwb_recent_posts'] == true) :
+		if( isset($widget_options['tzwb_recent_posts']) and $widget_options['tzwb_recent_posts'] == true) :
 			register_widget('TZWB_Recent_Posts_Widget');
 		endif;
 		
-		if( isset($options['active_widgets']['tzwb_social_icons']) and $options['active_widgets']['tzwb_social_icons'] == true) :
+		if( isset($widget_options['tzwb_social_icons']) and $widget_options['tzwb_social_icons'] == true) :
 			register_widget('TZWB_Social_Icons_Widget');
 		endif;
 		
-		if( isset($options['active_widgets']['tzwb_tabbed_content']) and $options['active_widgets']['tzwb_tabbed_content'] == true) :
+		if( isset($widget_options['tzwb_tabbed_content']) and $widget_options['tzwb_tabbed_content'] == true) :
 			register_widget('TZWB_Tabbed_Content_Widget');
 		endif;
 		
@@ -217,7 +222,7 @@ class ThemeZee_Widget_Bundle {
 		if( 'widgets.php' != $hook )
 			return;
 	
-		wp_enqueue_style( 'tzwb-widget-bgcolor', TZWB_PLUGIN_URL . '/assets/css/tzwb-widget-bgcolor.css', array(), '20140604' );
+		wp_enqueue_style( 'tzwb-widget-bgcolor', TZWB_PLUGIN_URL . '/assets/css/tzwb-widget-bgcolor.css', array(), TZWB_VERSION );
 		
 	}
 	
@@ -229,11 +234,11 @@ class ThemeZee_Widget_Bundle {
 			return;
 		
 		// Get Plugin Options
-		$options = TZWB_Settings::get_options();
+		$options = TZWB_Settings::instance();
 		
 		// Include Widget Visibility class
-		if( $options['widget_visibility'] == true ) :
-			require TZWB_PLUGIN_DIR . '/includes/admin/class-tzwb-widget-visibility.php';
+		if( $options->get('widget_visibility') == true ) :
+			require TZWB_PLUGIN_DIR . '/includes/class-tzwb-widget-visibility.php';
 		endif;
 		
 	}
@@ -274,18 +279,18 @@ class ThemeZee_Widget_Bundle {
 			return;
 		endif;
 		
-		$options = TZWB_Settings::get_options();
+		$options = TZWB_Settings::instance();
 
-		if( isset($options['license_key']) and $options['license_key'] <> '') :
+		if( $options->get('license_key') <> '') :
 			
-			$license_key = $options['license_key'];
+			$license_key = $options->get('license_key');
 			
 			// setup the updater
 			$tzwb_updater = new TZWB_Plugin_Updater( TZWB_STORE_API_URL, __FILE__, array(
 					'version' 	=> TZWB_VERSION,
 					'license' 	=> $license_key,
 					'item_name' => TZWB_NAME,
-					'item_id'   => 41305,
+					'item_id'   => TZWB_PRODUCT_ID,
 					'author' 	=> 'ThemeZee'
 				)
 			);

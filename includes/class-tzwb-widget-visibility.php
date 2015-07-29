@@ -24,8 +24,8 @@ class TZWB_Widget_Visibility {
 	}
 
 	public static function widget_admin_setup() {
-		wp_enqueue_style( 'tzwb-widget-visibility', plugins_url('/css/tzwb-widget-visibility.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script( 'tzwb-widget-visibility-js', plugins_url('/js/widget-visibility.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-core' ), 20130129, true );
+		wp_enqueue_style( 'tzwb-widget-visibility', TZWB_PLUGIN_URL . '/assets/css/tzwb-widget-visibility.css' );
+		wp_enqueue_script( 'tzwb-widget-visibility-js', TZWB_PLUGIN_URL . '/assets/js/widget-visibility.js', array( 'jquery', 'jquery-ui-core' ), TZWB_VERSION, true );
 	}
 
 	/**
