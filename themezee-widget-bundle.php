@@ -73,7 +73,7 @@ class ThemeZee_Widget_Bundle {
 		define( 'TZWB_VERSION', '1.0' );
 		
 		// Define Plugin Name
-		define( 'TZWB_PRODUCT_ID', 'ThemeZee Widget Bundle');
+		define( 'TZWB_PRODUCT_ID', 41305);
 
 		// Define Update API URL
 		define( 'TZWB_STORE_API_URL', 'https://themezee.com' ); 
