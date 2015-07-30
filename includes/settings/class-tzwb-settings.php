@@ -1,15 +1,29 @@
 <?php
-/**
+/***
  * TZWB Settings Class
  *
+ * Registers all plugin settings with the WordPress Settings API.
+ * Handles license key activation with the ThemeZee Store API.
+ *
+ * @link https://codex.wordpress.org/Settings_API
+ * @package ThemeZee Widget Bundle
  */
+
 
  /* Use class to avoid namespace collisions */
 if ( ! class_exists('TZWB_Settings') ) :
 
 class TZWB_Settings {
+	/** Singleton *************************************************************/
 
+	/**
+	 * @var instance The one true TZWB_Settings instance
+	 */
 	private static $instance;
+	
+	/**
+	 * @var options Plugin options array
+	 */
 	private $options;
 	
 	/**
@@ -24,7 +38,6 @@ class TZWB_Settings {
         }
  
         return self::$instance;
- 
     }
 	
 	/**
@@ -34,12 +47,21 @@ class TZWB_Settings {
 	*/
 	public function __construct() {
 
-		$this->options = get_option( 'tzwb_settings', array() );
-
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_init', array( $this, 'activate_license' ) );
 		add_action( 'admin_init', array( $this, 'deactivate_license' ) );
 		add_action( 'admin_init', array( $this, 'check_license' ) );
+		
+		// Merge Plugin Options Array from Database with Default Settings Array
+		$this->options = wp_parse_args( 
+			
+			// Get saved theme options from WP database
+			get_option( 'tzwb_settings' , array() ), 
+			
+			// Merge with Default Settings if setting was not saved yet
+			$this->default_settings()
+			
+		);
 	}
 
 	/**
@@ -60,6 +82,36 @@ class TZWB_Settings {
 	public function get_all() {
 		return $this->options;
 	}
+	
+	/**
+	 * Retrieve default settings
+	 *
+	 * @return array
+	*/
+	public function default_settings() {
+
+		$default_settings = array();
+
+		foreach ( $this->get_registered_settings() as $key => $option ) :
+		
+			if ( $option[ 'type' ] == 'multicheck' ) :
+			
+				foreach ( $option[ 'options' ] as $index => $value ) :
+				
+					$default_settings[$key][$index] = isset( $option['default'] ) ? $option['default'] : false;
+				
+				endforeach;
+			
+			else :
+				
+				$default_settings[$key] =  isset( $option['default'] ) ? $option['default'] : false;
+				
+			endif;
+		
+		endforeach;
+		
+		return $default_settings;
+	}
 
 	/**
 	 * Register all settings sections and fields
@@ -68,6 +120,7 @@ class TZWB_Settings {
 	*/
 	function register_settings() {
 
+		// Make sure that options exist in database
 		if ( false == get_option( 'tzwb_settings' ) ) {
 			add_option( 'tzwb_settings' );
 		}
@@ -90,15 +143,14 @@ class TZWB_Settings {
 				'tzwb_settings_' . $section,
 				array(
 					'id'      => $key,
-					'desc'    => ! empty( $option['desc'] ) ? $option['desc'] : '',
 					'name'    => isset( $option['name'] ) ? $option['name'] : null,
-					'section' => $section,
+					'desc'    => ! empty( $option['desc'] ) ? $option['desc'] : '',
 					'size'    => isset( $option['size'] ) ? $option['size'] : null,
 					'max'     => isset( $option['max'] ) ? $option['max'] : null,
 					'min'     => isset( $option['min'] ) ? $option['min'] : null,
 					'step'    => isset( $option['step'] ) ? $option['step'] : null,
 					'options' => isset( $option['options'] ) ? $option['options'] : '',
-					'std'     => isset( $option['std'] ) ? $option['std'] : ''
+					'default'     => isset( $option['default'] ) ? $option['default'] : ''
 				)
 			);
 			
@@ -106,7 +158,6 @@ class TZWB_Settings {
 
 		// Creates our settings in the options table
 		register_setting( 'tzwb_settings', 'tzwb_settings', array( $this, 'sanitize_settings' ) );
-
 	}
 
 	/**
@@ -124,44 +175,73 @@ class TZWB_Settings {
 		if( ! is_array( $saved ) ) {
 			$saved = array();
 		}
+		
 		$settings = $this->get_registered_settings();
-
 		$input = $input ? $input : array();
-		$input = apply_filters( 'tzwb_settings_sanitize', $input );
-
-		// Ensure a value is always passed for every checkbox
-		if( ! empty( $settings ) ) {
-			foreach ( $settings as $key => $setting ) {
-
-				// Single checkbox
-				if ( isset( $settings[ $key ][ 'type' ] ) && 'checkbox' == $settings[ $key ][ 'type' ] ) {
-					$input[ $key ] = ! empty( $input[ $key ] );
-				}
-
-				// Multicheck list
-				if ( isset( $settings[ $key ][ 'type' ] ) && 'multicheck' == $settings[ $key ][ 'type' ] ) {
-					if( empty( $input[ $key ] ) ) {
-						$input[ $key ] = array();
-					}
-				}
-			}
-		}
 		
 		// Loop through each setting being saved and pass it through a sanitization filter
-		foreach ( $input as $key => $value ) {
+		foreach ( $input as $key => $value ) :
 
 			// Get the setting type (checkbox, select, etc)
 			$type = isset( $settings[ $key ][ 'type' ] ) ? $settings[ $key ][ 'type' ] : false;
-			$input[ $key ] = $value;
+			
+			// Sanitize user input based on setting type
+			if ( $type == 'text' or $type == 'license' ) :
+				
+				$input[ $key ] = sanitize_text_field( $value );
+			
+			elseif ( $type == 'radio' or $type == 'select' ) :
+				
+				$available_options = array_keys( $settings[ $key ][ 'options' ] );
+				$input[ $key ] = in_array( $value, $available_options, true ) ? $value : $settings[ $key ][ 'default' ];
+							
+			elseif ( $type == 'number' ) :
+				
+				$input[ $key ] = floatval( $value );
+			
+			elseif ( $type == 'textarea' ) :
+				
+				$input[ $key ] = esc_html( $value );
+			
+			elseif ( $type == 'textarea_html' ) :
+				
+				if ( current_user_can('unfiltered_html') ) :
+					$input[ $key ] = $value;
+				else :
+					$input[ $key ] = wp_kses_post( $value );
+				endif;
+			
+			elseif ( $type == 'checkbox' or $type == 'multicheck' ) :
+				
+				$input[ $key ] = $value; // Validate Checkboxes later
+				
+			else :
+				
+				// Default Sanitization
+				$input[ $key ] = esc_html( $value );
+				
+			endif;
 
-			if ( $type ) {
-				// Field type specific filter
-				$input[ $key ] = apply_filters( 'tzwb_settings_sanitize_' . $type, $input[ $key ], $key );
-			}
+		endforeach;
+		
+		// Ensure a value is always passed for every checkbox
+		if( ! empty( $settings ) ) :
+			foreach ( $settings as $key => $setting ) :
 
-			// General filter
-			$input[ $key ] = apply_filters( 'tzwb_settings_sanitize', $input[ $key ], $key );
-		}
+				// Single checkbox
+				if ( isset( $settings[ $key ][ 'type' ] ) && 'checkbox' == $settings[ $key ][ 'type' ] ) :
+					$input[ $key ] = ! empty( $input[ $key ] );
+				endif;
+
+				// Multicheck list
+				if ( isset( $settings[ $key ][ 'type' ] ) && 'multicheck' == $settings[ $key ][ 'type' ] ) :
+					foreach ( $settings[ $key ][ 'options' ] as $index => $value ) :
+						$input[ $key ][ $index ] = ! empty( $input[ $key ][ $index ] );
+					endforeach;
+				endif;
+				
+			endforeach;
+		endif;
 
 		return array_merge( $saved, $input );
 
@@ -179,28 +259,30 @@ class TZWB_Settings {
 				'name' =>  __('Visibility', 'themezee-widget-bundle'),
 				'desc' => __('Add "Visibility" tab to widget settings to set conditions where the widget should be displayed.', 'themezee-widget-bundle'),
 				'section' => 'widgets',
-				'type' => 'checkbox'
+				'type' => 'checkbox',
+				'default' => true
 			),
 			'active_widgets' => array(
 				'name' => __( 'Active Widgets', 'themezee-widget-bundle' ),
 				'desc' => __( 'Choose available widgets.', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'multicheck',
+				'default' => true,
 				'options' => array(	
-						'tzwb_author_posts' => __('Enable Author Posts Widget', 'themezee-widget-bundle'),	
-						'tzwb_category_posts' => __('Enable Category Posts Widget', 'themezee-widget-bundle'),	
-						'tzwb_popular_posts' => __('Enable Popular Posts Widget', 'themezee-widget-bundle'),	
-						'tzwb_recent_comments' => __('Enable Recent Comments Widget', 'themezee-widget-bundle'),	
-						'tzwb_recent_posts' => __('Enable Recent Posts Widget', 'themezee-widget-bundle'),	
-						'tzwb_social_icons' => __('Enable Social Icons Widget', 'themezee-widget-bundle'),	
-						'tzwb_tabbed_content' => __('Enable Tabbed Content Widget', 'themezee-widget-bundle')	
-					)
+					'tzwb_author_posts' => __('Enable Author Posts Widget', 'themezee-widget-bundle'),	
+					'tzwb_category_posts' => __('Enable Category Posts Widget', 'themezee-widget-bundle'),	
+					'tzwb_popular_posts' => __('Enable Popular Posts Widget', 'themezee-widget-bundle'),	
+					'tzwb_recent_comments' => __('Enable Recent Comments Widget', 'themezee-widget-bundle'),	
+					'tzwb_recent_posts' => __('Enable Recent Posts Widget', 'themezee-widget-bundle'),	
+					'tzwb_social_icons' => __('Enable Social Icons Widget', 'themezee-widget-bundle'),	
+					'tzwb_tabbed_content' => __('Enable Tabbed Content Widget', 'themezee-widget-bundle') )
 				),
 			'license_key' => array(
 				'name' => __( 'License Key', 'themezee-widget-bundle' ),
-				'desc' => '<p class="description">' . sprintf( __( 'Please enter your license key. An active license key is needed for automatic plugin updates and <a href="%s" target="_blank">support</a>.', 'themezee-widget-bundle' ), 'http://themezee.com/support/' ) . '</p>',
+				'desc' => sprintf( __( 'Please enter your license key. An active license key is needed for automatic plugin updates and <a href="%s" target="_blank">support</a>.', 'themezee-widget-bundle' ), 'http://themezee.com/support/' ),
 				'section' => 'license',
-				'type' => 'license'
+				'type' => 'license',
+				'default' => ''
 			)
 		);
 
@@ -236,42 +318,17 @@ class TZWB_Settings {
 	 */
 	function multicheck_callback( $args ) {
 
-		if ( ! empty( $args['options'] ) ) {
+		if ( ! empty( $args['options'] ) ) :
 			foreach( $args['options'] as $key => $option ) {
-				if( isset( $this->options[$args['id']][$key] ) ) { $enabled = $option; } else { $enabled = NULL; }
-				echo '<input name="tzwb_settings[' . $args['id'] . '][' . $key . ']" id="tzwb_settings[' . $args['id'] . '][' . $key . ']" type="checkbox" value="' . $option . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
+				$checked = isset($this->options[$args['id']][$key]) ? checked(1, $this->options[$args['id']][$key], false) : '';
+				echo '<input name="tzwb_settings[' . $args['id'] . '][' . $key . ']" id="tzwb_settings[' . $args['id'] . '][' . $key . ']" type="checkbox" value="1" ' . $checked . '/>&nbsp;';
 				echo '<label for="tzwb_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
 			}
-			echo '<p class="description">' . $args['desc'] . '</p>';
-		}
-	}
-
-	/**
-	 * Radio Callback
-	 *
-	 * Renders radio boxes.
-	 *
-	 * @param array $args Arguments passed by the setting
-	 * @global $this->options Array of all the ThemeZee Widget Bundle Options
-	 * @return void
-	 */
-	function radio_callback( $args ) {
-
-		foreach ( $args['options'] as $key => $option ) :
-			$checked = false;
-
-			if ( isset( $this->options[ $args['id'] ] ) && $this->options[ $args['id'] ] == $key )
-				$checked = true;
-			elseif( isset( $args['std'] ) && $args['std'] == $key && ! isset( $this->options[ $args['id'] ] ) )
-				$checked = true;
-
-			echo '<input name="tzwb_settings[' . $args['id'] . ']"" id="tzwb_settings[' . $args['id'] . '][' . $key . ']" type="radio" value="' . $key . '" ' . checked(true, $checked, false) . '/>&nbsp;';
-			echo '<label for="tzwb_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
-		endforeach;
-
+		endif;
 		echo '<p class="description">' . $args['desc'] . '</p>';
 	}
-
+	
+	
 	/**
 	 * Text Callback
 	 *
@@ -286,14 +343,43 @@ class TZWB_Settings {
 		if ( isset( $this->options[ $args['id'] ] ) )
 			$value = $this->options[ $args['id'] ];
 		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
+			$value = isset( $args['default'] ) ? $args['default'] : '';
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 		$html = '<input type="text" class="' . $size . '-text" id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
-		$html .= '<label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+		$html .= '<p class="description">'  . $args['desc'] . '</p>';
 
 		echo $html;
 	}
+	
+	
+	/**
+	 * Radio Callback
+	 *
+	 * Renders radio boxes.
+	 *
+	 * @param array $args Arguments passed by the setting
+	 * @global $this->options Array of all the ThemeZee Widget Bundle Options
+	 * @return void
+	 */
+	function radio_callback( $args ) {
+
+		if ( ! empty( $args['options'] ) ):
+			foreach ( $args['options'] as $key => $option ) :
+				$checked = false;
+
+				if ( isset( $this->options[ $args['id'] ] ) && $this->options[ $args['id'] ] == $key )
+					$checked = true;
+				elseif( isset( $args['default'] ) && $args['default'] == $key && ! isset( $this->options[ $args['id'] ] ) )
+					$checked = true;
+
+				echo '<input name="tzwb_settings[' . $args['id'] . ']"" id="tzwb_settings[' . $args['id'] . '][' . $key . ']" type="radio" value="' . $key . '" ' . checked(true, $checked, false) . '/>&nbsp;';
+				echo '<label for="tzwb_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
+			endforeach;
+		endif;
+		echo '<p class="description">' . $args['desc'] . '</p>';
+	}
+
 
 	/**
 	 * License Callback
@@ -309,7 +395,7 @@ class TZWB_Settings {
 		if ( isset( $this->options[ $args['id'] ] ) )
 			$value = $this->options[ $args['id'] ];
 		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
+			$value = isset( $args['default'] ) ? $args['default'] : '';
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 		$html = '<input type="text" class="' . $size . '-text" id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
@@ -327,7 +413,7 @@ class TZWB_Settings {
 			$html .= '<input type="submit" class="button" name="tzwb_activate_license" value="' . esc_attr__( 'Activate License', 'themezee-widget-bundle' ) . '"/>';
 		}
 
-		$html .= '<br/><label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+		$html .= '<p class="description">'  . $args['desc'] . '</p>';
 
 		echo $html;
 	}
@@ -346,7 +432,7 @@ class TZWB_Settings {
 		if ( isset( $this->options[ $args['id'] ] ) )
 			$value = $this->options[ $args['id'] ];
 		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
+			$value = isset( $args['default'] ) ? $args['default'] : '';
 
 		$max  = isset( $args['max'] ) ? $args['max'] : 999999;
 		$min  = isset( $args['min'] ) ? $args['min'] : 0;
@@ -354,7 +440,7 @@ class TZWB_Settings {
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 		$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
-		$html .= '<label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+		$html .= '<p class="description">'  . $args['desc'] . '</p>';
 
 		echo $html;
 	}
@@ -373,14 +459,38 @@ class TZWB_Settings {
 		if ( isset( $this->options[ $args['id'] ] ) )
 			$value = $this->options[ $args['id'] ];
 		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
+			$value = isset( $args['default'] ) ? $args['default'] : '';
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<textarea class="large-text" cols="50" rows="5" id="tzwb_settings_' . $args['id'] . '" name="tzwb_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
-		$html .= '<label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+		$html = '<textarea class="' . $size . '-text" cols="20" rows="5" id="tzwb_settings_' . $args['id'] . '" name="tzwb_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+		$html .= '<p class="description">'  . $args['desc'] . '</p>';
 
 		echo $html;
 	}
+	
+	/**
+	 * Textarea HTML Callback
+	 *
+	 * Renders textarea fields which allow HTML code.
+	 *
+	 * @param array $args Arguments passed by the setting
+	 * @global $this->options Array of all the ThemeZee Widget Bundle Options
+	 * @return void
+	 */
+	function textarea_html_callback( $args ) {
+
+		if ( isset( $this->options[ $args['id'] ] ) )
+			$value = $this->options[ $args['id'] ];
+		else
+			$value = isset( $args['default'] ) ? $args['default'] : '';
+
+		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html = '<textarea class="' . $size . '-text" cols="20" rows="5" id="tzwb_settings_' . $args['id'] . '" name="tzwb_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+		$html .= '<p class="description">'  . $args['desc'] . '</p>';
+
+		echo $html;
+	}
+
 
 	/**
 	 * Missing Callback
@@ -409,7 +519,7 @@ class TZWB_Settings {
 		if ( isset( $this->options[ $args['id'] ] ) )
 			$value = $this->options[ $args['id'] ];
 		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
+			$value = isset( $args['default'] ) ? $args['default'] : '';
 
 		$html = '<select id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']"/>';
 
@@ -419,58 +529,16 @@ class TZWB_Settings {
 		endforeach;
 
 		$html .= '</select>';
-		$html .= '<label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+		$html .= '<p class="description">'  . $args['desc'] . '</p>';
 
 		echo $html;
 	}
 
 	/**
-	 * Rich Editor Callback
+	 * Activate license key
 	 *
-	 * Renders rich editor fields.
-	 *
-	 * @param array $args Arguments passed by the setting
-	 * @global $this->options Array of all the ThemeZee Widget Bundle Options
-	 * @global $wp_version WordPress Version
-	 */
-	function rich_editor_callback( $args ) {
-
-		if ( isset( $this->options[ $args['id'] ] ) )
-			$value = $this->options[ $args['id'] ];
-		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
-
-		ob_start();
-		wp_editor( stripslashes( $value ), 'tzwb_settings_' . $args['id'], array( 'textarea_name' => 'tzwb_settings[' . $args['id'] . ']' ) );
-		$html = ob_get_clean();
-
-		$html .= '<br/><label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
-
-		echo $html;
-	}
-
-	/**
-	 * Upload Callback
-	 *
-	 * Renders file upload fields.
-	 *
-	 * @param array $args Arguements passed by the setting
-	 */
-	function upload_callback( $args ) {
-		if( isset( $this->options[ $args['id'] ] ) )
-			$value = $this->options[ $args['id'] ];
-		else
-			$value = isset( $args['std'] ) ? $args['std'] : '';
-
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="text" class="' . $size . '-text" id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
-		$html .= '<span>&nbsp;<input type="button" class="tzwb_settings_upload_button button-secondary" value="' . __( 'Upload File', 'themezee-widget-bundle' ) . '"/></span>';
-		$html .= '<label for="tzwb_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
-
-		echo $html;
-	}
-
-
+	 * @return void
+	*/
 	public function activate_license() {
 		
 		if( ! isset( $_POST['tzwb_settings'] ) )
@@ -517,7 +585,12 @@ class TZWB_Settings {
 		delete_transient( 'tzwb_license_check' );
 
 	}
-
+	
+	/**
+	 * Deactivate license key
+	 *
+	 * @return void
+	*/
 	public function deactivate_license() {
 
 		if( ! isset( $_POST['tzwb_settings'] ) )
@@ -557,6 +630,11 @@ class TZWB_Settings {
 
 	}
 
+	/**
+	 * Check license key
+	 *
+	 * @return void
+	*/
 	public function check_license() {
 
 		if( ! empty( $_POST['tzwb_settings'] ) ) {
@@ -600,7 +678,12 @@ class TZWB_Settings {
 		return $status;
 
 	}
-
+	
+	/**
+	 * Retrieve license status
+	 *
+	 * @return bool
+	*/
 	public function is_license_valid() {
 		return $this->check_license() == 'valid';
 	}
