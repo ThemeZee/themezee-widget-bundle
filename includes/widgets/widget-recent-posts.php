@@ -10,7 +10,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 			'classname' => 'tzwb_recent_posts', 
 			'description' => __('Displays recent posts.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('tzwb_recent_posts', 'ThemeZee: Recent Posts (Widget Bundle)', $widget_ops);
+		parent::__construct('tzwb_recent_posts', 'ThemeZee: Recent Posts (Widget Bundle)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );

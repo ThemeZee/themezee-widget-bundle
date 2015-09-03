@@ -10,7 +10,7 @@ class TZWB_Popular_Posts_Widget extends WP_Widget {
 			'classname' => 'tzwb_popular_posts', 
 			'description' => __('Displays popular posts by comment count.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('tzwb_popular_posts', 'ThemeZee: Popular Posts (Widget Bundle)', $widget_ops);
+		parent::__construct('tzwb_popular_posts', 'ThemeZee: Popular Posts (Widget Bundle)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );

@@ -10,7 +10,7 @@ class TZWB_Author_Posts_Widget extends WP_Widget {
 			'classname' => 'tzwb_author_posts', 
 			'description' => __('Displays recents posts from a chosen author.', 'themezee-widget-bundle')
 		);
-		$this->WP_Widget('tzwb_author_posts', 'ThemeZee: Author Posts (Widget Bundle)', $widget_ops);
+		parent::__construct('tzwb_author_posts', 'ThemeZee: Author Posts', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
