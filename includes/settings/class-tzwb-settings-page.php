@@ -20,26 +20,25 @@ class TZWB_Settings_Page {
 	*/
 	static function setup() {
 		
-		// Add settings page to admin menu
-		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ), 9 );
+		// Add settings page to addon tabs
+		add_filter( 'themezee_addons_settings_tabs', array( __CLASS__, 'add_settings_page' ) );
+		
+		// Hook settings page to addon page
+		add_action( 'themezee_addons_page_widgets', array( __CLASS__, 'display_settings_page' ) );
 		
 	}
 
 	/**
-	 * Add settings page link to admin menu
+	 * Add settings page to tabs list on themezee add-on page
 	 *
 	 * @return void
 	*/
-	static function add_settings_page() {
+	static function add_settings_page($tabs) {
 			
-		add_submenu_page(
-			'themezee-add-ons',
-			__( 'ThemeZee Widget Bundle Settings', 'themezee-widget-bundle' ),
-			__( 'Widget Bundle', 'themezee-widget-bundle' ),
-			'manage_options',
-			'themezee-widget-bundle',
-			array( __CLASS__, 'display_settings_page' )
-		); 
+		// Add Boilerplate Settings Page to Tabs List
+		$tabs['widgets']      = __( 'Widget Bundle', 'themezee-widget-bundle' );
+		
+		return $tabs;
 		
 	}
 	
@@ -51,25 +50,20 @@ class TZWB_Settings_Page {
 	static function display_settings_page() { 
 	
 		ob_start();
-
 	?>
 		
-		<div id="tzwb-settings-wrap" class="wrap">
+		<div id="tzwb-settings" class="tzwb-settings-wrap">
 			
-			<h2><?php _e( 'ThemeZee Widget Bundle Settings', 'themezee-widget-bundle' ); ?></h2>
+			<h2><?php _e( 'ThemeZee Widget Bundle', 'themezee-widget-bundle' ); ?></h2>
 			<?php settings_errors(); ?>
 			
-			<div class="tzwb-settings-container">
-
-				<form method="post" action="options.php">
-					<?php
-						settings_fields('tzwb_settings');
-						do_settings_sections('tzwb_settings');
-						submit_button();
-					?>
-				</form>
-				
-			</div>
+			<form class="tzwb-settings-form" method="post" action="options.php">
+				<?php
+					settings_fields('tzwb_settings');
+					do_settings_sections('tzwb_settings');
+					submit_button();
+				?>
+			</form>
 			
 		</div>
 <?php

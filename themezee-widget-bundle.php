@@ -98,7 +98,7 @@ class ThemeZee_Widget_Bundle {
 	static function includes() {
 
 		// Include Admin Classes
-		require_once TZWB_PLUGIN_DIR . '/includes/class-themezee-addons-overview.php';
+		require_once TZWB_PLUGIN_DIR . '/includes/class-themezee-addons-page.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/class-tzwb-plugin-updater.php';
 		
 		// Include Settings Classes
@@ -256,7 +256,7 @@ class ThemeZee_Widget_Bundle {
 					<?php echo wp_kses_post( $plugin_data['Description'] ); ?><br/>
 				</p>
 				<p>
-					<a href="<?php echo admin_url( 'admin.php?page=themezee-widget-bundle' ); ?>" class="button button-primary"><?php _e('Plugin Settings', 'themezee-widget-bundle'); ?></a> 
+					<a href="<?php echo admin_url( 'admin.php?page=themezee-add-ons&tab=widgets' ); ?>" class="button button-primary"><?php _e('Plugin Settings', 'themezee-widget-bundle'); ?></a> 
 					<a href="<?php echo admin_url( 'plugins.php?s=ThemeZee+Widget+Bundle' ); ?>" class="button button-secondary"><?php _e('Deactivate', 'themezee-widget-bundle'); ?></a>
 				</p>
 				

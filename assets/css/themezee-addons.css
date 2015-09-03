@@ -12,6 +12,11 @@
 }
 
 /* Layout */
+.themezee-addons-tab-content {
+	margin-top: 16px;
+}
+
+/* Add-on Overview List */
 #themezee-addons-list {
 	margin-top: 12px;
 	max-width: 1100px;
