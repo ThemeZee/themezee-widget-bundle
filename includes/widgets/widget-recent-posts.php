@@ -10,7 +10,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 			'classname' => 'tzwb_recent_posts', 
 			'description' => __('Displays recent posts.', 'themezee-widget-bundle')
 		);
-		parent::__construct('tzwb_recent_posts', 'ThemeZee: Recent Posts (Widget Bundle)', $widget_ops);
+		parent::__construct('tzwb_recent_posts', 'ThemeZee: Recent Posts', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
@@ -33,9 +33,11 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	
 		$defaults = array(
 			'title'				=> '',
-			'number'			=> 5,
+			'category'			=> 0,
+			'order'				=> 'date',
 			'thumbnails'		=> true,
 			'excerpt_length' 	=> 0,
+			'number'			=> 5,
 			'meta_date'			=> false,
 			'meta_author'		=> false,
 			'meta_comments'		=> false
@@ -115,7 +117,9 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		// Get latest posts from database
 		$query_arguments = array(
 			'posts_per_page' => (int)$number,
-			'ignore_sticky_posts' => true
+			'ignore_sticky_posts' => true,
+			'cat' => (int)$category,
+			'orderby' => esc_attr($order)
 		);
 		$posts_query = new WP_Query($query_arguments);
 		
@@ -206,9 +210,11 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
-		$instance['number'] = (int)$new_instance['number'];
+		$instance['category'] = (int)$new_instance['category'];
+		$instance['order'] = esc_attr($new_instance['order']);
 		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
 		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
+		$instance['number'] = (int)$new_instance['number'];
 		$instance['meta_date'] = !empty($new_instance['meta_date']);
 		$instance['meta_author'] = !empty($new_instance['meta_author']);
 		$instance['meta_comments'] = !empty($new_instance['meta_comments']);
@@ -230,44 +236,66 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
-
+		
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'themezee-widget-bundle'); ?>
-				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
-			</label>
+			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Select Category:', 'themezee-widget-bundle'); ?></label><br/>
+			<?php // Display Category Select
+				$args = array(
+					'show_option_all'    => __('All Categories', 'themezee-widget-bundle'),
+					'selected'           => $category,
+					'name'               => $this->get_field_name('category'),
+					'id'                 => $this->get_field_id('category')
+				);
+				wp_dropdown_categories( $args ); 
+			?>
 		</p>
-
+		
 		<p>
-			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
-				<?php _e('Show Post Thumbnails?', 'themezee-widget-bundle'); ?>
-			</label>
+			<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order by:', 'themezee-widget-bundle'); ?></label><br/>
+			<select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
+				<option <?php selected( $order, 'date' ); ?> value="date"><?php _e('Post Date', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $order, 'comment_count' ); ?> value="comment_count"><?php _e('Comment Count', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $order, 'rand' ); ?> value="rand"><?php _e('Random', 'themezee-widget-bundle'); ?></option>
+			</select>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" />
+				<input id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" size="5" />
+			</label>
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts:', 'themezee-widget-bundle'); ?>
+				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+			</label>
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
+				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
+				<?php _e('Display post thumbnails', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_date'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
-				<?php _e('Show Post Date?', 'themezee-widget-bundle'); ?>
+				<?php _e('Display post date', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
-				<?php _e('Show Author of Post?', 'themezee-widget-bundle'); ?>
+				<?php _e('Display post author', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_comments'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_comments ) ; ?> id="<?php echo $this->get_field_id('meta_comments'); ?>" name="<?php echo $this->get_field_name('meta_comments'); ?>" />
-				<?php _e('Show Post Comments?', 'themezee-widget-bundle'); ?>
+				<?php _e('Display post comments', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 <?php

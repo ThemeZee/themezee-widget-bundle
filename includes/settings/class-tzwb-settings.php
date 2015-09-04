@@ -269,12 +269,10 @@ class TZWB_Settings {
 				'type' => 'multicheck',
 				'default' => true,
 				'options' => array(	
-					'tzwb_author_posts' => __('Enable Author Posts Widget', 'themezee-widget-bundle'),	
-					'tzwb_category_posts' => __('Enable Category Posts Widget', 'themezee-widget-bundle'),	
-					'tzwb_popular_posts' => __('Enable Popular Posts Widget', 'themezee-widget-bundle'),	
-					'tzwb_recent_comments' => __('Enable Recent Comments Widget', 'themezee-widget-bundle'),	
-					'tzwb_recent_posts' => __('Enable Recent Posts Widget', 'themezee-widget-bundle'),	
-					'tzwb_social_icons' => __('Enable Social Icons Widget', 'themezee-widget-bundle'),	
+					'tzwb_facebook_likebox' => __('Enable Facebook Like Box Widget', 'themezee-widget-bundle'),
+					'tzwb_recent_comments' => __('Enable Recent Comments Widget', 'themezee-widget-bundle'),
+					'tzwb_recent_posts' => __('Enable Recent Posts Widget', 'themezee-widget-bundle'),
+					'tzwb_social_icons' => __('Enable Social Icons Widget', 'themezee-widget-bundle'),
 					'tzwb_tabbed_content' => __('Enable Tabbed Content Widget', 'themezee-widget-bundle') )
 				),
 			'license_key' => array(

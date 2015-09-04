@@ -31,8 +31,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	}
 	
 	public function enqueue_scripts() {
-
-		wp_enqueue_script('tzwb-tabbed-content', plugins_url('/js/tabbed-content.js', dirname( __FILE__ ) ), array('jquery'));
+		
+		wp_enqueue_script( 'tzwb-tabbed-content', TZWB_PLUGIN_URL . '/assets/js/tabbed-content.js', array( 'jquery' ), TZWB_VERSION );
 		
 	}
 	

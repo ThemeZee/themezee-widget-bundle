@@ -11,8 +11,8 @@ Domain Path: /languages/
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Lean Custom Post Types Plugin
-Copyright(C) 2014, ThemeZee.com - contact@themezee.com
+ThemeZee Widget Bundle
+Copyright(C) 2015, ThemeZee.com - support@themezee.com
 
 */
 
@@ -39,21 +39,20 @@ class ThemeZee_Widget_Bundle {
 	 * @uses ThemeZee_Widget_Bundle::constants() Setup the constants needed
 	 * @uses ThemeZee_Widget_Bundle::includes() Include the required files
 	 * @uses ThemeZee_Widget_Bundle::setup_actions() Setup the hooks and actions
-	 * @uses ThemeZee_Widget_Bundle::updater() Setup the plugin updater
 	 */
 	static function setup() {
 	
 		// Setup Constants
 		self::constants();
 		
+		// Setup Translation
+		load_plugin_textdomain( 'themezee-widget-bundle', false, TZWB_PLUGIN_DIR . '/languages/' );
+	
 		// Include Files
 		self::includes();
 		
 		// Setup Action Hooks
 		self::setup_actions();
-		
-		// Load Translation File
-		load_plugin_textdomain( 'themezee-widget-bundle', false, dirname(plugin_basename(__FILE__)) );
 		
 	}
 	
@@ -106,9 +105,7 @@ class ThemeZee_Widget_Bundle {
 		require_once TZWB_PLUGIN_DIR . '/includes/settings/class-tzwb-settings-page.php';
 		
 		// Include Widget Classes
-		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-author-posts.php';
-		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-category-posts.php';
-		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-popular-posts.php';
+		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-facebook-likebox.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-recent-comments.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-recent-posts.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-social-icons.php';
@@ -152,16 +149,8 @@ class ThemeZee_Widget_Bundle {
 		$options = TZWB_Settings::instance();
 		$widget_options = $options->get('active_widgets');
 		
-		if( isset($widget_options['tzwb_author_posts']) and $widget_options['tzwb_author_posts'] == true) :
-			register_widget('TZWB_Author_Posts_Widget');
-		endif;
-		
-		if( isset($widget_options['tzwb_category_posts']) and $widget_options['tzwb_category_posts'] == true) :
-			register_widget('TZWB_Category_Posts_Widget');
-		endif;
-		
-		if( isset($widget_options['tzwb_popular_posts']) and $widget_options['tzwb_popular_posts'] == true) :
-			register_widget('TZWB_Popular_Posts_Widget');
+		if( isset($widget_options['tzwb_facebook_likebox']) and $widget_options['tzwb_facebook_likebox'] == true) :
+			register_widget('TZWB_Facebook_Likebox_Widget');
 		endif;
 		
 		if( isset($widget_options['tzwb_recent_comments']) and $widget_options['tzwb_recent_comments'] == true) :
@@ -186,9 +175,7 @@ class ThemeZee_Widget_Bundle {
 	static function enqueue_styles() {
 	
 		// Load stylesheet only if widgets are active
-		if ( is_active_widget('TZWB_Author_Posts_Widget', false, 'tzwb_author_posts')
-			or is_active_widget('TZWB_Category_Posts_Widget', false, 'tzwb_category_posts')
-			or is_active_widget('TZWB_Popular_Posts_Widget', false, 'tzwb_popular_posts')
+		if ( is_active_widget('TZWB_Facebook_Likebox_Widget', false, 'tzwb_facebook_likebox')
 			or is_active_widget('TZWB_Recent_Comments_Widget', false, 'tzwb_recent_comments')
 			or is_active_widget('TZWB_Recent_Posts_Widget', false, 'tzwb_recent_posts')
 			or is_active_widget('TZWB_Social_Icons_Widget', false, 'tzwb_social_icons')

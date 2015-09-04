@@ -1,5 +1,2 @@
 
-#widget-list [id*='_tzwb_'] .widget-top { border-left: 3px solid #21759b; }
-
-
-#widget-list [id*='_tzwb_'] .widget-top h4:after { display: inline; content: "(Widget Bundle)"; font-style: normal; color: #777; padding: 0 5px; }
+#widget-list [id*='_tzwb_'] .widget-top { border-left: 3px solid #21759b; color: #21759b; }

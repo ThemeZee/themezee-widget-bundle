@@ -18,7 +18,13 @@
     *zoom: 1; /* For IE 6/7 only */  
 }
 
-/* Recent & Popular Posts Widget
+/* Facebook Like Box Widget
+-------------------------------------------------------------- */
+.tzwb-facebook-likebox {
+	overflow: hidden;
+}
+
+/* Recent Posts Widget
 -------------------------------------------------------------- */
 .tzwb-posts-list {
 	margin: 0;
