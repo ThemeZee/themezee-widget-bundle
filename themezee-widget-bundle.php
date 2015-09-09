@@ -22,23 +22,21 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 // Use class to avoid namespace collisions
 if ( ! class_exists('ThemeZee_Widget_Bundle') ) :
 
+
 /**
  * Main ThemeZee_Widget_Bundle Class
  *
- * @since 1.0
+ * @package ThemeZee Widget Bundle
  */
 class ThemeZee_Widget_Bundle {
 
 	/**
-	 * ThemeZee Widget Bundle Setup
+	 * Call all Functions to setup the Plugin
 	 *
-	 * Calls all Functions to setup the Plugin
-	 *
-	 * @since 1.0
-	 * @static
 	 * @uses ThemeZee_Widget_Bundle::constants() Setup the constants needed
 	 * @uses ThemeZee_Widget_Bundle::includes() Include the required files
 	 * @uses ThemeZee_Widget_Bundle::setup_actions() Setup the hooks and actions
+	 * @return void
 	 */
 	static function setup() {
 	
@@ -60,7 +58,6 @@ class ThemeZee_Widget_Bundle {
 	/**
 	 * Setup plugin constants
 	 *
-	 * @since 1.0
 	 * @return void
 	 */
 	static function constants() {
@@ -88,10 +85,10 @@ class ThemeZee_Widget_Bundle {
 		
 	}
 	
+	
 	/**
 	 * Include required files
 	 *
-	 * @since 1.0
 	 * @return void
 	 */
 	static function includes() {
@@ -117,7 +114,7 @@ class ThemeZee_Widget_Bundle {
 	/**
 	 * Setup Action Hooks
 	 *
-	 * @since 1.0
+	 * @see https://codex.wordpress.org/Function_Reference/add_action WordPress Codex
 	 * @return void
 	 */
 	static function setup_actions() {
@@ -146,7 +143,11 @@ class ThemeZee_Widget_Bundle {
 	}
 
 
-	/* Register Widgets */
+	/**
+	 * Register Widgets
+	 *
+	 * @return void
+	 */
 	static function register_widgets() {
 		
 		$options = TZWB_Settings::instance();
@@ -174,7 +175,12 @@ class ThemeZee_Widget_Bundle {
 		
 	}
 	
-	/* Enqueue Widget Styles */
+	
+	/**
+	 * Enqueue Widget Styles
+	 *
+	 * @return void
+	 */
 	static function enqueue_styles() {
 		
 		// Return early if theme handles styling
@@ -198,7 +204,11 @@ class ThemeZee_Widget_Bundle {
 	}
 	
 	
-	/* Enqueue Backend Scripts and Styles */
+	/**
+	 * Enqueue Admin Styles
+	 *
+	 * @return void
+	 */
 	static function enqueue_admin_scripts( $hook ) {
 		
 		// Embed Widget Highlight only on widget page
@@ -213,6 +223,8 @@ class ThemeZee_Widget_Bundle {
 	
 	/**
 	 * Add custom image size for post thumbnails in widgets
+	 *
+	 * @return void
 	 */
 	static function add_image_size() {
 		
@@ -244,6 +256,11 @@ class ThemeZee_Widget_Bundle {
 	}
 	
 	
+	/**
+	 * Add widget bundle box to addon overview admin page
+	 *
+	 * @return void
+	 */
 	static function addon_overview_page() { 
 	
 		$plugin_data = get_plugin_data( __FILE__ );
@@ -270,7 +287,6 @@ class ThemeZee_Widget_Bundle {
 	/**
 	 * Plugin Updater
 	 *
-	 * @since 1.0
 	 * @return void
 	 */
 	static function plugin_updater() {
@@ -301,7 +317,7 @@ class ThemeZee_Widget_Bundle {
 	
 }
 
-/* Run Plugin */
+// Run Plugin
 ThemeZee_Widget_Bundle::setup();
 
 endif;

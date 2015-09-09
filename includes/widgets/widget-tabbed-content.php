@@ -11,6 +11,9 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 
 	/**
 	 * Widget Constructor
+	 *
+	 * @uses WP_Widget::__construct() Create Widget
+	 * @return void
 	 */
 	function __construct() {
 		
@@ -37,6 +40,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	
 	/**
 	 * Set default settings of the widget
+	 *
+	 * @return array Default widget settings.
 	 */
 	private function default_settings() {
 	
@@ -53,13 +58,11 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	}
 	
 		
-
-	public function enqueue_scripts() {
-		
-		wp_enqueue_script( 'tzwb-tabbed-content', TZWB_PLUGIN_URL . '/assets/js/tabbed-content.js', array( 'jquery' ), TZWB_VERSION );
-		
-	}
-	
+	/**
+	 * Reset widget cache object
+	 *
+	 * @return void
+	 */
 	public function delete_widget_cache() {
 		
 		wp_cache_delete('tzwb_tabbed_content', 'widget');
@@ -67,7 +70,28 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	}
 	
 	
-	// Display Widget
+	/**
+	 * Enqueue jquery tabs javascript
+	 *
+	 * @see https://codex.wordpress.org/Function_Reference/wp_enqueue_script WordPress Codex
+	 * @return void
+	 */
+	public function enqueue_scripts() {
+		
+		wp_enqueue_script( 'tzwb-tabbed-content', TZWB_PLUGIN_URL . '/assets/js/tabbed-content.js', array( 'jquery' ), TZWB_VERSION );
+		
+	}
+	
+	
+	/**
+	 * Main Function to display the widget
+	 * 
+	 * @uses this->render()
+	 * 
+	 * @param array $args Parameters from widget area created with register_sidebar()
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
 	function widget($args, $instance) {
 
 		// Get Widget Object Cache
@@ -105,7 +129,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
-			<?php echo $this->render($args, $instance); ?>
+			<?php echo $this->render($instance); ?>
 			
 		</div>
 			
@@ -122,8 +146,15 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	
 	}
 	
-	// Render Widget Content
-	function render($args, $instance) {
+	
+	/**
+	 * Display the tab navigation
+	 * 
+	 * @uses this->tab_content() to display content of tabs
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
+	function render($instance) {
 		
 		// Get Widget Settings
 		$defaults = $this->default_settings();
@@ -164,7 +195,14 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		
 	}
 	
-	// Display Tab Content
+	
+	/**
+	 * Display the tab content
+	 * 
+	 * @param array $instance Settings for this widget instance
+	 * @param integer $tabcontent Tab ID to select which tab is displayed
+	 * @return void
+	 */
 	function tab_content($instance, $tabcontent) {
 	
 		// Get Widget Settings
@@ -395,6 +433,14 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		endswitch;
 	}
 
+	
+	/**
+	 * Update Widget Settings
+	 *
+	 * @param array $new_instance Form Input for this widget instance
+	 * @param array $old_instance Old Settings for this widget instance
+	 * @return array $instance New widget settings
+	 */
 	function update($new_instance, $old_instance) {
 
 		$instance = $old_instance;
@@ -418,13 +464,20 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		return $instance;
 	}
 
+	
+	/**
+	 * Display Widget Settings Form in the Backend
+	 *
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
 	function form( $instance ) {
 		
 		// Get Widget Settings
 		$defaults = $this->default_settings();
 		extract( wp_parse_args( $instance, $defaults ) );
-
-?>
+		?>
+		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
@@ -475,8 +528,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 				<?php _e('Show Thumbnails?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
-<?php
-	}
-}
 
-?>
+		<?php
+	}
+	
+}

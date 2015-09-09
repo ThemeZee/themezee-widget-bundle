@@ -11,6 +11,9 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 
 	/**
 	 * Widget Constructor
+	 *
+	 * @uses WP_Widget::__construct() Create Widget
+	 * @return void
 	 */
 	function __construct() {
 		
@@ -25,6 +28,8 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 	
 	/**
 	 * Set default settings of the widget
+	 *
+	 * @return array Default widget settings.
 	 */
 	private function default_settings() {
 	
@@ -42,7 +47,14 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		
 	}
 	
-	// Display Widget
+	
+	/**
+	 * Main Function to display the widget
+	 * 
+	 * @param array $args / Parameters from widget area created with register_sidebar()
+	 * @param array $instance / Settings for this widget instance
+	 * @return void
+	 */
 	function widget($args, $instance) {
 
 		// Get Sidebar Arguments
@@ -104,7 +116,13 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 	
 	}
 	
-	// Validate the Facebook Page URL
+	
+	/**
+	 * Validate the Facebook Page URL
+	 *
+	 * @param string $facebook_url URL of Facebook Page
+	 * @return string $valid_url Valid URL of Facebook Page
+	 */
 	function validate_facebook_url( $facebook_url ) {
 
 		if ( FALSE !== strpos( $facebook_url, 'facebook.com' ) ) :
@@ -122,6 +140,14 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		
 	}
 
+	
+	/**
+	 * Update Widget Settings
+	 *
+	 * @param array $new_instance Form Input for this widget instance
+	 * @param array $old_instance Old Settings for this widget instance
+	 * @return array $instance New Settings for this widget instance
+	 */
 	function update($new_instance, $old_instance) {
 
 		$instance = $old_instance;
@@ -139,6 +165,13 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		return $instance;
 	}
 
+	
+	/**
+	 * Display Widget Settings Form in the Backend
+	 *
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
 	function form( $instance ) {
 		
 		// Get Widget Settings
@@ -147,8 +180,8 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		
 		// Validate Facebook URL
 		$facebook_url = $this->validate_facebook_url( $facebook_url );
-
-?>
+		?>
+		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
@@ -194,8 +227,8 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 				<?php _e('Show Page Posts', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
-<?php
-	}
-}
 
-?>
+		<?php
+	}
+	
+}

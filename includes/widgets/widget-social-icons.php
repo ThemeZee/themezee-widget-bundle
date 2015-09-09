@@ -11,6 +11,9 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 
 	/**
 	 * Widget Constructor
+	 *
+	 * @uses WP_Widget::__construct() Create Widget
+	 * @return void
 	 */
 	function __construct() {
 		
@@ -29,6 +32,8 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	
 	/**
 	 * Set default settings of the widget
+	 *
+	 * @return array Default widget settings.
 	 */
 	private function default_settings() {
 	
@@ -42,13 +47,28 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		
 	}
 
+	
+	/**
+	 * Reset widget cache object
+	 *
+	 * @return void
+	 */
 	public function delete_widget_cache() {
 		
 		wp_cache_delete('tzwb_social_icons', 'widget');
 		
 	}
 	
-	// Display Widget
+	
+	/**
+	 * Main Function to display the widget
+	 * 
+	 * @uses this->render()
+	 * 
+	 * @param array $args Parameters from widget area created with register_sidebar()
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
 	function widget($args, $instance) {
 
 		// Get Widget Object Cache
@@ -103,7 +123,14 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	
 	}
 	
-	// Render Widget Content
+	
+	/**
+	 * Display the social icon menu
+	 * 
+	 * @see https://codex.wordpress.org/Function_Reference/wp_nav_menu WordPress Codex
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
 	function render($instance) {
 		
 		// Get Widget Settings
@@ -134,6 +161,14 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		
 	}
 
+	
+	/**
+	 * Update Widget Settings
+	 *
+	 * @param array $new_instance Form Input for this widget instance
+	 * @param array $old_instance Old Settings for this widget instance
+	 * @return array $instance New widget settings
+	 */
 	function update($new_instance, $old_instance) {
 
 		$instance = $old_instance;
@@ -146,13 +181,20 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		return $instance;
 	}
 
+	
+	/**
+	 * Display Widget Settings Form in the Backend
+	 *
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
 	function form( $instance ) {
 		
 		// Get Widget Settings
 		$defaults = $this->default_settings();
 		extract( wp_parse_args( $instance, $defaults ) );
-
-?>
+		?>
+		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
@@ -173,8 +215,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			</select>
 		</p>
 
-<?php
+		<?php
 	}
+	
 }
-
-?>
