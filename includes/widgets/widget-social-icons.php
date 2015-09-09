@@ -1,16 +1,24 @@
 <?php
+/***
+ * Social Icons Widget
+ *
+ * Display the latest posts from a selected category in a boxed layout. 
+ *
+ * @package ThemeZee Widget Bundle
+ */
 
-// Social Icons Widget
 class TZWB_Social_Icons_Widget extends WP_Widget {
 
+	/**
+	 * Widget Constructor
+	 */
 	function __construct() {
 		
-		// Setup Widget
-		$widget_ops = array(
-			'classname' => 'tzwb_social_icons', 
-			'description' => __('Displays your Social Icons.', 'themezee-widget-bundle')
+		parent::__construct(
+			'tzwb-social-icons', // ID
+			__( 'Social Icons (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-social-icons', 'description' => __( 'Displays your Social Icons.', 'themezee-widget-bundle' ) ) // Args
 		);
-		parent::__construct('tzwb_social_icons', 'ThemeZee: Social Icons (Widget Bundle)', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'wp_update_nav_menu', array( $this, 'delete_widget_cache' ) );
@@ -18,12 +26,10 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		
 	}
 
-	public function delete_widget_cache() {
-		
-		wp_cache_delete('widget_tzwb_social_icons', 'widget');
-		
-	}
 	
+	/**
+	 * Set default settings of the widget
+	 */
 	private function default_settings() {
 	
 		$defaults = array(
@@ -35,13 +41,19 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		return $defaults;
 		
 	}
+
+	public function delete_widget_cache() {
+		
+		wp_cache_delete('tzwb_social_icons', 'widget');
+		
+	}
 	
 	// Display Widget
 	function widget($args, $instance) {
 
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
-			$cache = wp_cache_get( 'widget_tzwb_social_icons', 'widget' );
+			$cache = wp_cache_get( 'tzwb_social_icons', 'widget' );
 		}
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -68,26 +80,23 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		
 		// Output
 		echo $before_widget;
-	?>
-		<div class="tzwb-social-icons">
-		
-			<?php // Display Title
-			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+
+		// Display Title
+		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
 			
-			<div class="tzwb-content tzwb-clearfix">
-				
-				<?php echo $this->render($instance); ?>
-				
-			</div>
+		<div class="tzwb-content tzwb-clearfix">
+			
+			<?php echo $this->render($instance); ?>
 			
 		</div>
-	<?php
+			
+		<?php
 		echo $after_widget;
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
 			$cache[ $this->id ] = ob_get_flush();
-			wp_cache_set( 'widget_tzwb_social_icons', $cache, 'widget' );
+			wp_cache_set( 'tzwb_social_icons', $cache, 'widget' );
 		} else {
 			ob_end_flush();
 		}
@@ -108,7 +117,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			$menu_args = array(
 				'menu' => (int)$menu,
 				'container' => false,
-				'menu_class' => 'tzwb-social-icons-menu',
+				'menu_class' => 'tzwb-social-icons-menu menu',
 				'echo' => true,
 				'fallback_cb' => '',
 				'before' => '',
@@ -121,13 +130,6 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			// Display Social Icons Menu
 			wp_nav_menu( $menu_args );
 			
-		else: // Display Hint how to configure Social Icons ?>
-
-			<p class="tzwb-social-icons-hint">
-				<?php _e('Please go to WP-Admin -> Appearance -> Menus and create a new custom menu with custom links to all your social networks. Then select your created menu on the "Social Icons" widget settings.', 'themezee-widget-bundle'); ?>
-			</p>
-			
-	<?php
 		endif;
 		
 	}

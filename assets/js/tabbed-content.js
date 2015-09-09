@@ -28,7 +28,7 @@
 	}
 	
 	$( document ).ready( function() {
-		$( '.tzwb_tabbed_content').each( function () {
+		$( '.tzwb-tabbed-content').each( function () {
 			initTabbedWidget( $( this ) );
 		} );
 	} );

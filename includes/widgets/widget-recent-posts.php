@@ -1,16 +1,24 @@
 <?php
+/***
+ * Recent Posts Widget
+ *
+ * Display the latest posts from a selected category in a boxed layout. 
+ *
+ * @package ThemeZee Widget Bundle
+ */
 
-// Recent Posts Widget
 class TZWB_Recent_Posts_Widget extends WP_Widget {
 
+	/**
+	 * Widget Constructor
+	 */
 	function __construct() {
 		
-		// Setup Widget
-		$widget_ops = array(
-			'classname' => 'tzwb_recent_posts', 
-			'description' => __('Displays recent posts.', 'themezee-widget-bundle')
+		parent::__construct(
+			'tzwb-recent-posts', // ID
+			__( 'Recent Posts (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-recent-posts', 'description' => __( 'Displays recent posts.', 'themezee-widget-bundle' ) ) // Args
 		);
-		parent::__construct('tzwb_recent_posts', 'ThemeZee: Recent Posts', $widget_ops);
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
@@ -18,26 +26,20 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		add_action( 'switch_theme', array( $this, 'delete_widget_cache' ) );
 		
 	}
-
-	function excerpt_length($length) {
-		return $this->excerpt_length;
-	}
 	
-	public function delete_widget_cache() {
-		
-		wp_cache_delete('widget_tzwb_recent_posts', 'widget');
-		
-	}
 	
+	/**
+	 * Set default settings of the widget
+	 */
 	private function default_settings() {
 	
 		$defaults = array(
 			'title'				=> '',
 			'category'			=> 0,
 			'order'				=> 'date',
-			'thumbnails'		=> true,
-			'excerpt_length' 	=> 0,
 			'number'			=> 5,
+			'excerpt_length' 	=> 0,
+			'thumbnails'		=> true,
 			'meta_date'			=> false,
 			'meta_author'		=> false,
 			'meta_comments'		=> false
@@ -47,12 +49,24 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		
 	}
 	
+	
+	function excerpt_length($length) {
+		return $this->excerpt_length;
+	}
+	
+	public function delete_widget_cache() {
+		
+		wp_cache_delete('tzwb_recent_posts', 'widget');
+		
+	}
+	
+	
 	// Display Widget
 	function widget($args, $instance) {
 
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
-			$cache = wp_cache_get( 'widget_tzwb_recent_posts', 'widget' );
+			$cache = wp_cache_get( 'tzwb_recent_posts', 'widget' );
 		}
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -79,28 +93,25 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		
 		// Output
 		echo $before_widget;
-	?>
-		<div class="tzwb-recent-posts tzwb-posts">
-		
-			<?php // Display Title
-			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+
+		// Display Title
+		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
 			
-			<div class="tzwb-content tzwb-clearfix">
-				
-				<ul class="tzwb-posts-list">
-					<?php echo $this->render($instance); ?>
-				</ul>
-				
-			</div>
+		<div class="tzwb-content tzwb-clearfix">
+			
+			<ul class="tzwb-posts-list">
+				<?php echo $this->render($instance); ?>
+			</ul>
 			
 		</div>
-	<?php
+			
+		<?php
 		echo $after_widget;
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
 			$cache[ $this->id ] = ob_get_flush();
-			wp_cache_set( 'widget_tzwb_recent_posts', $cache, 'widget' );
+			wp_cache_set( 'tzwb_recent_posts', $cache, 'widget' );
 		} else {
 			ob_end_flush();
 		}
@@ -128,7 +139,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		
 			// Limit the number of words for the excerpt
 			$this->excerpt_length = (int)$excerpt_length;
-			add_filter('excerpt_length', array(&$this, 'excerpt_length') );	
+			add_filter('excerpt_length', array($this, 'excerpt_length') );	
 			
 			// Display Posts
 			while( $posts_query->have_posts() ) :
@@ -197,7 +208,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 			endwhile;
 			
 			// Remove excerpt filter
-			remove_filter('excerpt_length', array(&$this, 'excerpt_length') );	
+			remove_filter('excerpt_length', array($this, 'excerpt_length') );	
 			
 		endif;
 		
@@ -212,9 +223,9 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		$instance['title'] = esc_attr($new_instance['title']);
 		$instance['category'] = (int)$new_instance['category'];
 		$instance['order'] = esc_attr($new_instance['order']);
-		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
-		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
 		$instance['number'] = (int)$new_instance['number'];
+		$instance['excerpt_length'] = (int)$new_instance['excerpt_length'];
+		$instance['thumbnails'] = !empty($new_instance['thumbnails']);
 		$instance['meta_date'] = !empty($new_instance['meta_date']);
 		$instance['meta_author'] = !empty($new_instance['meta_author']);
 		$instance['meta_comments'] = !empty($new_instance['meta_comments']);
@@ -260,14 +271,14 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
-				<input id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" size="5" />
-			</label>
-		</p>
-		
-		<p>
 			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+			</label>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
+				<input id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" size="5" />
 			</label>
 		</p>
 		

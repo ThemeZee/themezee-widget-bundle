@@ -1,21 +1,25 @@
 <?php
+/***
+ * Tabbed Content Widget
+ *
+ * Display the latest posts from a selected category in a boxed layout. 
+ *
+ * @package ThemeZee Widget Bundle
+ */
 
-// Recent Posts Widget
 class TZWB_Tabbed_Content_Widget extends WP_Widget {
 
+	/**
+	 * Widget Constructor
+	 */
 	function __construct() {
 		
-		// Setup Widget
-		$widget_ops = array(
-			'classname' => 'tzwb_tabbed_content', 
-			'description' => __('Displays various content with tabs.', 'themezee-widget-bundle')
+		parent::__construct(
+			'tzwb-tabbed-content', // ID
+			__( 'Tabbed Content (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-tabbed-content', 'description' => __( 'Displays various content with tabs.', 'themezee-widget-bundle' ) ), // Args
+			array( 'width' => 450,  'id_base' => 'tzwb-tabbed-content' ) // Controls
 		);
-		$control_ops = array(
-			'width' => 450, 
-			'id_base' => 'tzwb_tabbed_content'
-		);
-		
-		parent::__construct('tzwb_tabbed_content', 'ThemeZee: Tabbed Content (Widget Bundle)', $widget_ops, $control_ops);
 		
 		// Enqueue Javascript for Tabs
 		if ( is_active_widget(false, false, $this->id_base) )
@@ -30,18 +34,10 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		
 	}
 	
-	public function enqueue_scripts() {
-		
-		wp_enqueue_script( 'tzwb-tabbed-content', TZWB_PLUGIN_URL . '/assets/js/tabbed-content.js', array( 'jquery' ), TZWB_VERSION );
-		
-	}
 	
-	public function delete_widget_cache() {
-		
-		wp_cache_delete('widget_tzwb_tabbed_content', 'widget');
-		
-	}
-	
+	/**
+	 * Set default settings of the widget
+	 */
 	private function default_settings() {
 	
 		$defaults = array(
@@ -56,12 +52,27 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		
 	}
 	
+		
+
+	public function enqueue_scripts() {
+		
+		wp_enqueue_script( 'tzwb-tabbed-content', TZWB_PLUGIN_URL . '/assets/js/tabbed-content.js', array( 'jquery' ), TZWB_VERSION );
+		
+	}
+	
+	public function delete_widget_cache() {
+		
+		wp_cache_delete('tzwb_tabbed_content', 'widget');
+		
+	}
+	
+	
 	// Display Widget
 	function widget($args, $instance) {
 
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
-			$cache = wp_cache_get( 'widget_tzwb_tabbed_content', 'widget' );
+			$cache = wp_cache_get( 'tzwb_tabbed_content', 'widget' );
 		}
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -88,26 +99,23 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		
 		// Output
 		echo $before_widget;
-	?>
-		<div class="tzwb-tabbed-content">
-		
-			<?php // Display Title
-			if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+
+		// Display Title
+		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
 			
-			<div class="tzwb-content tzwb-clearfix">
-				
-				<?php echo $this->render($args, $instance); ?>
-				
-			</div>
+		<div class="tzwb-content tzwb-clearfix">
+			
+			<?php echo $this->render($args, $instance); ?>
 			
 		</div>
-	<?php
+			
+		<?php
 		echo $after_widget;
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
 			$cache[ $this->id ] = ob_get_flush();
-			wp_cache_set( 'widget_tzwb_tabbed_content', $cache, 'widget' );
+			wp_cache_set( 'tzwb_tabbed_content', $cache, 'widget' );
 		} else {
 			ob_end_flush();
 		}
@@ -331,7 +339,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 				
 							<li class="tzwb-has-thumbnail">
 								<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
-									<?php the_post_thumbnail('tzwb-thumbnail'); ?>
+									<?php the_post_thumbnail( 'tzwb-thumbnail' ); ?>
 								</a>
 					
 						<?php else: ?>

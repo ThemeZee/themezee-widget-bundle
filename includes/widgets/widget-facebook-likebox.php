@@ -1,19 +1,31 @@
 <?php
+/***
+ * Facebook Likebox Widget
+ *
+ * Display the latest posts from a selected category in a boxed layout. 
+ *
+ * @package ThemeZee Widget Bundle
+ */
 
-// Recent Posts Widget
 class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 
+	/**
+	 * Widget Constructor
+	 */
 	function __construct() {
 		
-		// Setup Widget
-		$widget_ops = array(
-			'classname' => 'tzwb_facebook_likebox', 
-			'description' => __('Display facebook like box.', 'themezee-widget-bundle')
+		parent::__construct(
+			'tzwb-facebook-likebox', // ID
+			__( 'Facebook Like Box (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-facebook-likebox', 'description' => __( 'Display facebook like box.', 'themezee-widget-bundle' ) ) // Args
 		);
-		parent::__construct('tzwb_facebook_likebox', __('Facebook Like Box (ThemeZee)', 'themezee-widget-bundle'), $widget_ops);
 
 	}
 
+	
+	/**
+	 * Set default settings of the widget
+	 */
 	private function default_settings() {
 	
 		$defaults = array(
@@ -66,31 +78,28 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		
 		// Output
 		echo $before_widget;
-	?>
-		<div class="tzwb-facebook-likebox">
-		
-			<?php // Display Title
-			if( !empty( $widget_title ) ) { echo $before_title . esc_html( $widget_title ) . $after_title; }; ?>
-			
-			<div class="tzwb-content tzwb-clearfix">
-				
-				<div id="fb-root"></div>
-				<script>(function(d, s, id) {
-				  var js, fjs = d.getElementsByTagName(s)[0];
-				  if (d.getElementById(id)) return;
-				  js = d.createElement(s); js.id = id;
-				  js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&version=v2.4";
-				  fjs.parentNode.insertBefore(js, fjs);
-				}(document, 'script', 'facebook-jssdk'));</script>
 
-				<div class="fb-page" data-href="<?php echo esc_url( $facebook_href ); ?>" data-height="<?php echo intval( $height ); ?>" data-small-header="<?php echo esc_attr( $small_header ); ?>" data-adapt-container-width="true" data-hide-cover="<?php echo esc_attr( $cover_photo ); ?>" data-show-facepile="<?php echo esc_attr( $faces ); ?>" data-show-posts="<?php echo esc_attr( $streams  ); ?>">
-					<div class="fb-xfbml-parse-ignore"><blockquote cite="<?php echo esc_url( $facebook_href ); ?>"><a href="<?php echo esc_url( $facebook_href ); ?>"><?php echo esc_html( $widget_title ); ?></a></blockquote></div>
-				</div>
-				
+		// Display Title
+		if( !empty( $widget_title ) ) { echo $before_title . esc_html( $widget_title ) . $after_title; }; ?>
+			
+		<div class="tzwb-content tzwb-clearfix">
+			
+			<div id="fb-root"></div>
+			<script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&version=v2.4";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));</script>
+
+			<div class="fb-page" data-href="<?php echo esc_url( $facebook_href ); ?>" data-height="<?php echo intval( $height ); ?>" data-small-header="<?php echo esc_attr( $small_header ); ?>" data-adapt-container-width="true" data-hide-cover="<?php echo esc_attr( $cover_photo ); ?>" data-show-facepile="<?php echo esc_attr( $faces ); ?>" data-show-posts="<?php echo esc_attr( $streams  ); ?>">
+				<div class="fb-xfbml-parse-ignore"><blockquote cite="<?php echo esc_url( $facebook_href ); ?>"><a href="<?php echo esc_url( $facebook_href ); ?>"><?php echo esc_html( $widget_title ); ?></a></blockquote></div>
 			</div>
 			
 		</div>
-	<?php
+		
+		<?php
 		echo $after_widget;
 	
 	}

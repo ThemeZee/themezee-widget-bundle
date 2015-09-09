@@ -131,6 +131,9 @@ class ThemeZee_Widget_Bundle {
 		// Enqueue Scripts and Styles on widgets admin screen
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_scripts' ) );
 		
+		// Register Image Sizes
+		add_action( 'init',  array( __CLASS__, 'add_image_size' ) );
+		
 		// Include Widget Visibility Class if Jetpack is not active
 		add_action( 'init',  array( __CLASS__, 'widget_visibility_class' ), 11 );
 		
@@ -173,45 +176,55 @@ class ThemeZee_Widget_Bundle {
 	
 	/* Enqueue Widget Styles */
 	static function enqueue_styles() {
-	
+		
+		// Return early if theme handles styling
+		if ( current_theme_supports( 'themezee-widget-bundle' ) ) :
+			return;
+		endif;
+		
 		// Load stylesheet only if widgets are active
-		if ( is_active_widget('TZWB_Facebook_Likebox_Widget', false, 'tzwb_facebook_likebox')
-			or is_active_widget('TZWB_Recent_Comments_Widget', false, 'tzwb_recent_comments')
-			or is_active_widget('TZWB_Recent_Posts_Widget', false, 'tzwb_recent_posts')
-			or is_active_widget('TZWB_Social_Icons_Widget', false, 'tzwb_social_icons')
-			or is_active_widget('TZWB_Tabbed_Content_Widget', false, 'tzwb_tabbed_content')
+		if ( is_active_widget('TZWB_Facebook_Likebox_Widget', false, 'tzwb-facebook-likebox')
+			or is_active_widget('TZWB_Recent_Comments_Widget', false, 'tzwb-recent-comments')
+			or is_active_widget('TZWB_Recent_Posts_Widget', false, 'tzwb-recent-posts')
+			or is_active_widget('TZWB_Social_Icons_Widget', false, 'tzwb-social-icons')
+			or is_active_widget('TZWB_Tabbed_Content_Widget', false, 'tzwb-tabbed-content')
 		) :
 		
 			// Enqueue BCW Plugin Stylesheet
-			wp_enqueue_style('themezee-widget-bundle', self::get_stylesheet() );
+			wp_enqueue_style('themezee-widget-bundle', TZWB_PLUGIN_URL . '/assets/css/themezee-widget-bundle.css', array(), TZWB_VERSION );
 
 		endif;
 		
 	}
 	
-	/* Get Stylesheet URL */
-	static function get_stylesheet() {
-		
-		if ( file_exists( get_stylesheet_directory() . '/css/themezee-widget-bundle.css' ) )
-			$stylesheet = get_stylesheet_directory() . '/css/themezee-widget-bundle.css';
-		elseif ( file_exists( get_template_directory() . '/css/themezee-widget-bundle.css' ) )
-			$stylesheet = get_template_directory() . '/css/themezee-widget-bundle.css';
-		else 
-			$stylesheet = TZWB_PLUGIN_URL . '/assets/css/themezee-widget-bundle.css';
-		
-		return $stylesheet;
-	}
 	
 	/* Enqueue Backend Scripts and Styles */
 	static function enqueue_admin_scripts( $hook ) {
 		
 		// Embed Widget Highlight only on widget page
-		if( 'widgets.php' != $hook )
+		if( 'widgets.php' != $hook ) :
 			return;
+		endif;
 	
 		wp_enqueue_style( 'tzwb-widget-bgcolor', TZWB_PLUGIN_URL . '/assets/css/tzwb-widget-bgcolor.css', array(), TZWB_VERSION );
 		
 	}
+	
+	
+	/**
+	 * Add custom image size for post thumbnails in widgets
+	 */
+	static function add_image_size() {
+		
+		// Return early if theme handles image sizes
+		if ( current_theme_supports( 'themezee-widget-bundle' ) ) :
+			return;
+		endif;
+		
+		add_image_size( 'tzwb-thumbnail', 80, 80, true );
+		
+	}
+
 	
 	/* Enqueue Widget Visibility Class */
 	static function widget_visibility_class() {
