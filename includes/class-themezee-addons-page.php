@@ -1,8 +1,11 @@
 <?php
-/**
- * Registers the ThemeZee Addons Settings Page Class
+/***
+ * ThemeZee Add-ons page
+ *
+ * Registers and displays the ThemeZee Addons Page
  *
  */
+ 
 
 // Use class to avoid namespace collisions
 if ( ! class_exists('ThemeZee_Addons_Page') ) :
@@ -36,9 +39,8 @@ class ThemeZee_Addons_Page {
 			__( 'ThemeZee Add-ons', 'themezee-widget-bundle' ),
 			__( 'Theme Add-ons', 'themezee-widget-bundle' ),
 			'manage_options',
-			'themezee-add-ons',
-			array( __CLASS__, 'display_addons_page' ),
-			'dashicons-index-card'
+			'themezee-addons',
+			array( __CLASS__, 'display_addons_page' )
 		);
 		
 	}
@@ -92,7 +94,8 @@ class ThemeZee_Addons_Page {
 			</div>
 
 		</div>
-<?php	
+		
+	<?php	
 	}
 	
 	
@@ -101,16 +104,27 @@ class ThemeZee_Addons_Page {
 	 *
 	 * @return void
 	*/
-	static function display_overview_page() { ?>
+	static function display_overview_page() { 
+	
+		$addon_link = '<a target="_blank" href="http://themezee.com/addons/" title="ThemeZee Add-ons">add-ons</a>';
+		?>
 		
-		<h2><?php _e( 'ThemeZee Add-ons', 'themezee-widget-bundle' ); ?></h2>
+		<div id="themezee-addons-overview">
+		
+			<h2 id="themezee-addon-header"><?php _e( 'ThemeZee Add-ons', 'themezee-widget-bundle' ); ?></h2>
+			<div class="themezee-addons-intro">
+				<?php printf( __( 'You need more features and functionality? Extend your website with our affordable %s.', 'themezee-widget-bundle' ), $addon_link ); ?>
+			</div>
+			<hr/>
 
-		<div id="themezee-addons-list" class="themezee-addons-clearfix">
-		
-			<?php do_action('themezee_addons_overview_page'); ?>
+			<div id="themezee-addons-list" class="themezee-addons-clearfix">
+			
+				<?php do_action('themezee_addons_overview_page'); ?>
+				
+			</div>
 			
 		</div>
-<?php	
+	<?php	
 	}
 	
 	
@@ -136,7 +150,7 @@ class ThemeZee_Addons_Page {
 	static function enqueue_admin_styles( $hook ) {
 
 		// Embed stylesheet only on admin settings page
-		if( 'appearance_page_themezee-add-ons' != $hook )
+		if( 'appearance_page_themezee-addons' != $hook )
 			return;
 				
 		// Enqueue Admin CSS

@@ -2,7 +2,7 @@
 /*
 Plugin Name: ThemeZee Widget Bundle
 Plugin URI: http://themezee.com/addons/widget-bundle/
-Description: Includes several new custom sidebar widgets to show your best content and information.
+Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
 Author: ThemeZee
 Author URI: http://themezee.com/
 Version: 1.0
@@ -130,10 +130,7 @@ class ThemeZee_Widget_Bundle {
 		
 		// Register Image Sizes
 		add_action( 'init',  array( __CLASS__, 'add_image_size' ) );
-		
-		// Include Widget Visibility Class if Jetpack is not active
-		add_action( 'init',  array( __CLASS__, 'widget_visibility_class' ), 11 );
-		
+
 		// Add Widget Bundle Box to Add-on Overview Page
 		add_action('themezee_addons_overview_page', array( __CLASS__, 'addon_overview_page' ) );
 		
@@ -150,26 +147,28 @@ class ThemeZee_Widget_Bundle {
 	 */
 	static function register_widgets() {
 		
-		$options = TZWB_Settings::instance();
-		$widget_options = $options->get('active_widgets');
+		// Get Settings
+		$instance = TZWB_Settings::instance();
+		$options = $instance->get_all();
 		
-		if( isset($widget_options['tzwb_facebook_likebox']) and $widget_options['tzwb_facebook_likebox'] == true) :
+		// Register Widgets if enabled
+		if( isset( $options['facebook_likebox'] ) and $options['facebook_likebox'] == true) :
 			register_widget('TZWB_Facebook_Likebox_Widget');
 		endif;
 		
-		if( isset($widget_options['tzwb_recent_comments']) and $widget_options['tzwb_recent_comments'] == true) :
+		if( isset( $options['recent_comments'] ) and $options['recent_comments'] == true) :
 			register_widget('TZWB_Recent_Comments_Widget');
 		endif;
 		
-		if( isset($widget_options['tzwb_recent_posts']) and $widget_options['tzwb_recent_posts'] == true) :
+		if( isset( $options['recent_posts'] ) and $options['recent_posts'] == true) :
 			register_widget('TZWB_Recent_Posts_Widget');
 		endif;
 		
-		if( isset($widget_options['tzwb_social_icons']) and $widget_options['tzwb_social_icons'] == true) :
+		if( isset( $options['social_icons'] ) and $options['social_icons'] == true) :
 			register_widget('TZWB_Social_Icons_Widget');
 		endif;
 		
-		if( isset($widget_options['tzwb_tabbed_content']) and $widget_options['tzwb_tabbed_content'] == true) :
+		if( isset( $options['tabbed_content'] ) and $options['tabbed_content'] == true) :
 			register_widget('TZWB_Tabbed_Content_Widget');
 		endif;
 		
@@ -197,7 +196,7 @@ class ThemeZee_Widget_Bundle {
 		) :
 		
 			// Enqueue BCW Plugin Stylesheet
-			wp_enqueue_style('themezee-widget-bundle', TZWB_PLUGIN_URL . '/assets/css/themezee-widget-bundle.css', array(), TZWB_VERSION );
+			wp_enqueue_style('themezee-widget-bundle', TZWB_PLUGIN_URL . 'assets/css/themezee-widget-bundle.css', array(), TZWB_VERSION );
 
 		endif;
 		
@@ -216,7 +215,7 @@ class ThemeZee_Widget_Bundle {
 			return;
 		endif;
 	
-		wp_enqueue_style( 'tzwb-widget-bgcolor', TZWB_PLUGIN_URL . '/assets/css/tzwb-widget-bgcolor.css', array(), TZWB_VERSION );
+		wp_enqueue_style( 'tzwb-widget-bgcolor', TZWB_PLUGIN_URL . 'assets/css/tzwb-widget-bgcolor.css', array(), TZWB_VERSION );
 		
 	}
 	
@@ -236,24 +235,6 @@ class ThemeZee_Widget_Bundle {
 		add_image_size( 'tzwb-thumbnail', 80, 80, true );
 		
 	}
-
-	
-	/* Enqueue Widget Visibility Class */
-	static function widget_visibility_class() {
-		
-		// Do not run when Jetpack is active
-		if ( class_exists( 'Jetpack_Widget_Conditions' ) )
-			return;
-		
-		// Get Plugin Options
-		$options = TZWB_Settings::instance();
-		
-		// Include Widget Visibility class
-		if( $options->get('widget_visibility') == true ) :
-			require TZWB_PLUGIN_DIR . '/includes/class-tzwb-widget-visibility.php';
-		endif;
-		
-	}
 	
 	
 	/**
@@ -267,16 +248,15 @@ class ThemeZee_Widget_Bundle {
 		
 		?>
 
-		<dl><dt><h4><?php echo esc_html( $plugin_data['Name'] ); ?> <?php echo esc_html( $plugin_data['Version'] ); ?></h4></dt>
+		<dl>
+			<dt>
+				<h4><?php echo esc_html( $plugin_data['Name'] ); ?></h4>
+				<span><?php printf( __( 'Version %s', 'themezee-widget-bundle'),  esc_html( $plugin_data['Version'] ) ); ?></span>
+			</dt>
 			<dd>
-				<p>
-					<?php echo wp_kses_post( $plugin_data['Description'] ); ?><br/>
-				</p>
-				<p>
-					<a href="<?php echo admin_url( 'admin.php?page=themezee-add-ons&tab=widgets' ); ?>" class="button button-primary"><?php _e('Plugin Settings', 'themezee-widget-bundle'); ?></a> 
-					<a href="<?php echo admin_url( 'plugins.php?s=ThemeZee+Widget+Bundle' ); ?>" class="button button-secondary"><?php _e('Deactivate', 'themezee-widget-bundle'); ?></a>
-				</p>
-				
+				<p><?php echo wp_kses_post( $plugin_data['Description'] ); ?><br/></p>
+				<a href="<?php echo admin_url( 'admin.php?page=themezee-addons&tab=widgets' ); ?>" class="button button-primary"><?php _e('Plugin Settings', 'themezee-widget-bundle'); ?></a>&nbsp;
+				<a href="<?php echo esc_url( 'http://themezee.com/docs/widget-bundle/'); ?>" class="button button-secondary" target="_blank"><?php _e('View Documentation', 'themezee-widget-bundle'); ?></a>
 			</dd>
 		</dl>
 		

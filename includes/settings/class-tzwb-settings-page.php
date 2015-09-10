@@ -48,13 +48,15 @@ class TZWB_Settings_Page {
 	 * @return void
 	*/
 	static function display_settings_page() { 
-	
+		
+		$plugin_data = get_plugin_data( TZWB_PLUGIN_FILE );
+		
 		ob_start();
 	?>
 		
 		<div id="tzwb-settings" class="tzwb-settings-wrap">
 			
-			<h2><?php _e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h2>
+			<h2><?php _e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h2><br/>
 			<?php settings_errors(); ?>
 			
 			<form class="tzwb-settings-form" method="post" action="options.php">

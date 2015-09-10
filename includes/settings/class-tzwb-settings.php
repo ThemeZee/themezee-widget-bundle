@@ -126,8 +126,8 @@ class TZWB_Settings {
 		}
 		
 		// Add Sections
-		add_settings_section( 'tzwb_settings_widgets', __('Widgets', 'themezee-widget-bundle' ), '__return_false', 'tzwb_settings' );
-		add_settings_section( 'tzwb_settings_license', __('License', 'themezee-widget-bundle'), '__return_false', 'tzwb_settings' );
+		add_settings_section( 'tzwb_settings_widgets', __('Widgets', 'themezee-widget-bundle' ), array( $this, 'widget_section_intro' ), 'tzwb_settings' );
+		add_settings_section( 'tzwb_settings_license', __('License', 'themezee-widget-bundle'), array( $this, 'license_section_intro' ), 'tzwb_settings' );
 		
 		// Add Settings
 		foreach ( $this->get_registered_settings() as $key => $option ) :
@@ -160,6 +160,27 @@ class TZWB_Settings {
 		register_setting( 'tzwb_settings', 'tzwb_settings', array( $this, 'sanitize_settings' ) );
 	}
 
+	
+	/**
+	 * Widget Section Intro
+	 *
+	 * @return void
+	*/
+	function widget_section_intro() {
+		_e( 'Activate all the widgets you want to use here.', 'themezee-widget-bundle');
+	}
+	
+	
+	/**
+	 * License Section Intro
+	 *
+	 * @return void
+	*/
+	function license_section_intro() {
+		_e( 'Please enter your license key in order to receive updates and support.', 'themezee-widget-bundle');
+	}
+	
+	
 	/**
 	 * Sanitize the Plugin Settings
 	 *
@@ -255,26 +276,41 @@ class TZWB_Settings {
 	function get_registered_settings() {
 
 		$settings = array(
-			'widget_visibility' => array(
-				'name' =>  __('Visibility', 'themezee-widget-bundle'),
-				'desc' => __('Add "Visibility" tab to widget settings to set conditions where the widget should be displayed.', 'themezee-widget-bundle'),
+			'facebook_likebox' => array(
+				'name' =>  __( 'Facebook Likebox', 'themezee-widget-bundle' ),
+				'desc' => __( 'Enable Facebook Like Box Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'checkbox',
 				'default' => true
 			),
-			'active_widgets' => array(
-				'name' => __( 'Active Widgets', 'themezee-widget-bundle' ),
-				'desc' => __( 'Choose available widgets.', 'themezee-widget-bundle' ),
+			'recent_comments' => array(
+				'name' =>  __( 'Recent Comments', 'themezee-widget-bundle' ),
+				'desc' => __( 'Enable Recent Comments Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
-				'type' => 'multicheck',
-				'default' => true,
-				'options' => array(	
-					'tzwb_facebook_likebox' => __('Enable Facebook Like Box Widget', 'themezee-widget-bundle'),
-					'tzwb_recent_comments' => __('Enable Recent Comments Widget', 'themezee-widget-bundle'),
-					'tzwb_recent_posts' => __('Enable Recent Posts Widget', 'themezee-widget-bundle'),
-					'tzwb_social_icons' => __('Enable Social Icons Widget', 'themezee-widget-bundle'),
-					'tzwb_tabbed_content' => __('Enable Tabbed Content Widget', 'themezee-widget-bundle') )
-				),
+				'type' => 'checkbox',
+				'default' => true
+			),
+			'recent_posts' => array(
+				'name' =>  __( 'Recent Posts', 'themezee-widget-bundle' ),
+				'desc' => __( 'Enable Recent Posts Widget', 'themezee-widget-bundle' ),
+				'section' => 'widgets',
+				'type' => 'checkbox',
+				'default' => true
+			),
+			'social_icons' => array(
+				'name' =>  __( 'Social Icons', 'themezee-widget-bundle' ),
+				'desc' => __( 'Enable Social Icons Widget', 'themezee-widget-bundle' ),
+				'section' => 'widgets',
+				'type' => 'checkbox',
+				'default' => true
+			),
+			'tabbed_content' => array(
+				'name' =>  __( 'Tabbed Content', 'themezee-widget-bundle' ),
+				'desc' => __( 'Enable Tabbed Content Widget', 'themezee-widget-bundle' ),
+				'section' => 'widgets',
+				'type' => 'checkbox',
+				'default' => true
+			),
 			'license_key' => array(
 				'name' => __( 'License Key', 'themezee-widget-bundle' ),
 				'desc' => sprintf( __( 'Please enter your license key. An active license key is needed for automatic plugin updates and <a href="%s" target="_blank">support</a>.', 'themezee-widget-bundle' ), 'http://themezee.com/support/' ),
@@ -287,6 +323,7 @@ class TZWB_Settings {
 		return apply_filters( 'tzwb_settings', $settings );
 	}
 
+	
 	/**
 	 * Checkbox Callback
 	 *
@@ -305,6 +342,7 @@ class TZWB_Settings {
 		echo $html;
 	}
 
+	
 	/**
 	 * Multicheck Callback
 	 *
@@ -416,6 +454,7 @@ class TZWB_Settings {
 		echo $html;
 	}
 
+	
 	/**
 	 * Number Callback
 	 *
@@ -443,6 +482,7 @@ class TZWB_Settings {
 		echo $html;
 	}
 
+	
 	/**
 	 * Textarea Callback
 	 *
@@ -465,6 +505,7 @@ class TZWB_Settings {
 
 		echo $html;
 	}
+	
 	
 	/**
 	 * Textarea HTML Callback
@@ -495,7 +536,6 @@ class TZWB_Settings {
 	 *
 	 * If a function is missing for settings callbacks alert the user.
 	 *
-	 * @since 1.3.1
 	 * @param array $args Arguments passed by the setting
 	 * @return void
 	 */
@@ -531,6 +571,7 @@ class TZWB_Settings {
 
 		echo $html;
 	}
+	
 
 	/**
 	 * Activate license key
