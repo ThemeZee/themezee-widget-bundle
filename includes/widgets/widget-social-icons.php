@@ -71,6 +71,8 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 */
 	function widget($args, $instance) {
 
+		$cache = array();
+		
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
 			$cache = wp_cache_get( 'tzwb_social_icons', 'widget' );

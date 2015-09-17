@@ -94,6 +94,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	 */
 	function widget($args, $instance) {
 
+		$cache = array();
+		
 		// Get Widget Object Cache
 		if ( ! $this->is_preview() ) {
 			$cache = wp_cache_get( 'tzwb_tabbed_content', 'widget' );
