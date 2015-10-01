@@ -177,7 +177,8 @@ class TZWB_Settings {
 	 * @return void
 	*/
 	function license_section_intro() {
-		_e( 'Please enter your license key in order to receive updates and support.', 'themezee-widget-bundle');
+		printf( __( 'Please enter your license key. An active license key is needed for automatic plugin updates and <a href="%s" target="_blank">support</a>.', 'themezee-widget-bundle' ), 'http://themezee.com/support/' );
+
 	}
 	
 	
@@ -313,7 +314,6 @@ class TZWB_Settings {
 			),
 			'license_key' => array(
 				'name' => __( 'License Key', 'themezee-widget-bundle' ),
-				'desc' => sprintf( __( 'Please enter your license key. An active license key is needed for automatic plugin updates and <a href="%s" target="_blank">support</a>.', 'themezee-widget-bundle' ), 'http://themezee.com/support/' ),
 				'section' => 'license',
 				'type' => 'license',
 				'default' => ''
@@ -434,17 +434,20 @@ class TZWB_Settings {
 			$value = isset( $args['default'] ) ? $args['default'] : '';
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="text" class="' . $size . '-text" id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+		$html = '<input type="text" class="' . $size . '-text" id="tzwb_settings[' . $args['id'] . ']" name="tzwb_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/><br/><br/>';
 		$license_status = $this->get( 'license_status' );
 		$license_key = ! empty( $value ) ? $value : false;
 
 		if( 'valid' === $license_status && ! empty( $license_key ) ) {
 			$html .= '<input type="submit" class="button" name="tzwb_deactivate_license" value="' . esc_attr__( 'Deactivate License', 'themezee-widget-bundle' ) . '"/>';
-			$html .= '<span style="color:green;">&nbsp;' . __( 'Your license is valid!', 'themezee-widget-bundle' ) . '</span>';
+			$html .= '<span style="display: inline-block; padding: 5px; color: green;">&nbsp;' . __( 'Your license is valid!', 'themezee-widget-bundle' ) . '</span>';
 		} elseif( 'expired' === $license_status && ! empty( $license_key ) ) {
-			$renewal_url = esc_url( add_query_arg( array( 'edd_license_key' => $license_key, 'download_id' => 17 ), 'https://affiliatewp.com/checkout' ) );
+			$renewal_url = esc_url( add_query_arg( array( 'edd_license_key' => $license_key, 'download_id' => TZWB_PRODUCT_ID ), 'https://themezee.com/checkout' ) );
 			$html .= '<a href="' . esc_url( $renewal_url ) . '" class="button-primary">' . __( 'Renew Your License', 'themezee-widget-bundle' ) . '</a>';
-			$html .= '<br/><span style="color:red;">&nbsp;' . __( 'Your license has expired, renew today to continue getting updates and support!', 'themezee-widget-bundle' ) . '</span>';
+			$html .= '<br/><span style="display: inline-block; padding: 5px; color: red;">&nbsp;' . __( 'Your license has expired, renew today to continue getting updates and support!', 'themezee-widget-bundle' ) . '</span>';
+		} elseif( 'invalid' === $license_status && ! empty( $license_key ) ) {
+			$html .= '<input type="submit" class="button" name="tzwb_activate_license" value="' . esc_attr__( 'Activate License', 'themezee-widget-bundle' ) . '"/>';
+			$html .= '<span style="display: inline-block; padding: 5px; color: red;">&nbsp;' . __( 'Your license is invalid!', 'themezee-widget-bundle' ) . '</span>';
 		} else {
 			$html .= '<input type="submit" class="button" name="tzwb_activate_license" value="' . esc_attr__( 'Activate License', 'themezee-widget-bundle' ) . '"/>';
 		}
