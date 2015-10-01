@@ -195,8 +195,11 @@ class ThemeZee_Widget_Bundle {
 			or is_active_widget('TZWB_Tabbed_Content_Widget', false, 'tzwb-tabbed-content')
 		) :
 		
-			// Enqueue BCW Plugin Stylesheet
-			wp_enqueue_style('themezee-widget-bundle', TZWB_PLUGIN_URL . 'assets/css/themezee-widget-bundle.css', array(), TZWB_VERSION );
+			// Enqueue Plugin Stylesheet
+			wp_enqueue_style( 'themezee-widget-bundle', TZWB_PLUGIN_URL . 'assets/css/themezee-widget-bundle.css', array(), TZWB_VERSION );
+			
+			// Enqueue Genericons
+			wp_enqueue_style( 'genericons', TZWB_PLUGIN_URL . 'assets/genericons/genericons.css', array(), TZWB_VERSION );
 
 		endif;
 		

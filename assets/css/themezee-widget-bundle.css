@@ -156,7 +156,6 @@
 
 .tzwb-tabbed-content .tzwb-tabnavi li a.current-tab {
 	text-decoration: underline;
-	border: none;
 }
 
 .tzwb-tabbed-content .tzwb-tabcontent {
@@ -249,11 +248,13 @@
 .tzwb-social-icons-menu li a[href*="polldaddy.com"]:before { content: '\f217'; }
 .tzwb-social-icons-menu li a[href*="getpocket.com"]:before { content: '\f224'; }
 .tzwb-social-icons-menu li a[href*="reddit.com"]:before { content: '\f222'; }
+.tzwb-social-icons-menu li a[href*="spotify.com"]:before { content: '\f515'; }
 .tzwb-social-icons-menu li a[href*="skype.com"]:before,
 .tzwb-social-icons-menu li a[href*="skype:"]:before { content: '\f220'; }
 .tzwb-social-icons-menu li a[href*="stumbleupon.com"]:before { content: '\f223'; }
 .tzwb-social-icons-menu li a[href*="tumblr.com"]:before { content: '\f214'; }
 .tzwb-social-icons-menu li a[href*="twitter.com"]:before { content: '\f202'; }
+.tzwb-social-icons-menu li a[href*="twitch.tv"]:before { content: '\f516'; }
 .tzwb-social-icons-menu li a[href*="vimeo.com"]:before  { content: '\f212'; }
 .tzwb-social-icons-menu li a[href*="wordpress.org"]:before,
 .tzwb-social-icons-menu li a[href*="wordpress.com"]:before { content: '\f205'; }
@@ -263,6 +264,8 @@
 .tzwb-social-icons-menu li a[href*="?feed=rss2"]:before,
 .tzwb-social-icons-menu li a[href*="feedburner.google.com"]:before,
 .tzwb-social-icons-menu li a[href*="feedburner.com"]:before { content: '\f413'; }
+.tzwb-social-icons-menu li a[href*="/newsletter"]:before,
+.tzwb-social-icons-menu li a[href*="mailto:"]:before{ content: '\f410'; }
 
 /* Add Colors */
 .tzwb-social-icons-menu li a { background: #444; } /* Default Icon */
@@ -279,11 +282,13 @@
 .tzwb-social-icons-menu li a[href*="polldaddy.com"] { background: #bc0b0b; }
 .tzwb-social-icons-menu li a[href*="getpocket.com"] { background: #ee4056; }
 .tzwb-social-icons-menu li a[href*="reddit.com"] { background: #ff4500; }
+.tzwb-social-icons-menu li a[href*="spotify.com"] { background: #81b71a; }
 .tzwb-social-icons-menu li a[href*="skype.com"],
 .tzwb-social-icons-menu li a[href*="skype:"] { background: #00aff0; }
 .tzwb-social-icons-menu li a[href*="stumbleupon.com"] { background: #f74425; }
 .tzwb-social-icons-menu li a[href*="tumblr.com"] { background: #32506d; }
 .tzwb-social-icons-menu li a[href*="twitter.com"] { background: #00aced; }
+.tzwb-social-icons-menu li a[href*="twitch.tv"]:before { background: #6441A5; }
 .tzwb-social-icons-menu li a[href*="vimeo.com"]  { background: #aad450; }
 .tzwb-social-icons-menu li a[href*="wordpress.org"] { background: #21759b; }
 .tzwb-social-icons-menu li a[href*="wordpress.com"] { background: #1e8cbe; }
