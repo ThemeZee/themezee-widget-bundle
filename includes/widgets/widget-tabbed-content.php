@@ -131,7 +131,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
-			<?php echo $this->render($instance); ?>
+			<?php echo $this->render( $args, $instance ); ?>
 			
 		</div>
 			
@@ -156,7 +156,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function render($instance) {
+	function render( $args, $instance ) {
 		
 		// Get Widget Settings
 		$defaults = $this->default_settings();
@@ -189,7 +189,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 				<div id="<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>" class="tzwb-tabcontent">
 				
-					<?php echo $this->tab_content($instance, $tab_content[$i]); ?>
+					<?php echo $this->tab_content( $instance, $tab_content[$i] ); ?>
 					
 				</div>
 				

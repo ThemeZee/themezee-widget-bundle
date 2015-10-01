@@ -136,8 +136,8 @@
 
 .tzwb-tabbed-content .tzwb-tabnavi li a {
 	display: block;
-	margin: 0 1px 1px 0;
-	padding: 0.5em 1em;
+	margin: 0 2px 2px 0;
+	padding: 0.3em 0.6em;
 	font-size: 0.9em;
 	text-decoration: none;
 	background-color: #eee;
@@ -156,6 +156,7 @@
 
 .tzwb-tabbed-content .tzwb-tabnavi li a.current-tab {
 	text-decoration: underline;
+	border: none;
 }
 
 .tzwb-tabbed-content .tzwb-tabcontent {
@@ -206,9 +207,8 @@
 
 .tzwb-social-icons .tzwb-social-icons-menu li {
 	float: left;
-	margin: 0 2px 2px 0;
+	margin: 0 0.4em 0.4em 0;
 	padding: 0;
-	background: #222;
 }
 
 .tzwb-social-icons .tzwb-social-icons-menu li a {
@@ -219,6 +219,7 @@
 	text-decoration: none;
 	color: #fff;
 	line-height: 1em;
+	border-radius: 2em;
 }
 
 .tzwb-social-icons .tzwb-social-icons-menu li a:before {
