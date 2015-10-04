@@ -273,7 +273,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of comments to show:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>

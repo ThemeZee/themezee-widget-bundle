@@ -200,43 +200,12 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 					
 					<span class="tzwb-excerpt"><?php the_excerpt(); ?></span>
 				
-				<?php endif; ?>
+				<?php endif;
 
 				
-					<div class="tzwb-postmeta">
-						
-					<?php // Display Date
-					if ( $meta_date == 1 ) : ?>
-						
-						<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
-						
-					<?php endif; ?>
-					
-					<?php // Display Author
-					if ( $meta_author == 1 ) : ?>
-						
-						<span class="tzwb-meta-author">
-							<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
-								esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-								esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
-								get_the_author()
-							);?>
-						</span>
-						
-					<?php endif; ?>
-					
-					<?php // Display Comments
-					if ( $meta_comments == 1 and comments_open() ) : ?>
-					
-						<span class="tzwb-meta-comments">
-							<?php comments_popup_link( __('No comments', 'themezee-widget-bundle'),__('One comment','themezee-widget-bundle'),__('% comments','themezee-widget-bundle') ); ?>
-						</span>
-						
-					<?php endif; ?>
-					
-					</div>
+				// Display Post Meta
+				echo $this->postmeta( $instance );
 				
-			<?php
 			endwhile;
 			
 			// Remove excerpt filter
@@ -249,6 +218,64 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		
 	}
 
+	
+	/**
+	 * Display post meta
+	 * 
+	 * @param array $instance Settings for this widget instance
+	 * @return void
+	 */
+	function postmeta( $instance ) {
+		
+		// Get Widget Settings
+		$defaults = $this->default_settings();
+		extract( wp_parse_args( $instance, $defaults ) );
+		
+		// Create Post Meta Array
+		$postmeta = array( $meta_date, $meta_author, $meta_comments );
+		
+		// Return early if no meta is displayed
+		if( in_array( true, $postmeta, true ) === false ) :
+			return;
+		endif;
+		?>
+		
+		<div class="tzwb-postmeta">
+			
+		<?php // Display Date
+		if ( $meta_date == 1 ) : ?>
+			
+			<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
+			
+		<?php endif; ?>
+		
+		<?php // Display Author
+		if ( $meta_author == 1 ) : ?>
+			
+			<span class="tzwb-meta-author">
+				<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
+					esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
+					esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
+					get_the_author()
+				);?>
+			</span>
+			
+		<?php endif; ?>
+		
+		<?php // Display Comments
+		if ( $meta_comments == 1 and comments_open() ) : ?>
+		
+			<span class="tzwb-meta-comments">
+				<?php comments_popup_link( __('No comments', 'themezee-widget-bundle'),__('One comment','themezee-widget-bundle'),__('% comments','themezee-widget-bundle') ); ?>
+			</span>
+			
+		<?php endif; ?>
+		
+		</div>
+		
+	<?php
+	}
+	
 	
 	/**
 	 * Update Widget Settings
@@ -345,7 +372,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $meta_author ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
 				<?php _e('Display post author', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
