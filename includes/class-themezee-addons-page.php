@@ -4,8 +4,12 @@
  *
  * Registers and displays the ThemeZee Addons Page
  *
+ * @package ThemeZee Widget Bundle
  */
  
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 
 // Use class to avoid namespace collisions
 if ( ! class_exists('ThemeZee_Addons_Page') ) :
@@ -154,7 +158,7 @@ class ThemeZee_Addons_Page {
 			return;
 				
 		// Enqueue Admin CSS
-		wp_enqueue_style( 'themezee-addons-stylesheet', TZWB_PLUGIN_URL . '/assets/css/themezee-addons.css', array(), TZWB_VERSION );
+		wp_enqueue_style( 'themezee-addons-stylesheet', TZWB_PLUGIN_URL . 'assets/css/themezee-addons.css', array(), TZWB_VERSION );
 		
 	}
 	

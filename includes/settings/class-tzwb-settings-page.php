@@ -7,8 +7,11 @@
  * @package ThemeZee Widget Bundle
  */
  
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
- /* Use class to avoid namespace collisions */
+
+// Use class to avoid namespace collisions
 if ( ! class_exists('TZWB_Settings_Page') ) :
 
 class TZWB_Settings_Page {
