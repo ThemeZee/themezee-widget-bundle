@@ -19,8 +19,8 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		
 		parent::__construct(
 			'tzwb-recent-posts', // ID
-			__( 'Recent Posts (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-recent-posts', 'description' => __( 'Displays recent posts.', 'themezee-widget-bundle' ) ) // Args
+			esc_html__( 'Recent Posts (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-recent-posts', 'description' => esc_html__( 'Displays recent posts.', 'themezee-widget-bundle' ) ) // Args
 		);
 		
 		// Delete Widget Cache on certain actions
@@ -178,7 +178,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 				
 				$posts_query->the_post(); 
 				
-				if ( $thumbnails == 1 ) : ?>
+				if ( $thumbnails == 1 and has_post_thumbnail() ) : ?>
 			
 					<li class="tzwb-has-thumbnail">
 						<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
@@ -240,7 +240,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		endif;
 		?>
 		
-		<div class="tzwb-postmeta">
+		<div class="tzwb-entry-meta">
 			
 		<?php // Display Date
 		if ( $meta_date == 1 ) : ?>
@@ -255,7 +255,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 			<span class="tzwb-meta-author">
 				<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
 					esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-					esc_attr( sprintf( __( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
+					esc_attr( sprintf( esc_html__( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
 					get_the_author()
 				);?>
 			</span>
@@ -266,7 +266,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		if ( $meta_comments == 1 and comments_open() ) : ?>
 		
 			<span class="tzwb-meta-comments">
-				<?php comments_popup_link( __('No comments', 'themezee-widget-bundle'),__('One comment','themezee-widget-bundle'),__('% comments','themezee-widget-bundle') ); ?>
+				<?php comments_popup_link( esc_html__( 'No comments', 'themezee-widget-bundle' ), esc_html__( 'One comment','themezee-widget-bundle' ), esc_html__( '% comments','themezee-widget-bundle' ) ); ?>
 			</span>
 			
 		<?php endif; ?>
@@ -317,16 +317,16 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		?>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Select Category:', 'themezee-widget-bundle'); ?></label><br/>
+			<label for="<?php echo $this->get_field_id('category'); ?>"><?php esc_html_e('Select Category:', 'themezee-widget-bundle'); ?></label><br/>
 			<?php // Display Category Select
 				$args = array(
-					'show_option_all'    => __('All Categories', 'themezee-widget-bundle'),
+					'show_option_all'    => esc_html__( 'All Categories', 'themezee-widget-bundle' ),
 					'selected'           => $category,
 					'name'               => $this->get_field_name('category'),
 					'id'                 => $this->get_field_id('category')
@@ -336,22 +336,22 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order by:', 'themezee-widget-bundle'); ?></label><br/>
+			<label for="<?php echo $this->get_field_id('order'); ?>"><?php esc_html_e('Order by:', 'themezee-widget-bundle'); ?></label><br/>
 			<select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
-				<option <?php selected( $order, 'date' ); ?> value="date"><?php _e('Post Date', 'themezee-widget-bundle'); ?></option>
-				<option <?php selected( $order, 'comment_count' ); ?> value="comment_count"><?php _e('Comment Count', 'themezee-widget-bundle'); ?></option>
-				<option <?php selected( $order, 'rand' ); ?> value="rand"><?php _e('Random', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $order, 'date' ); ?> value="date"><?php esc_html_e('Post Date', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $order, 'comment_count' ); ?> value="comment_count"><?php esc_html_e('Comment Count', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $order, 'rand' ); ?> value="rand"><?php esc_html_e('Random', 'themezee-widget-bundle'); ?></option>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php esc_html_e('Number of posts:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php esc_html_e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" size="5" />
 			</label>
 		</p>
@@ -359,28 +359,28 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
-				<?php _e('Display post thumbnails', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e('Display post thumbnails', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_date'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
-				<?php _e('Display post date', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e('Display post date', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_author ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
-				<?php _e('Display post author', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e('Display post author', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_comments'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $meta_comments ) ; ?> id="<?php echo $this->get_field_id('meta_comments'); ?>" name="<?php echo $this->get_field_name('meta_comments'); ?>" />
-				<?php _e('Display post comments', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e('Display post comments', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 

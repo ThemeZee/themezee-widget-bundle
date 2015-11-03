@@ -39,7 +39,7 @@ class TZWB_Settings_Page {
 	static function add_settings_page($tabs) {
 			
 		// Add Boilerplate Settings Page to Tabs List
-		$tabs['widgets']      = __( 'Widget Bundle', 'themezee-widget-bundle' );
+		$tabs['widgets']      = esc_html__( 'Widget Bundle', 'themezee-widget-bundle' );
 		
 		return $tabs;
 		
@@ -59,7 +59,7 @@ class TZWB_Settings_Page {
 		
 		<div id="tzwb-settings" class="tzwb-settings-wrap">
 			
-			<h2><?php _e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h2><br/>
+			<h2><?php esc_html_e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h2>
 			<?php settings_errors(); ?>
 			
 			<form class="tzwb-settings-form" method="post" action="options.php">

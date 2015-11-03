@@ -19,8 +19,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		
 		parent::__construct(
 			'tzwb-tabbed-content', // ID
-			__( 'Tabbed Content (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-tabbed-content', 'description' => __( 'Displays various content with tabs.', 'themezee-widget-bundle' ) ), // Args
+			esc_html__( 'Tabbed Content (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-tabbed-content', 'description' => esc_html__( 'Displays various content with tabs.', 'themezee-widget-bundle' ) ), // Args
 			array( 'width' => 450,  'id_base' => 'tzwb-tabbed-content' ) // Controls
 		);
 		
@@ -277,7 +277,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 								<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 							</a>
 						
-							<div class="tzwb-postmeta">
+							<div class="tzwb-entry-meta">
 							
 							<?php // Display Date
 							if ( $thumbnails == 1 ) : ?>
@@ -328,7 +328,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 							<?php endif;
 							
 							echo get_comment_author_link($comment->comment_ID);
-							_e(' on', 'themezee-widget-bundle'); ?>
+							esc_html_e(' on', 'themezee-widget-bundle'); ?>
 						
 							<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
 								<?php echo get_the_title($comment->comment_post_ID); ?>
@@ -392,7 +392,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 								<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 							</a>
 						
-							<div class="tzwb-postmeta">
+							<div class="tzwb-entry-meta">
 							
 							<?php // Display Date
 							if ( $thumbnails == 1 ) : ?>
@@ -425,7 +425,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			default: ?>
 				
 				<p class="tzwb-tabcontent-missing">
-					<?php _e('Please select the Tab Content in the Widget Settings.', 'themezee-widget-bundle'); ?>
+					<?php esc_html_e('Please select the Tab Content in the Widget Settings.', 'themezee-widget-bundle'); ?>
 				</p>
 			
 			<?php
@@ -481,7 +481,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		?>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
@@ -494,20 +494,20 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 					
 			<p>
 				<label for="<?php echo $this->get_field_id('tab_content-'.$i); ?>">
-					<?php printf( __( 'Tab %s:', 'themezee-widget-bundle' ), $i+1 ); ?>
+					<?php printf( esc_html__( 'Tab %s:', 'themezee-widget-bundle' ), $i+1 ); ?>
 				</label>
 				<select id="<?php echo $this->get_field_id('tab_content-'.$i); ?>" name="<?php echo $this->get_field_name('tab_content-'.$i); ?>">
 					<option value="0" <?php selected($tab_content[$i], 0); ?>></option>
-					<option value="1" <?php selected($tab_content[$i], 1); ?>><?php _e('Archives', 'themezee-widget-bundle'); ?></option>
-					<option value="2" <?php selected($tab_content[$i], 2); ?>><?php _e('Categories', 'themezee-widget-bundle'); ?></option>
-					<option value="3" <?php selected($tab_content[$i], 3); ?>><?php _e('Pages', 'themezee-widget-bundle'); ?></option>
-					<option value="4" <?php selected($tab_content[$i], 4); ?>><?php _e('Popular Posts', 'themezee-widget-bundle'); ?></option>
-					<option value="5" <?php selected($tab_content[$i], 5); ?>><?php _e('Recent Comments', 'themezee-widget-bundle'); ?></option>
-					<option value="6" <?php selected($tab_content[$i], 6); ?>><?php _e('Recent Posts', 'themezee-widget-bundle'); ?></option>
-					<option value="7" <?php selected($tab_content[$i], 7); ?>><?php _e('Tag Cloud', 'themezee-widget-bundle'); ?></option>
+					<option value="1" <?php selected($tab_content[$i], 1); ?>><?php esc_html_e('Archives', 'themezee-widget-bundle'); ?></option>
+					<option value="2" <?php selected($tab_content[$i], 2); ?>><?php esc_html_e('Categories', 'themezee-widget-bundle'); ?></option>
+					<option value="3" <?php selected($tab_content[$i], 3); ?>><?php esc_html_e('Pages', 'themezee-widget-bundle'); ?></option>
+					<option value="4" <?php selected($tab_content[$i], 4); ?>><?php esc_html_e('Popular Posts', 'themezee-widget-bundle'); ?></option>
+					<option value="5" <?php selected($tab_content[$i], 5); ?>><?php esc_html_e('Recent Comments', 'themezee-widget-bundle'); ?></option>
+					<option value="6" <?php selected($tab_content[$i], 6); ?>><?php esc_html_e('Recent Posts', 'themezee-widget-bundle'); ?></option>
+					<option value="7" <?php selected($tab_content[$i], 7); ?>><?php esc_html_e('Tag Cloud', 'themezee-widget-bundle'); ?></option>
 				</select>
 				
-				<label for="<?php echo $this->get_field_id('tab_titles-'.$i); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
+				<label for="<?php echo $this->get_field_id('tab_titles-'.$i); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
 					<input id="<?php echo $this->get_field_id('tab_titles-'.$i); ?>" name="<?php echo $this->get_field_name('tab_titles-'.$i); ?>" type="text" value="<?php echo $tab_titles[$i]; ?>" />
 				</label>
 			</p>
@@ -516,10 +516,10 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 				
 		</div>
 		
-		<strong><?php _e('Settings for Recent/Popular Posts and Recent Comments', 'themezee-widget-bundle'); ?></strong>
+		<strong><?php esc_html_e('Settings for Recent/Popular Posts and Recent Comments', 'themezee-widget-bundle'); ?></strong>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of entries:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php esc_html_e('Number of entries:', 'themezee-widget-bundle'); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
@@ -527,7 +527,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
-				<?php _e('Show Thumbnails?', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e('Show Thumbnails?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 

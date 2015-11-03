@@ -44,7 +44,7 @@ class ThemeZee_Widget_Bundle {
 		self::constants();
 		
 		// Setup Translation
-		load_plugin_textdomain( 'themezee-widget-bundle', false, TZWB_PLUGIN_DIR . '/languages/' );
+		add_action( 'plugins_loaded', array( __CLASS__, 'translation' ) );
 	
 		// Include Files
 		self::includes();
@@ -82,6 +82,18 @@ class ThemeZee_Widget_Bundle {
 
 		// Plugin Root File
 		define( 'TZWB_PLUGIN_FILE', __FILE__ );
+		
+	}
+	
+	
+	/**
+	 * Load Translation File
+	 *
+	 * @return void
+	 */
+	static function translation() {
+
+		load_plugin_textdomain( 'themezee-widget-bundle', false, dirname( plugin_basename( TZWB_PLUGIN_FILE ) ) . '/languages/' );
 		
 	}
 	
@@ -152,24 +164,24 @@ class ThemeZee_Widget_Bundle {
 		$options = $instance->get_all();
 		
 		// Register Widgets if enabled
-		if( isset( $options['facebook_likebox'] ) and $options['facebook_likebox'] == true) :
-			register_widget('TZWB_Facebook_Likebox_Widget');
+		if( true == $options['facebook_likebox'] ) :
+			register_widget( 'TZWB_Facebook_Likebox_Widget' );
 		endif;
 		
-		if( isset( $options['recent_comments'] ) and $options['recent_comments'] == true) :
-			register_widget('TZWB_Recent_Comments_Widget');
+		if( true ==  $options['recent_comments'] ) :
+			register_widget( 'TZWB_Recent_Comments_Widget' );
 		endif;
 		
-		if( isset( $options['recent_posts'] ) and $options['recent_posts'] == true) :
-			register_widget('TZWB_Recent_Posts_Widget');
+		if( true ==  $options['recent_posts'] ) :
+			register_widget( 'TZWB_Recent_Posts_Widget' );
 		endif;
 		
-		if( isset( $options['social_icons'] ) and $options['social_icons'] == true) :
-			register_widget('TZWB_Social_Icons_Widget');
+		if( true ==  $options['social_icons'] ) :
+			register_widget( 'TZWB_Social_Icons_Widget' );
 		endif;
 		
-		if( isset( $options['tabbed_content'] ) and $options['tabbed_content'] == true) :
-			register_widget('TZWB_Tabbed_Content_Widget');
+		if( true ==  $options['tabbed_content'] ) :
+			register_widget( 'TZWB_Tabbed_Content_Widget' );
 		endif;
 		
 	}
@@ -188,11 +200,11 @@ class ThemeZee_Widget_Bundle {
 		endif;
 		
 		// Load stylesheet only if widgets are active
-		if ( is_active_widget('TZWB_Facebook_Likebox_Widget', false, 'tzwb-facebook-likebox')
-			or is_active_widget('TZWB_Recent_Comments_Widget', false, 'tzwb-recent-comments')
-			or is_active_widget('TZWB_Recent_Posts_Widget', false, 'tzwb-recent-posts')
-			or is_active_widget('TZWB_Social_Icons_Widget', false, 'tzwb-social-icons')
-			or is_active_widget('TZWB_Tabbed_Content_Widget', false, 'tzwb-tabbed-content')
+		if ( is_active_widget( 'TZWB_Facebook_Likebox_Widget', false, 'tzwb-facebook-likebox' )
+			or is_active_widget( 'TZWB_Recent_Comments_Widget', false, 'tzwb-recent-comments' )
+			or is_active_widget( 'TZWB_Recent_Posts_Widget', false, 'tzwb-recent-posts' )
+			or is_active_widget( 'TZWB_Social_Icons_Widget', false, 'tzwb-social-icons' )
+			or is_active_widget( 'TZWB_Tabbed_Content_Widget', false, 'tzwb-tabbed-content' )
 		) :
 		
 			// Enqueue Plugin Stylesheet
@@ -254,12 +266,12 @@ class ThemeZee_Widget_Bundle {
 		<dl>
 			<dt>
 				<h4><?php echo esc_html( $plugin_data['Name'] ); ?></h4>
-				<span><?php printf( __( 'Version %s', 'themezee-widget-bundle'),  esc_html( $plugin_data['Version'] ) ); ?></span>
+				<span><?php printf( esc_html__( 'Version %s', 'themezee-widget-bundle'),  esc_html( $plugin_data['Version'] ) ); ?></span>
 			</dt>
 			<dd>
 				<p><?php echo wp_kses_post( $plugin_data['Description'] ); ?><br/></p>
-				<a href="<?php echo admin_url( 'admin.php?page=themezee-addons&tab=widgets' ); ?>" class="button button-primary"><?php _e('Plugin Settings', 'themezee-widget-bundle'); ?></a>&nbsp;
-				<a href="<?php echo esc_url( 'http://themezee.com/docs/widget-bundle/'); ?>" class="button button-secondary" target="_blank"><?php _e('View Documentation', 'themezee-widget-bundle'); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=themezee-addons&tab=widgets' ); ?>" class="button button-primary"><?php esc_html_e('Plugin Settings', 'themezee-widget-bundle'); ?></a>&nbsp;
+				<a href="<?php echo esc_url( 'http://themezee.com/docs/widget-bundle/'); ?>" class="button button-secondary" target="_blank"><?php esc_html_e('View Documentation', 'themezee-widget-bundle'); ?></a>
 			</dd>
 		</dl>
 		

@@ -129,8 +129,8 @@ class TZWB_Settings {
 		}
 		
 		// Add Sections
-		add_settings_section( 'tzwb_settings_widgets', __('Widgets', 'themezee-widget-bundle' ), array( $this, 'widget_section_intro' ), 'tzwb_settings' );
-		add_settings_section( 'tzwb_settings_license', __('License', 'themezee-widget-bundle'), array( $this, 'license_section_intro' ), 'tzwb_settings' );
+		add_settings_section( 'tzwb_settings_widgets', esc_html__( 'Widgets', 'themezee-widget-bundle' ), array( $this, 'widget_section_intro' ), 'tzwb_settings' );
+		add_settings_section( 'tzwb_settings_license', esc_html__( 'License', 'themezee-widget-bundle' ), array( $this, 'license_section_intro' ), 'tzwb_settings' );
 		
 		// Add Settings
 		foreach ( $this->get_registered_settings() as $key => $option ) :
@@ -170,7 +170,7 @@ class TZWB_Settings {
 	 * @return void
 	*/
 	function widget_section_intro() {
-		_e( 'Activate all the widgets you want to use here.', 'themezee-widget-bundle');
+		esc_html_e( 'Activate all the widgets you want to use here.', 'themezee-widget-bundle');
 	}
 	
 	
@@ -281,42 +281,42 @@ class TZWB_Settings {
 
 		$settings = array(
 			'facebook_likebox' => array(
-				'name' =>  __( 'Facebook Likebox', 'themezee-widget-bundle' ),
-				'desc' => __( 'Enable Facebook Like Box Widget', 'themezee-widget-bundle' ),
+				'name' =>  esc_html__( 'Facebook Likebox', 'themezee-widget-bundle' ),
+				'desc' => esc_html__( 'Enable Facebook Like Box Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'checkbox',
 				'default' => true
 			),
 			'recent_comments' => array(
-				'name' =>  __( 'Recent Comments', 'themezee-widget-bundle' ),
-				'desc' => __( 'Enable Recent Comments Widget', 'themezee-widget-bundle' ),
+				'name' =>  esc_html__( 'Recent Comments', 'themezee-widget-bundle' ),
+				'desc' => esc_html__( 'Enable Recent Comments Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'checkbox',
 				'default' => true
 			),
 			'recent_posts' => array(
-				'name' =>  __( 'Recent Posts', 'themezee-widget-bundle' ),
-				'desc' => __( 'Enable Recent Posts Widget', 'themezee-widget-bundle' ),
+				'name' =>  esc_html__( 'Recent Posts', 'themezee-widget-bundle' ),
+				'desc' => esc_html__( 'Enable Recent Posts Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'checkbox',
 				'default' => true
 			),
 			'social_icons' => array(
-				'name' =>  __( 'Social Icons', 'themezee-widget-bundle' ),
-				'desc' => __( 'Enable Social Icons Widget', 'themezee-widget-bundle' ),
+				'name' =>  esc_html__( 'Social Icons', 'themezee-widget-bundle' ),
+				'desc' => esc_html__( 'Enable Social Icons Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'checkbox',
 				'default' => true
 			),
 			'tabbed_content' => array(
-				'name' =>  __( 'Tabbed Content', 'themezee-widget-bundle' ),
-				'desc' => __( 'Enable Tabbed Content Widget', 'themezee-widget-bundle' ),
+				'name' =>  esc_html__( 'Tabbed Content', 'themezee-widget-bundle' ),
+				'desc' => esc_html__( 'Enable Tabbed Content Widget', 'themezee-widget-bundle' ),
 				'section' => 'widgets',
 				'type' => 'checkbox',
 				'default' => true
 			),
 			'license_key' => array(
-				'name' => __( 'License Key', 'themezee-widget-bundle' ),
+				'name' => esc_html__( 'License Key', 'themezee-widget-bundle' ),
 				'section' => 'license',
 				'type' => 'license',
 				'default' => ''
@@ -443,14 +443,14 @@ class TZWB_Settings {
 
 		if( 'valid' === $license_status && ! empty( $license_key ) ) {
 			$html .= '<input type="submit" class="button" name="tzwb_deactivate_license" value="' . esc_attr__( 'Deactivate License', 'themezee-widget-bundle' ) . '"/>';
-			$html .= '<span style="display: inline-block; padding: 5px; color: green;">&nbsp;' . __( 'Your license is valid!', 'themezee-widget-bundle' ) . '</span>';
+			$html .= '<span style="display: inline-block; padding: 5px; color: green;">&nbsp;' . esc_html__( 'Your license is valid!', 'themezee-widget-bundle' ) . '</span>';
 		} elseif( 'expired' === $license_status && ! empty( $license_key ) ) {
 			$renewal_url = esc_url( add_query_arg( array( 'edd_license_key' => $license_key, 'download_id' => TZWB_PRODUCT_ID ), 'https://themezee.com/checkout' ) );
-			$html .= '<a href="' . esc_url( $renewal_url ) . '" class="button-primary">' . __( 'Renew Your License', 'themezee-widget-bundle' ) . '</a>';
-			$html .= '<br/><span style="display: inline-block; padding: 5px; color: red;">&nbsp;' . __( 'Your license has expired, renew today to continue getting updates and support!', 'themezee-widget-bundle' ) . '</span>';
+			$html .= '<a href="' . esc_url( $renewal_url ) . '" class="button-primary">' . esc_html__( 'Renew Your License', 'themezee-widget-bundle' ) . '</a>';
+			$html .= '<br/><span style="display: inline-block; padding: 5px; color: red;">&nbsp;' . esc_html__( 'Your license has expired, renew today to continue getting updates and support!', 'themezee-widget-bundle' ) . '</span>';
 		} elseif( 'invalid' === $license_status && ! empty( $license_key ) ) {
 			$html .= '<input type="submit" class="button" name="tzwb_activate_license" value="' . esc_attr__( 'Activate License', 'themezee-widget-bundle' ) . '"/>';
-			$html .= '<span style="display: inline-block; padding: 5px; color: red;">&nbsp;' . __( 'Your license is invalid!', 'themezee-widget-bundle' ) . '</span>';
+			$html .= '<span style="display: inline-block; padding: 5px; color: red;">&nbsp;' . esc_html__( 'Your license is invalid!', 'themezee-widget-bundle' ) . '</span>';
 		} else {
 			$html .= '<input type="submit" class="button" name="tzwb_activate_license" value="' . esc_attr__( 'Activate License', 'themezee-widget-bundle' ) . '"/>';
 		}

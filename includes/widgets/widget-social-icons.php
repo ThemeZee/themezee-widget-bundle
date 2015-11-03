@@ -19,8 +19,8 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		
 		parent::__construct(
 			'tzwb-social-icons', // ID
-			__( 'Social Icons (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-social-icons', 'description' => __( 'Displays your Social Icons.', 'themezee-widget-bundle' ) ) // Args
+			esc_html__( 'Social Icons (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-social-icons', 'description' => esc_html__( 'Displays your Social Icons.', 'themezee-widget-bundle' ) ) // Args
 		);
 		
 		// Delete Widget Cache on certain actions
@@ -198,13 +198,13 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		?>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('menu'); ?>"><?php _e('Select Social Menu:', 'themezee-widget-bundle'); ?></label><br/>
+			<label for="<?php echo $this->get_field_id('menu'); ?>"><?php esc_html_e('Select Social Menu:', 'themezee-widget-bundle'); ?></label><br/>
 			<select id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>">
 				<option value="0" <?php selected($menu, 0, false); ?>> </option>
 				<?php // Display Menu Select Options

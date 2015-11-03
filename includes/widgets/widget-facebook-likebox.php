@@ -19,8 +19,8 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		
 		parent::__construct(
 			'tzwb-facebook-likebox', // ID
-			__( 'Facebook Like Box (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-facebook-likebox', 'description' => __( 'Display facebook like box.', 'themezee-widget-bundle' ) ) // Args
+			esc_html__( 'Facebook Like Box (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-facebook-likebox', 'description' => esc_html__( 'Display facebook like box.', 'themezee-widget-bundle' ) ) // Args
 		);
 
 	}
@@ -183,19 +183,19 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		?>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e( 'Title:', 'themezee-widget-bundle' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('facebook_url'); ?>"><?php _e('Facebook Page URL:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('facebook_url'); ?>"><?php esc_html_e( 'Facebook Page URL:', 'themezee-widget-bundle' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('facebook_url'); ?>" name="<?php echo $this->get_field_name('facebook_url'); ?>" type="text" value="<?php echo $facebook_url; ?>" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('height'); ?>"><?php _e('Height in pixels:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('height'); ?>"><?php esc_html_e( 'Height in pixels:', 'themezee-widget-bundle' ); ?>
 				<input id="<?php echo $this->get_field_id('height'); ?>" name="<?php echo $this->get_field_name('height'); ?>" type="text" value="<?php echo $height; ?>" size="6" />
 			</label>
 		</p>
@@ -203,28 +203,28 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('small_header'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $small_header ) ; ?> id="<?php echo $this->get_field_id('small_header'); ?>" name="<?php echo $this->get_field_name('small_header'); ?>" />
-				<?php _e('Use Small Header', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Use Small Header', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('cover_photo'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $cover_photo ) ; ?> id="<?php echo $this->get_field_id('cover_photo'); ?>" name="<?php echo $this->get_field_name('cover_photo'); ?>" />
-				<?php _e('Hide Cover Photo', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Hide Cover Photo', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('faces'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $faces ) ; ?> id="<?php echo $this->get_field_id('faces'); ?>" name="<?php echo $this->get_field_name('faces'); ?>" />
-				<?php _e('Show Faces', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Show Faces', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('streams'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $streams ) ; ?> id="<?php echo $this->get_field_id('streams'); ?>" name="<?php echo $this->get_field_name('streams'); ?>" />
-				<?php _e('Show Page Posts', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Show Page Posts', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 

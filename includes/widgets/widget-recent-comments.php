@@ -19,8 +19,8 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		
 		parent::__construct(
 			'tzwb-recent-comments', // ID
-			__( 'Recent Comments (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-recent-comments', 'description' => __( 'Displays latest comments with Gravatar.', 'themezee-widget-bundle' ) ) // Args
+			esc_html__( 'Recent Comments (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			array( 'classname' => 'tzwb-recent-comments', 'description' => esc_html__( 'Displays latest comments with Gravatar.', 'themezee-widget-bundle' ) ) // Args
 		);
 		
 		// Delete Widget Cache on certain actions
@@ -189,7 +189,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 				if ( $post_title == 1 ) : 
 			
 					echo get_comment_author_link( $comment->comment_ID );
-					_e(' on', 'themezee-widget-bundle'); ?>
+					esc_html_e( ' on', 'themezee-widget-bundle' ); ?>
 					
 					<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
 						<?php echo get_the_title( $comment->comment_post_ID ); ?>
@@ -267,20 +267,20 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		?>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e( 'Title:', 'themezee-widget-bundle' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of comments to show:', 'themezee-widget-bundle'); ?>
+			<label for="<?php echo $this->get_field_id('number'); ?>"><?php esc_html_e( 'Number of comments to show:', 'themezee-widget-bundle' ); ?>
 				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('comment_length'); ?>">
-				<?php _e('Excerpt length in number of characters:', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Excerpt length in number of characters:', 'themezee-widget-bundle' ); ?>
 				<input id="<?php echo $this->get_field_id('comment_length'); ?>" name="<?php echo $this->get_field_name('comment_length'); ?>" type="text" value="<?php echo $comment_length; ?>" size="5" />
 			</label>
 		</p>	
@@ -288,21 +288,21 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('avatar'); ?>">
 				<input class="checkbox" type="checkbox"  <?php checked( $avatar ) ; ?> id="<?php echo $this->get_field_id('avatar'); ?>" name="<?php echo $this->get_field_name('avatar'); ?>" />
-				<?php _e('Display avatar of comment author', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Display avatar of comment author', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('post_title'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $post_title ) ; ?> id="<?php echo $this->get_field_id('post_title'); ?>" name="<?php echo $this->get_field_name('post_title'); ?>" />
-				<?php _e('Display post title of commented post', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Display post title of commented post', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('comment_date'); ?>">
 				<input class="checkbox" type="checkbox" <?php checked( $comment_date ) ; ?> id="<?php echo $this->get_field_id('comment_date'); ?>" name="<?php echo $this->get_field_name('comment_date'); ?>" />
-				<?php _e('Display comment date', 'themezee-widget-bundle'); ?>
+				<?php esc_html_e( 'Display comment date', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
