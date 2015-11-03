@@ -39,8 +39,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	
 		$defaults = array(
 			'title'				=> '',
-			'menu'				=> 0,
-			'style'				=> 'icons'
+			'menu'				=> 0
 		);
 		
 		return $defaults;
@@ -69,7 +68,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function widget($args, $instance) {
+	function widget( $args, $instance ) {
 
 		$cache = array();
 		
@@ -90,30 +89,26 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		// Start Output Buffering
 		ob_start();
 		
-		// Get Sidebar Arguments
-		extract($args);
-		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Add Widget Title Filter
-		$widget_title = apply_filters('widget_title', $title, $instance, $this->id_base);
+		$widget_title = apply_filters('widget_title', $settings['title'], $settings, $this->id_base);
 		
 		// Output
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		// Display Title
-		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+		if( !empty( $widget_title ) ) { echo $args['before_title'] . $widget_title . $args['after_title']; }; ?>
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
-			<?php echo $this->render($instance); ?>
+			<?php echo $this->render( $settings ); ?>
 			
 		</div>
 			
 		<?php
-		echo $after_widget;
+		echo $args['after_widget'];
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
@@ -133,18 +128,14 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function render($instance) {
-		
-		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+	function render( $settings ) {
 		
 		// Check if there is a social_icons menu
-		if( isset($menu) and $menu > 0 ) :
+		if( $settings['menu'] > 0 ) :
 		
 			// Set Social Menu Arguments
 			$menu_args = array(
-				'menu' => (int)$menu,
+				'menu' => (int)$settings['menu'],
 				'container' => false,
 				'menu_class' => 'tzwb-social-icons-menu menu',
 				'echo' => true,
@@ -171,7 +162,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 * @param array $old_instance Old Settings for this widget instance
 	 * @return array $instance New widget settings
 	 */
-	function update($new_instance, $old_instance) {
+	function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
@@ -193,25 +184,25 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	function form( $instance ) {
 		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
+		
 		?>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $settings['title']; ?>" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('menu'); ?>"><?php esc_html_e('Select Social Menu:', 'themezee-widget-bundle'); ?></label><br/>
 			<select id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>">
-				<option value="0" <?php selected($menu, 0, false); ?>> </option>
+				<option value="0" <?php selected($settings['menu'], 0, false); ?>> </option>
 				<?php // Display Menu Select Options
 					$nav_menus = wp_get_nav_menus(array('hide_empty' => true));
 					
 					foreach ( $nav_menus as $nav_menu ) :
-						printf('<option value="%s" %s>%s</option>', $nav_menu->term_id, selected($menu, $nav_menu->term_id, false), $nav_menu->name);
+						printf('<option value="%s" %s>%s</option>', $nav_menu->term_id, selected($settings['menu'], $nav_menu->term_id, false), $nav_menu->name);
 					endforeach;
 				?>
 			</select>

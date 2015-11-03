@@ -107,32 +107,28 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		// Start Output Buffering
 		ob_start();
 		
-		// Get Sidebar Arguments
-		extract($args);
-		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Add Widget Title Filter
-		$widget_title = apply_filters('widget_title', $title, $instance, $this->id_base);
+		$widget_title = apply_filters('widget_title', $settings['title'], $settings, $this->id_base);
 		
 		// Output
-		echo $before_widget;
+		echo $args['before_widget'];
 		
 		// Display Title
-		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+		if( !empty( $widget_title ) ) { echo $args['before_title'] . $widget_title . $args['after_title']; }; ?>
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
 			<ul class="tzwb-comments-list">
-				<?php echo $this->render($instance); ?>
+				<?php echo $this->render( $settings ); ?>
 			</ul>
 			
 		</div>
 
 		<?php
-		echo $after_widget;
+		echo $args['after_widget'];
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
@@ -151,15 +147,11 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function render($instance) {
+	function render( $settings ) {
 		
-		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
-	
 		// Get latest comments from database
 		$comments = get_comments( array( 
-			'number' => (int)$number, 
+			'number' => (int)$settings['number'], 
 			'status' => 'approve', 
 			'post_status' => 'publish' 
 		) );
@@ -171,7 +163,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 			foreach ( (array) $comments as $comment) : ?>
 				
 				<?php // Display Gravatar
-				if ( $avatar == 1 ) : ?>
+				if ( true == $settings['avatar'] ) : ?>
 			
 					<li class="tzwb-has-avatar">
 						<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
@@ -186,7 +178,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 				
 				
 				<?php // Display Post Title
-				if ( $post_title == 1 ) : 
+				if ( true == $settings['post_title'] ) : 
 			
 					echo get_comment_author_link( $comment->comment_ID );
 					esc_html_e( ' on', 'themezee-widget-bundle' ); ?>
@@ -205,14 +197,14 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 				
 				
 				<?php // Display Comment Content
-				if ( $comment_length > 0 ) :  ?>
+				if ( $settings['comment_length'] > 0 ) :  ?>
 					
-					<div class="tzwb-comment-content"><?php echo $this->comment_length( $comment->comment_content, $comment_length ); ?></div>
+					<div class="tzwb-comment-content"><?php echo $this->comment_length( $comment->comment_content, $settings['comment_length'] ); ?></div>
 
 				<?php endif; ?>
 				
 				<?php // Display Comment Date
-				if ( $comment_date == 1 ) : 
+				if ( true == $settings['comment_date'] ) : 
 
 					$date_format = get_option( 'date_format' );
 					$time_format = get_option( 'time_format' );
@@ -237,7 +229,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 	 * @param array $old_instance Old Settings for this widget instance
 	 * @return array $instance New widget settings
 	 */
-	function update($new_instance, $old_instance) {
+	function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
@@ -262,46 +254,46 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 	function form( $instance ) {
 		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) ); 
+		$settings = wp_parse_args( $instance, $this->default_settings() );
+		
 		?>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e( 'Title:', 'themezee-widget-bundle' ); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $settings['title']; ?>" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('number'); ?>"><?php esc_html_e( 'Number of comments to show:', 'themezee-widget-bundle' ); ?>
-				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $settings['number']; ?>" size="3" />
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('comment_length'); ?>">
 				<?php esc_html_e( 'Excerpt length in number of characters:', 'themezee-widget-bundle' ); ?>
-				<input id="<?php echo $this->get_field_id('comment_length'); ?>" name="<?php echo $this->get_field_name('comment_length'); ?>" type="text" value="<?php echo $comment_length; ?>" size="5" />
+				<input id="<?php echo $this->get_field_id('comment_length'); ?>" name="<?php echo $this->get_field_name('comment_length'); ?>" type="text" value="<?php echo $settings['comment_length']; ?>" size="5" />
 			</label>
 		</p>	
 
 		<p>
 			<label for="<?php echo $this->get_field_id('avatar'); ?>">
-				<input class="checkbox" type="checkbox"  <?php checked( $avatar ) ; ?> id="<?php echo $this->get_field_id('avatar'); ?>" name="<?php echo $this->get_field_name('avatar'); ?>" />
+				<input class="checkbox" type="checkbox"  <?php checked( $settings['avatar'] ) ; ?> id="<?php echo $this->get_field_id('avatar'); ?>" name="<?php echo $this->get_field_name('avatar'); ?>" />
 				<?php esc_html_e( 'Display avatar of comment author', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('post_title'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $post_title ) ; ?> id="<?php echo $this->get_field_id('post_title'); ?>" name="<?php echo $this->get_field_name('post_title'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['post_title'] ) ; ?> id="<?php echo $this->get_field_id('post_title'); ?>" name="<?php echo $this->get_field_name('post_title'); ?>" />
 				<?php esc_html_e( 'Display post title of commented post', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('comment_date'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $comment_date ) ; ?> id="<?php echo $this->get_field_id('comment_date'); ?>" name="<?php echo $this->get_field_name('comment_date'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['comment_date'] ) ; ?> id="<?php echo $this->get_field_id('comment_date'); ?>" name="<?php echo $this->get_field_name('comment_date'); ?>" />
 				<?php esc_html_e( 'Display comment date', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>

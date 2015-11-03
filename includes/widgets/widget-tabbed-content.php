@@ -113,30 +113,26 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		// Start Output Buffering
 		ob_start();
 		
-		// Get Sidebar Arguments
-		extract($args);
-		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Add Widget Title Filter
-		$widget_title = apply_filters('widget_title', $title, $instance, $this->id_base);
+		$widget_title = apply_filters('widget_title', $settings['title'], $settings, $this->id_base);
 		
 		// Output
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		// Display Title
-		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+		if( !empty( $widget_title ) ) { echo $args['before_title'] . $widget_title . $args['after_title']; }; ?>
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
-			<?php echo $this->render( $args, $instance ); ?>
+			<?php echo $this->render( $args, $settings ); ?>
 			
 		</div>
 			
 		<?php
-		echo $after_widget;
+		echo $args['after_widget'];
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
@@ -156,12 +152,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function render( $args, $instance ) {
+	function render( $args, $settings ) {
 		
-		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
-			
 		?>
 		
 		<div class="tzwb-tabnavi-wrap tzwb-clearfix">
@@ -172,11 +164,11 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 				for( $i = 0; $i <= 3; $i++ ) : 
 
 					// Do not display empty tabs
-					if ( $tab_titles[$i] == '' and $tab_content[$i] == 0)
+					if ( $settings['tab_titles'][$i] == '' and $settings['tab_content'][$i] == 0)
 						continue;
 				?>
 				
-					<li><a href="#<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>"><?php echo esc_html($tab_titles[$i]); ?></a></li>
+					<li><a href="#<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>"><?php echo esc_html( $settings['tab_titles'][$i] ); ?></a></li>
 					
 				<?php endfor; ?>
 				
@@ -189,7 +181,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 				<div id="<?php echo $args['widget_id']; ?>-tab-<?php echo $i; ?>" class="tzwb-tabcontent">
 				
-					<?php echo $this->tab_content( $instance, $tab_content[$i] ); ?>
+					<?php echo $this->tab_content( $settings, $settings['tab_content'][$i] ); ?>
 					
 				</div>
 				
@@ -205,13 +197,9 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	 * @param integer $tabcontent Tab ID to select which tab is displayed
 	 * @return void
 	 */
-	function tab_content($instance, $tabcontent) {
-	
-		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+	function tab_content( $settings, $tabcontent ) {
 
-		switch($tabcontent) :
+		switch( $tabcontent) :
 
 			 // Archives
 			 case 1: ?>
@@ -248,7 +236,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 				// Get latest popular posts from database
 				$query_arguments = array(
-					'posts_per_page' => (int)$number,
+					'posts_per_page' => (int)$settings['number'],
 					'ignore_sticky_posts' => true,
 					'orderby' => 'comment_count'
 				);
@@ -260,7 +248,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 					<?php // Display Posts
 					if( $posts_query->have_posts() ) : while( $posts_query->have_posts() ) : $posts_query->the_post();
 					
-						if ( $thumbnails == 1 ) : ?>
+						if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 				
 							<li class="tzwb-has-thumbnail">
 								<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
@@ -279,8 +267,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 						
 							<div class="tzwb-entry-meta">
 							
-							<?php // Display Date
-							if ( $thumbnails == 1 ) : ?>
+							<?php // Display Date only on posts with thumbnails
+							if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 								
 								<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
 
@@ -301,7 +289,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 				// Get latest comments from database
 				$comments = get_comments( array( 
-					'number' => (int)$number, 
+					'number' => (int)$settings['number'], 
 					'status' => 'approve', 
 					'post_status' => 'publish' 
 				) );
@@ -314,7 +302,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 						foreach ( (array) $comments as $comment) :
 					
 							 // Display Gravatar
-							if ( $thumbnails == 1 ) : ?>
+							if ( $settings['thumbnails'] == 1 ) : ?>
 						
 								<li class="tzwb-has-avatar">
 									<a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>">
@@ -364,7 +352,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			
 				// Get latest posts from database
 				$query_arguments = array(
-					'posts_per_page' => (int)$number,
+					'posts_per_page' => (int)$settings['number'],
 					'ignore_sticky_posts' => true
 				);
 				$posts_query = new WP_Query($query_arguments);
@@ -375,7 +363,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 					<?php // Display Posts
 					if( $posts_query->have_posts() ) : while( $posts_query->have_posts() ) : $posts_query->the_post();
 					
-						if ( $thumbnails == 1 ) : ?>
+						if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 				
 							<li class="tzwb-has-thumbnail">
 								<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
@@ -394,8 +382,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 						
 							<div class="tzwb-entry-meta">
 							
-							<?php // Display Date
-							if ( $thumbnails == 1 ) : ?>
+							<?php // Display Date only for posts with thumbnails
+							if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 								
 								<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
 
@@ -476,13 +464,13 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 	function form( $instance ) {
 		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
+		
 		?>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $settings['title']; ?>" />
 			</label>
 		</p>
 		
@@ -497,18 +485,18 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 					<?php printf( esc_html__( 'Tab %s:', 'themezee-widget-bundle' ), $i+1 ); ?>
 				</label>
 				<select id="<?php echo $this->get_field_id('tab_content-'.$i); ?>" name="<?php echo $this->get_field_name('tab_content-'.$i); ?>">
-					<option value="0" <?php selected($tab_content[$i], 0); ?>></option>
-					<option value="1" <?php selected($tab_content[$i], 1); ?>><?php esc_html_e('Archives', 'themezee-widget-bundle'); ?></option>
-					<option value="2" <?php selected($tab_content[$i], 2); ?>><?php esc_html_e('Categories', 'themezee-widget-bundle'); ?></option>
-					<option value="3" <?php selected($tab_content[$i], 3); ?>><?php esc_html_e('Pages', 'themezee-widget-bundle'); ?></option>
-					<option value="4" <?php selected($tab_content[$i], 4); ?>><?php esc_html_e('Popular Posts', 'themezee-widget-bundle'); ?></option>
-					<option value="5" <?php selected($tab_content[$i], 5); ?>><?php esc_html_e('Recent Comments', 'themezee-widget-bundle'); ?></option>
-					<option value="6" <?php selected($tab_content[$i], 6); ?>><?php esc_html_e('Recent Posts', 'themezee-widget-bundle'); ?></option>
-					<option value="7" <?php selected($tab_content[$i], 7); ?>><?php esc_html_e('Tag Cloud', 'themezee-widget-bundle'); ?></option>
+					<option value="0" <?php selected($settings['tab_content'][$i], 0); ?>></option>
+					<option value="1" <?php selected($settings['tab_content'][$i], 1); ?>><?php esc_html_e('Archives', 'themezee-widget-bundle'); ?></option>
+					<option value="2" <?php selected($settings['tab_content'][$i], 2); ?>><?php esc_html_e('Categories', 'themezee-widget-bundle'); ?></option>
+					<option value="3" <?php selected($settings['tab_content'][$i], 3); ?>><?php esc_html_e('Pages', 'themezee-widget-bundle'); ?></option>
+					<option value="4" <?php selected($settings['tab_content'][$i], 4); ?>><?php esc_html_e('Popular Posts', 'themezee-widget-bundle'); ?></option>
+					<option value="5" <?php selected($settings['tab_content'][$i], 5); ?>><?php esc_html_e('Recent Comments', 'themezee-widget-bundle'); ?></option>
+					<option value="6" <?php selected($settings['tab_content'][$i], 6); ?>><?php esc_html_e('Recent Posts', 'themezee-widget-bundle'); ?></option>
+					<option value="7" <?php selected($settings['tab_content'][$i], 7); ?>><?php esc_html_e('Tag Cloud', 'themezee-widget-bundle'); ?></option>
 				</select>
 				
 				<label for="<?php echo $this->get_field_id('tab_titles-'.$i); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
-					<input id="<?php echo $this->get_field_id('tab_titles-'.$i); ?>" name="<?php echo $this->get_field_name('tab_titles-'.$i); ?>" type="text" value="<?php echo $tab_titles[$i]; ?>" />
+					<input id="<?php echo $this->get_field_id('tab_titles-'.$i); ?>" name="<?php echo $this->get_field_name('tab_titles-'.$i); ?>" type="text" value="<?php echo $settings['tab_titles'][$i]; ?>" />
 				</label>
 			</p>
 						
@@ -520,13 +508,13 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo $this->get_field_id('number'); ?>"><?php esc_html_e('Number of entries:', 'themezee-widget-bundle'); ?>
-				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $settings['number']; ?>" size="3" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['thumbnails'] ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
 				<?php esc_html_e('Show Thumbnails?', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>

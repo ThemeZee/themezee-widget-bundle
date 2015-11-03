@@ -57,42 +57,38 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 	 */
 	function widget($args, $instance) {
 
-		// Get Sidebar Arguments
-		extract($args);
-		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Add Widget Title Filter
-		$widget_title = apply_filters('widget_title', $title, $instance, $this->id_base);
+		$widget_title = apply_filters('widget_title', $settings['title'], $settings, $this->id_base);
 		
 		// Validate Facebook URL
-		$facebook_href = $this->validate_facebook_url( $facebook_url );
+		$facebook_href = $this->validate_facebook_url( $settings['facebook_url'] );
 
 		// Display Notice if Facebook URL is empty or invalid
 		if ( '' == $facebook_href ) :
 			echo '<!-- Invalid Facebook Page URL -->';
 			if ( current_user_can('edit_theme_options') ) :
-				echo $before_widget;
-				if( !empty( $widget_title ) ) { echo $before_title . esc_html( $widget_title ) . $after_title; };
+				echo $args['before_widget'];
+				if( !empty( $widget_title ) ) { echo $args['before_title'] . esc_html( $widget_title ) . $args['after_title']; };
 				echo '<p>' . sprintf( __( 'It looks like your Facebook URL is empty or invalid. Please check it in your <a href="%s">widget settings</a>.', 'themezee-widget-bundle' ), admin_url( 'widgets.php' ) ) . '</p>';
-				echo $after_widget;
+				echo $args['after_widget'];
 			endif;
 			return;
 		endif;
 		
 		// Normalize Checkboxes
-		$small_header = (bool) $small_header ? 'true'  : 'false';
-		$cover_photo = (bool) $cover_photo ? 'true'  : 'false';
-		$faces = (bool) $faces ? 'true'  : 'false';
-		$streams = (bool) $streams ? 'true'  : 'false';
+		$settings['small_header'] = (bool) $settings['small_header'] ? 'true'  : 'false';
+		$settings['cover_photo'] = (bool) $settings['cover_photo'] ? 'true'  : 'false';
+		$settings['faces'] = (bool) $settings['faces'] ? 'true'  : 'false';
+		$settings['streams'] = (bool) $settings['streams'] ? 'true'  : 'false';
 		
 		// Output
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		// Display Title
-		if( !empty( $widget_title ) ) { echo $before_title . esc_html( $widget_title ) . $after_title; }; ?>
+		if( !empty( $widget_title ) ) { echo $args['before_title'] . esc_html( $widget_title ) . $args['after_title']; }; ?>
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
@@ -105,14 +101,14 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 			  fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));</script>
 
-			<div class="fb-page" data-href="<?php echo esc_url( $facebook_href ); ?>" data-height="<?php echo intval( $height ); ?>" data-small-header="<?php echo esc_attr( $small_header ); ?>" data-adapt-container-width="true" data-hide-cover="<?php echo esc_attr( $cover_photo ); ?>" data-show-facepile="<?php echo esc_attr( $faces ); ?>" data-show-posts="<?php echo esc_attr( $streams  ); ?>">
+			<div class="fb-page" data-href="<?php echo esc_url( $facebook_href ); ?>" data-height="<?php echo intval( $settings['height'] ); ?>" data-small-header="<?php echo esc_attr( $settings['small_header'] ); ?>" data-adapt-container-width="true" data-hide-cover="<?php echo esc_attr( $settings['cover_photo'] ); ?>" data-show-facepile="<?php echo esc_attr( $settings['faces'] ); ?>" data-show-posts="<?php echo esc_attr( $settings['streams']  ); ?>">
 				<div class="fb-xfbml-parse-ignore"><blockquote cite="<?php echo esc_url( $facebook_href ); ?>"><a href="<?php echo esc_url( $facebook_href ); ?>"><?php echo esc_html( $widget_title ); ?></a></blockquote></div>
 			</div>
 			
 		</div>
 		
 		<?php
-		echo $after_widget;
+		echo $args['after_widget'];
 	
 	}
 	
@@ -120,7 +116,7 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 	/**
 	 * Validate the Facebook Page URL
 	 *
-	 * @param string $facebook_url URL of Facebook Page
+	 * @param string $settings['facebook_url'] URL of Facebook Page
 	 * @return string $valid_url Valid URL of Facebook Page
 	 */
 	function validate_facebook_url( $facebook_url ) {
@@ -148,7 +144,7 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 	 * @param array $old_instance Old Settings for this widget instance
 	 * @return array $instance New Settings for this widget instance
 	 */
-	function update($new_instance, $old_instance) {
+	function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
@@ -175,55 +171,54 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 	function form( $instance ) {
 		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Validate Facebook URL
-		$facebook_url = $this->validate_facebook_url( $facebook_url );
+		$settings['facebook_url'] = $this->validate_facebook_url( $settings['facebook_url'] );
 		?>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e( 'Title:', 'themezee-widget-bundle' ); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $settings['title']; ?>" />
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('facebook_url'); ?>"><?php esc_html_e( 'Facebook Page URL:', 'themezee-widget-bundle' ); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('facebook_url'); ?>" name="<?php echo $this->get_field_name('facebook_url'); ?>" type="text" value="<?php echo $facebook_url; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id('facebook_url'); ?>" name="<?php echo $this->get_field_name('facebook_url'); ?>" type="text" value="<?php echo $settings['facebook_url']; ?>" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('height'); ?>"><?php esc_html_e( 'Height in pixels:', 'themezee-widget-bundle' ); ?>
-				<input id="<?php echo $this->get_field_id('height'); ?>" name="<?php echo $this->get_field_name('height'); ?>" type="text" value="<?php echo $height; ?>" size="6" />
+				<input id="<?php echo $this->get_field_id('height'); ?>" name="<?php echo $this->get_field_name('height'); ?>" type="text" value="<?php echo $settings['height']; ?>" size="6" />
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('small_header'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $small_header ) ; ?> id="<?php echo $this->get_field_id('small_header'); ?>" name="<?php echo $this->get_field_name('small_header'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['small_header'] ) ; ?> id="<?php echo $this->get_field_id('small_header'); ?>" name="<?php echo $this->get_field_name('small_header'); ?>" />
 				<?php esc_html_e( 'Use Small Header', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('cover_photo'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $cover_photo ) ; ?> id="<?php echo $this->get_field_id('cover_photo'); ?>" name="<?php echo $this->get_field_name('cover_photo'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['cover_photo'] ) ; ?> id="<?php echo $this->get_field_id('cover_photo'); ?>" name="<?php echo $this->get_field_name('cover_photo'); ?>" />
 				<?php esc_html_e( 'Hide Cover Photo', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('faces'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $faces ) ; ?> id="<?php echo $this->get_field_id('faces'); ?>" name="<?php echo $this->get_field_name('faces'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['faces'] ) ; ?> id="<?php echo $this->get_field_id('faces'); ?>" name="<?php echo $this->get_field_name('faces'); ?>" />
 				<?php esc_html_e( 'Show Faces', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('streams'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $streams ) ; ?> id="<?php echo $this->get_field_id('streams'); ?>" name="<?php echo $this->get_field_name('streams'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['streams'] ) ; ?> id="<?php echo $this->get_field_id('streams'); ?>" name="<?php echo $this->get_field_name('streams'); ?>" />
 				<?php esc_html_e( 'Show Page Posts', 'themezee-widget-bundle' ); ?>
 			</label>
 		</p>

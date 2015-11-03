@@ -72,7 +72,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	 *
 	 * @return integer $this->excerpt_length Number of Words
 	 */
-	function excerpt_length($length) {
+	function excerpt_length( $length ) {
 		return $this->excerpt_length;
 	}
 	
@@ -86,7 +86,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function widget($args, $instance) {
+	function widget( $args, $instance ) {
 
 		$cache = array();
 		
@@ -107,32 +107,28 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		// Start Output Buffering
 		ob_start();
 		
-		// Get Sidebar Arguments
-		extract($args);
-		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Add Widget Title Filter
-		$widget_title = apply_filters('widget_title', $title, $instance, $this->id_base);
+		$widget_title = apply_filters('widget_title', $settings['title'], $settings, $this->id_base);
 		
 		// Output
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		// Display Title
-		if( !empty( $widget_title ) ) { echo $before_title . $widget_title . $after_title; }; ?>
+		if( !empty( $widget_title ) ) { echo $args['before_title'] . $widget_title . $args['after_title']; }; ?>
 			
 		<div class="tzwb-content tzwb-clearfix">
 			
 			<ul class="tzwb-posts-list">
-				<?php echo $this->render($instance); ?>
+				<?php echo $this->render( $settings ); ?>
 			</ul>
 			
 		</div>
 			
 		<?php
-		echo $after_widget;
+		echo $args['after_widget'];
 		
 		// Set Cache
 		if ( ! $this->is_preview() ) {
@@ -151,18 +147,14 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function render($instance) {
+	function render( $settings ) {
 		
-		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
-	
 		// Get latest posts from database
 		$query_arguments = array(
-			'posts_per_page' => (int)$number,
+			'posts_per_page' => (int)$settings['number'],
 			'ignore_sticky_posts' => true,
-			'cat' => (int)$category,
-			'orderby' => esc_attr($order)
+			'cat' => (int)$settings['category'],
+			'orderby' => esc_attr($settings['order'])
 		);
 		$posts_query = new WP_Query($query_arguments);
 		
@@ -170,7 +162,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		if( $posts_query->have_posts() ) :
 		
 			// Limit the number of words for the excerpt
-			$this->excerpt_length = (int)$excerpt_length;
+			$this->excerpt_length = (int)$settings['excerpt_length'];
 			add_filter('excerpt_length', array($this, 'excerpt_length') );	
 			
 			// Display Posts
@@ -178,7 +170,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 				
 				$posts_query->the_post(); 
 				
-				if ( $thumbnails == 1 and has_post_thumbnail() ) : ?>
+				if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 			
 					<li class="tzwb-has-thumbnail">
 						<a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
@@ -196,7 +188,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 					</a>
 
 				<?php // Display Post Content
-				if ( $excerpt_length > 0 ) : ?>
+				if ( $settings['excerpt_length'] > 0 ) : ?>
 					
 					<span class="tzwb-excerpt"><?php the_excerpt(); ?></span>
 				
@@ -204,7 +196,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 
 				
 				// Display Post Meta
-				echo $this->postmeta( $instance );
+				echo $this->postmeta( $settings );
 				
 			endwhile;
 			
@@ -225,14 +217,10 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	 * @param array $instance Settings for this widget instance
 	 * @return void
 	 */
-	function postmeta( $instance ) {
-		
-		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+	function postmeta( $settings ) {
 		
 		// Create Post Meta Array
-		$postmeta = array( $meta_date, $meta_author, $meta_comments );
+		$postmeta = array( $settings['meta_date'], $settings['meta_author'], $settings['meta_comments'] );
 		
 		// Return early if no meta is displayed
 		if( in_array( true, $postmeta, true ) === false ) :
@@ -243,14 +231,14 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		<div class="tzwb-entry-meta">
 			
 		<?php // Display Date
-		if ( $meta_date == 1 ) : ?>
+		if ( true == $settings['meta_date'] ) : ?>
 			
 			<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
 			
 		<?php endif; ?>
 		
 		<?php // Display Author
-		if ( $meta_author == 1 ) : ?>
+		if ( true == $settings['meta_author'] ) : ?>
 			
 			<span class="tzwb-meta-author">
 				<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
@@ -263,7 +251,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		<?php endif; ?>
 		
 		<?php // Display Comments
-		if ( $meta_comments == 1 and comments_open() ) : ?>
+		if ( true == $settings['meta_comments'] and comments_open() ) : ?>
 		
 			<span class="tzwb-meta-comments">
 				<?php comments_popup_link( esc_html__( 'No comments', 'themezee-widget-bundle' ), esc_html__( 'One comment','themezee-widget-bundle' ), esc_html__( '% comments','themezee-widget-bundle' ) ); ?>
@@ -284,7 +272,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	 * @param array $old_instance Old Settings for this widget instance
 	 * @return array $instance New widget settings
 	 */
-	function update($new_instance, $old_instance) {
+	function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		$instance['title'] = esc_attr($new_instance['title']);
@@ -312,13 +300,13 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 	function form( $instance ) {
 		
 		// Get Widget Settings
-		$defaults = $this->default_settings();
-		extract( wp_parse_args( $instance, $defaults ) );
+		$settings = wp_parse_args( $instance, $this->default_settings() );
+		
 		?>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $settings['title']; ?>" />
 			</label>
 		</p>
 		
@@ -327,7 +315,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 			<?php // Display Category Select
 				$args = array(
 					'show_option_all'    => esc_html__( 'All Categories', 'themezee-widget-bundle' ),
-					'selected'           => $category,
+					'selected'           => $settings['category'],
 					'name'               => $this->get_field_name('category'),
 					'id'                 => $this->get_field_id('category')
 				);
@@ -338,48 +326,48 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('order'); ?>"><?php esc_html_e('Order by:', 'themezee-widget-bundle'); ?></label><br/>
 			<select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
-				<option <?php selected( $order, 'date' ); ?> value="date"><?php esc_html_e('Post Date', 'themezee-widget-bundle'); ?></option>
-				<option <?php selected( $order, 'comment_count' ); ?> value="comment_count"><?php esc_html_e('Comment Count', 'themezee-widget-bundle'); ?></option>
-				<option <?php selected( $order, 'rand' ); ?> value="rand"><?php esc_html_e('Random', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $settings['order'], 'date' ); ?> value="date"><?php esc_html_e('Post Date', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $settings['order'], 'comment_count' ); ?> value="comment_count"><?php esc_html_e('Comment Count', 'themezee-widget-bundle'); ?></option>
+				<option <?php selected( $settings['order'], 'rand' ); ?> value="rand"><?php esc_html_e('Random', 'themezee-widget-bundle'); ?></option>
 			</select>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('number'); ?>"><?php esc_html_e('Number of posts:', 'themezee-widget-bundle'); ?>
-				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+				<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $settings['number']; ?>" size="3" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php esc_html_e('Excerpt length in number of words:', 'themezee-widget-bundle'); ?>
-				<input id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $excerpt_length; ?>" size="5" />
+				<input id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" type="text" value="<?php echo $settings['excerpt_length']; ?>" size="5" />
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('thumbnails'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $thumbnails ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['thumbnails'] ) ; ?> id="<?php echo $this->get_field_id('thumbnails'); ?>" name="<?php echo $this->get_field_name('thumbnails'); ?>" />
 				<?php esc_html_e('Display post thumbnails', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_date'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $meta_date ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['meta_date'] ) ; ?> id="<?php echo $this->get_field_id('meta_date'); ?>" name="<?php echo $this->get_field_name('meta_date'); ?>" />
 				<?php esc_html_e('Display post date', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_author'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $meta_author ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['meta_author'] ) ; ?> id="<?php echo $this->get_field_id('meta_author'); ?>" name="<?php echo $this->get_field_name('meta_author'); ?>" />
 				<?php esc_html_e('Display post author', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id('meta_comments'); ?>">
-				<input class="checkbox" type="checkbox" <?php checked( $meta_comments ) ; ?> id="<?php echo $this->get_field_id('meta_comments'); ?>" name="<?php echo $this->get_field_name('meta_comments'); ?>" />
+				<input class="checkbox" type="checkbox" <?php checked( $settings['meta_comments'] ) ; ?> id="<?php echo $this->get_field_id('meta_comments'); ?>" name="<?php echo $this->get_field_name('meta_comments'); ?>" />
 				<?php esc_html_e('Display post comments', 'themezee-widget-bundle'); ?>
 			</label>
 		</p>
