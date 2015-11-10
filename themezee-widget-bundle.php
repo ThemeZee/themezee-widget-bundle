@@ -146,6 +146,9 @@ class ThemeZee_Widget_Bundle {
 		// Add Widget Bundle Box to Add-on Overview Page
 		add_action('themezee_addons_overview_page', array( __CLASS__, 'addon_overview_page' ) );
 		
+		// Add License Key admin notice
+		add_action('admin_notices', array( __CLASS__, 'license_key_admin_notice' ) );
+		
 		// Add automatic plugin updater from ThemeZee Store API
 		add_action( 'admin_init', array( __CLASS__, 'plugin_updater' ), 0 );
 		
@@ -280,6 +283,40 @@ class ThemeZee_Widget_Bundle {
 	
 	
 	/**
+	 * Add license key admin notice
+	 *
+	 * @return void
+	 */
+	static function license_key_admin_notice() { 
+	
+		global $pagenow;
+	
+		// Display only on Plugins page
+		if ( 'plugins.php' !== $pagenow  ) {
+			return;
+		}
+		
+		// Get Settings
+		$options = TZWB_Settings::instance();
+		
+		if( '' == $options->get( 'license_key' ) ) : ?>
+			
+			<div class="updated">
+				<p>
+					<?php printf( __( 'Please enter your license key for the %1$s add-on in order to receive updates and support. <a href="%2$s">Enter License Key</a>', 'themezee-widget-bundle' ),
+						TZWB_NAME,
+						admin_url( 'themes.php?page=themezee-addons&tab=widgets' ) ); 
+					?>
+				</p>
+			</div>
+			
+		<?php
+		endif;
+	
+	}
+	
+	
+	/**
 	 * Plugin Updater
 	 *
 	 * @return void
@@ -292,9 +329,9 @@ class ThemeZee_Widget_Bundle {
 		
 		$options = TZWB_Settings::instance();
 
-		if( $options->get('license_key') <> '') :
+		if( $options->get( 'license_key' ) <> '' ) :
 			
-			$license_key = $options->get('license_key');
+			$license_key = $options->get( 'license_key' );
 			
 			// setup the updater
 			$tzwb_updater = new TZWB_Plugin_Updater( TZWB_STORE_API_URL, __FILE__, array(
