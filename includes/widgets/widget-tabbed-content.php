@@ -21,7 +21,7 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			'tzwb-tabbed-content', // ID
 			esc_html__( 'Tabbed Content (ThemeZee)', 'themezee-widget-bundle' ), // Name
 			array( 'classname' => 'tzwb-tabbed-content', 'description' => esc_html__( 'Displays various content with tabs.', 'themezee-widget-bundle' ) ), // Args
-			array( 'width' => 450,  'id_base' => 'tzwb-tabbed-content' ) // Controls
+			array( 'width' => 470,  'id_base' => 'tzwb-tabbed-content' ) // Controls
 		);
 		
 		// Enqueue Javascript for Tabs
