@@ -5,7 +5,7 @@ Plugin URI: http://themezee.com/addons/widget-bundle/
 Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
 Author: ThemeZee
 Author URI: http://themezee.com/
-Version: 1.0
+Version: 1.0.1
 Text Domain: themezee-widget-bundle
 Domain Path: /languages/
 License: GPL v3
@@ -66,7 +66,7 @@ class ThemeZee_Widget_Bundle {
 		define( 'TZWB_NAME', 'ThemeZee Widget Bundle');
 
 		// Define Version Number
-		define( 'TZWB_VERSION', '1.0' );
+		define( 'TZWB_VERSION', '1.0.1' );
 		
 		// Define Plugin Name
 		define( 'TZWB_PRODUCT_ID', 41305);

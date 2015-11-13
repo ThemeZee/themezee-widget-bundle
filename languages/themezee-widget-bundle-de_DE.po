@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: ThemeZee Widget Bundle\n"
 "Report-Msgid-Bugs-To: http://themezee.com/\n"
 "POT-Creation-Date: 2015-11-09 17:35+0100\n"
-"PO-Revision-Date: 2015-11-10 11:59+0100\n"
+"PO-Revision-Date: 2015-11-13 12:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: ThemeZee <support@themezee.com>\n"
 "Language: Deutsch\n"
@@ -254,7 +254,7 @@ msgstr "Zeigt die letzten Kommentare mit Gravatar."
 #: includes/widgets/widget-recent-comments.php:184
 #: includes/widgets/widget-tabbed-content.php:319
 msgid " on"
-msgstr "zu"
+msgstr " zu"
 
 #: includes/widgets/widget-recent-comments.php:268
 msgid "Number of comments to show:"
