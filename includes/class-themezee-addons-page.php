@@ -115,7 +115,7 @@ class ThemeZee_Addons_Page {
 		
 		<div id="themezee-addons-overview">
 		
-			<h2 id="themezee-addon-header"><?php esc_html_e( 'ThemeZee Add-ons', 'themezee-widget-bundle' ); ?></h2>
+			<h1 id="themezee-addon-header"><?php esc_html_e( 'ThemeZee Add-ons', 'themezee-widget-bundle' ); ?></h1>
 			<div class="themezee-addons-intro">
 				<?php printf( esc_html__( 'You need more features and functionality? Extend your website with our affordable %s.', 'themezee-widget-bundle' ), $addon_link ); ?>
 			</div>

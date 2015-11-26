@@ -59,7 +59,7 @@ class TZWB_Settings_Page {
 		
 		<div id="tzwb-settings" class="tzwb-settings-wrap">
 			
-			<h2><?php esc_html_e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h2>
+			<h1><?php esc_html_e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h1>
 			<?php settings_errors(); ?>
 			
 			<form class="tzwb-settings-form" method="post" action="options.php">

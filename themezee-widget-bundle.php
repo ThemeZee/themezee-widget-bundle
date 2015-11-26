@@ -142,6 +142,9 @@ class ThemeZee_Widget_Bundle {
 		
 		// Register Image Sizes
 		add_action( 'init',  array( __CLASS__, 'add_image_size' ) );
+		
+		// Add Settings link to Plugin actions
+		add_filter( 'plugin_action_links_' . plugin_basename( TZWB_PLUGIN_FILE ), array( __CLASS__, 'plugin_action_links' ) );
 
 		// Add Widget Bundle Box to Add-on Overview Page
 		add_action('themezee_addons_overview_page', array( __CLASS__, 'addon_overview_page' ) );
@@ -254,6 +257,18 @@ class ThemeZee_Widget_Bundle {
 		
 	}
 	
+	
+	/**
+	 * Add Settings link to the plugin actions
+	 *
+	 * @return array $actions Plugin action links
+	 */
+	static function plugin_action_links( $actions ) {
+
+		$settings_link = array( 'settings' => sprintf( '<a href="%s">%s</a>', admin_url( 'themes.php?page=themezee-addons&tab=widgets' ), __( 'Settings', 'themezee-widget-bundle' ) ) );
+		
+		return array_merge( $settings_link, $actions );
+	}
 	
 	/**
 	 * Add widget bundle box to addon overview admin page
