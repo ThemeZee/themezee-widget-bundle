@@ -23,23 +23,23 @@ class TZWB_Settings_Page {
 	*/
 	static function setup() {
 		
-		// Add settings page to addon tabs
-		add_filter( 'themezee_addons_settings_tabs', array( __CLASS__, 'add_settings_page' ) );
+		// Add settings page to plugin tabs
+		add_filter( 'themezee_plugins_settings_tabs', array( __CLASS__, 'add_settings_page' ) );
 		
-		// Hook settings page to addon page
-		add_action( 'themezee_addons_page_widgets', array( __CLASS__, 'display_settings_page' ) );
+		// Hook settings page to plugin page
+		add_action( 'themezee_plugins_page_widgets', array( __CLASS__, 'display_settings_page' ) );
 		
 	}
 
 	/**
-	 * Add settings page to tabs list on themezee add-on page
+	 * Add settings page to tabs list on themezee plugin page
 	 *
 	 * @return void
 	*/
 	static function add_settings_page($tabs) {
 			
 		// Add Boilerplate Settings Page to Tabs List
-		$tabs['widgets']      = esc_html__( 'Widget Bundle', 'themezee-widget-bundle' );
+		$tabs['widgets'] = esc_html__( 'Widget Bundle', 'themezee-widget-bundle' );
 		
 		return $tabs;
 		
@@ -60,7 +60,6 @@ class TZWB_Settings_Page {
 		<div id="tzwb-settings" class="tzwb-settings-wrap">
 			
 			<h1><?php esc_html_e( 'Widget Bundle', 'themezee-widget-bundle' ); ?></h1>
-			<?php settings_errors(); ?>
 			
 			<form class="tzwb-settings-form" method="post" action="options.php">
 				<?php

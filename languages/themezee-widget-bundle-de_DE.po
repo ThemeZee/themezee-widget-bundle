@@ -1,11 +1,11 @@
-# Translation of All Add-ons in German
-# This file is distributed under the same license as the All Add-ons package.
+# Translation of All Plugins in German
+# This file is distributed under the same license as the All Plugins package.
 msgid ""
 msgstr ""
 "Project-Id-Version: ThemeZee Widget Bundle\n"
 "Report-Msgid-Bugs-To: http://themezee.com/\n"
-"POT-Creation-Date: 2015-11-09 17:35+0100\n"
-"PO-Revision-Date: 2015-11-13 12:27+0100\n"
+"POT-Creation-Date: 2015-12-23 19:15+0100\n"
+"PO-Revision-Date: 2015-12-23 19:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: ThemeZee <support@themezee.com>\n"
 "Language: Deutsch\n"
@@ -15,34 +15,45 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 1.5.7\n"
 
-#: themezee-widget-bundle.php:269
+#: themezee-widget-bundle.php:268
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: themezee-widget-bundle.php:287
 #, php-format
 msgid "Version %s"
 msgstr "Version %s "
 
-#: themezee-widget-bundle.php:273
+#: themezee-widget-bundle.php:291
 msgid "Plugin Settings"
 msgstr "Plugin Einstellungen"
 
-#: themezee-widget-bundle.php:274
+#: themezee-widget-bundle.php:292
 msgid "View Documentation"
 msgstr "Dokumentation ansehen"
 
-#: includes/class-themezee-addons-page.php:43
-#: includes/class-themezee-addons-page.php:113
-#: includes/class-themezee-addons-page.php:118
-msgid "ThemeZee Add-ons"
-msgstr "ThemeZee Add-ons"
+#: themezee-widget-bundle.php:321
+#, php-format
+msgid ""
+"Please enter your license key for the %1$s plugin in order to receive "
+"updates and support. <a href=\"%2$s\">Enter License Key</a>"
+msgstr ""
+"Bitte trage deinen Lizenzschlüssel für das %1$s Plugin ein, um automatische "
+"Updates und Support zu erhalten. <a href=\"%2$s\">Lizenzschlüssel eingeben</"
+"a>"
 
-#: includes/class-themezee-addons-page.php:44
-msgid "Theme Add-ons"
-msgstr "Theme Add-ons"
+#: includes/admin/class-themezee-plugins-page.php:43
+#: includes/admin/class-themezee-plugins-page.php:44
+#: includes/admin/class-themezee-plugins-page.php:113
+#: includes/admin/class-themezee-plugins-page.php:118
+msgid "ThemeZee Plugins"
+msgstr "ThemeZee Plugins"
 
-#: includes/class-themezee-addons-page.php:113
-msgid "add-ons"
-msgstr "Add-ons"
+#: includes/admin/class-themezee-plugins-page.php:113
+msgid "plugins"
+msgstr "Plugins"
 
-#: includes/class-themezee-addons-page.php:120
+#: includes/admin/class-themezee-plugins-page.php:120
 #, php-format
 msgid ""
 "You need more features and functionality? Extend your website with our "
@@ -51,11 +62,11 @@ msgstr ""
 "Du brauchst mehr Features und Funktionalität? Erweitere deine Webseite mit "
 "unseren günstigen %s."
 
-#: includes/class-themezee-addons-page.php:143
+#: includes/admin/class-themezee-plugins-page.php:143
 msgid "Overview"
 msgstr "Übersicht"
 
-#: includes/class-tzwb-plugin-updater.php:177
+#: includes/admin/class-tzwb-plugin-updater.php:177
 #, php-format
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" class="
@@ -64,7 +75,7 @@ msgstr ""
 "Es gibt eine neue Version von %1$s. <a target=\"_blank\" class=\"thickbox\" "
 "href=\"%2$s\">Details zu Version %3$s ansehen</a>."
 
-#: includes/class-tzwb-plugin-updater.php:184
+#: includes/admin/class-tzwb-plugin-updater.php:184
 #, php-format
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" class="
@@ -75,11 +86,11 @@ msgstr ""
 "href=\"%2$s\">Details zu Version %3$s ansehen</a> oder <a href=\"%4$s"
 "\">jetzt aktualisieren</a>."
 
-#: includes/class-tzwb-plugin-updater.php:324
+#: includes/admin/class-tzwb-plugin-updater.php:324
 msgid "You do not have permission to install plugin updates"
 msgstr "Du hast keine Berechtigung zur Installation von Plugin Updates"
 
-#: includes/class-tzwb-plugin-updater.php:324
+#: includes/admin/class-tzwb-plugin-updater.php:324
 msgid "Error"
 msgstr "Fehler"
 
@@ -417,6 +428,9 @@ msgstr "Anzahl der Einträge:"
 msgid "Show Thumbnails?"
 msgstr "Zeige Thumbnails?"
 
+#~ msgid "Theme Plugins"
+#~ msgstr "Theme Plugins"
+
 #~ msgctxt "Noun"
 #~ msgid "User"
 #~ msgstr "Benutzer"
@@ -509,9 +523,6 @@ msgstr "Zeige Thumbnails?"
 
 #~ msgid "These scripts will be printed above the %s tag."
 #~ msgstr "Diese Skripte werden über dem %s Tag ausgegeben."
-
-#~ msgid "Settings"
-#~ msgstr "Einstellungen"
 
 #~ msgid ""
 #~ "View full size <span class=\"photo-size\">%1$s<span class=\"photo-size-"
