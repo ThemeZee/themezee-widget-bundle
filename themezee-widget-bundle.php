@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: ThemeZee Widget Bundle
-Plugin URI: http://themezee.com/plugins/widget-bundle/
+Plugin URI: https://themezee.com/plugins/widget-bundle/
 Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
 Author: ThemeZee
-Author URI: http://themezee.com/
+Author URI: https://themezee.com/
 Version: 1.0.1
 Text Domain: themezee-widget-bundle
 Domain Path: /languages/
@@ -288,8 +288,8 @@ class ThemeZee_Widget_Bundle {
 			</dt>
 			<dd>
 				<p><?php echo wp_kses_post( $plugin_data['Description'] ); ?><br/></p>
-				<a href="<?php echo admin_url( 'admin.php?page=themezee-plugins&tab=widgets' ); ?>" class="button button-primary"><?php esc_html_e('Plugin Settings', 'themezee-widget-bundle'); ?></a>&nbsp;
-				<a href="<?php echo esc_url( 'http://themezee.com/docs/widget-bundle/'); ?>" class="button button-secondary" target="_blank"><?php esc_html_e('View Documentation', 'themezee-widget-bundle'); ?></a>
+				<a href="<?php echo admin_url( 'options-general.php?page=themezee-plugins&tab=widgets' ); ?>" class="button button-primary"><?php esc_html_e('Plugin Settings', 'themezee-widget-bundle'); ?></a>&nbsp;
+				<a href="<?php echo esc_url( 'https://themezee.com/docs/widget-bundle/'); ?>" class="button button-secondary" target="_blank"><?php esc_html_e('View Documentation', 'themezee-widget-bundle'); ?></a>
 			</dd>
 		</dl>
 		

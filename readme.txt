@@ -1,6 +1,6 @@
 === ThemeZee Widget Bundle ===
-Author URI: http://themezee.com
-Plugin URI: http://themezee.com/plugins/widget-bundle/
+Author URI: https://themezee.com
+Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
 Requires at least: 4.1
 Tested up to: 4.4
@@ -15,13 +15,13 @@ The *ThemeZee Widget Bundle* is a collection of useful widgets, neatly bundled i
 
 = Documentation =
 
-For detailed setup instructions, visit the official [Documentation](http://themezee.com/docs/widget-bundle-documentation/) page
+For detailed setup instructions, visit the official [Documentation](https://themezee.com/docs/widget-bundle-documentation/) page
 
 == Installation ==
 
 1. Activate the plugin
 2. Go to Settings > ThemeZee Plugins > Widget Bundle and enable all the modules you need
-3. For detailed setup instructions, visit the official [Documentation](http://themezee.com/docs/widget-bundle-documentation/) page
+3. For detailed setup instructions, visit the official [Documentation](https://themezee.com/docs/widget-bundle-documentation/) page
 
 == Changelog ==
 

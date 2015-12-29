@@ -110,7 +110,7 @@ class ThemeZee_Plugins_Page {
 	*/
 	static function display_overview_page() { 
 	
-		$plugin_link = '<a target="_blank" href="http://themezee.com/plugins/" title="'. esc_html__( 'ThemeZee Plugins', 'themezee-widget-bundle' ) . '">'. esc_html__( 'plugins', 'themezee-widget-bundle' ) . '</a>';
+		$plugin_link = '<a target="_blank" href="https://themezee.com/plugins/" title="'. esc_html__( 'ThemeZee Plugins', 'themezee-widget-bundle' ) . '">'. esc_html__( 'plugins', 'themezee-widget-bundle' ) . '</a>';
 		?>
 		
 		<div id="themezee-plugins-overview">
