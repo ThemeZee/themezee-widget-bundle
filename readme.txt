@@ -25,6 +25,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 
 == Changelog ==
 
+= 1.0.3 =
+
+* Fixed wrong language bug in Facebook Like Box widget
+
 = 1.0.2 =
 
 * Moved plugin settings to Settings > ThemeZee Plugins panel
