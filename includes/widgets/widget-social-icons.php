@@ -54,7 +54,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 */
 	public function delete_widget_cache() {
 		
-		wp_cache_delete('tzwb_social_icons', 'widget');
+		wp_cache_delete( 'tzwb_social_icons', 'widget' );
 		
 	}
 	
@@ -93,7 +93,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		$settings = wp_parse_args( $instance, $this->default_settings() );
 		
 		// Add Widget Title Filter
-		$widget_title = apply_filters('widget_title', $settings['title'], $settings, $this->id_base);
+		$widget_title = apply_filters( 'widget_title', $settings['title'], $settings, $this->id_base );
 		
 		// Output
 		echo $args['before_widget'];
@@ -137,7 +137,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			$menu_args = array(
 				'menu' => (int)$settings['menu'],
 				'container' => false,
-				'menu_class' => 'tzwb-social-icons-menu menu',
+				'menu_class' => 'tzwb-social-icons-menu social-icons-menu menu',
 				'echo' => true,
 				'fallback_cb' => '',
 				'before' => '',

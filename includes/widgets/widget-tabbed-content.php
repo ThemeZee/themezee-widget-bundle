@@ -265,12 +265,12 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 								<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 							</a>
 						
-							<div class="tzwb-entry-meta">
+							<div class="tzwb-entry-meta entry-meta">
 							
 							<?php // Display Date only on posts with thumbnails
 							if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 								
-								<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
+								<span class="tzwb-meta-date meta-date"><?php the_time(get_option('date_format')); ?></span>
 
 							<?php endif; ?>
 							
@@ -380,12 +380,12 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 								<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 							</a>
 						
-							<div class="tzwb-entry-meta">
+							<div class="tzwb-entry-meta entry-meta">
 							
 							<?php // Display Date only for posts with thumbnails
 							if ( true == $settings['thumbnails'] and has_post_thumbnail() ) : ?>
 								
-								<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
+								<span class="tzwb-meta-date meta-date"><?php the_time(get_option('date_format')); ?></span>
 
 							<?php endif; ?>
 							
@@ -402,8 +402,8 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 			// Tag Cloud
 			case 7: ?>
 			
-				<div class="tzwb-tabcontent-tagcloud tagcloud">
-					<?php wp_tag_cloud( array('taxonomy' => 'post_tag') ); ?>
+				<div class="tzwb-tabcontent-tagcloud widget_tag_cloud">
+					<div class="tagcloud"><?php wp_tag_cloud( array('taxonomy' => 'post_tag') ); ?></div>
 				</div>
 			
 			<?php

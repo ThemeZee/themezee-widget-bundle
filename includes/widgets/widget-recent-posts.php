@@ -228,19 +228,19 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		endif;
 		?>
 		
-		<div class="tzwb-entry-meta">
+		<div class="tzwb-entry-meta entry-meta">
 			
 		<?php // Display Date
 		if ( true == $settings['meta_date'] ) : ?>
 			
-			<span class="tzwb-meta-date"><?php the_time(get_option('date_format')); ?></span>
+			<span class="tzwb-meta-date meta-date"><?php the_time(get_option('date_format')); ?></span>
 			
 		<?php endif; ?>
 		
 		<?php // Display Author
 		if ( true == $settings['meta_author'] ) : ?>
 			
-			<span class="tzwb-meta-author">
+			<span class="tzwb-meta-author meta-author">
 				<?php printf('<a href="%1$s" title="%2$s" rel="author">%3$s</a>', 
 					esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
 					esc_attr( sprintf( esc_html__( 'View all posts by %s', 'themezee-widget-bundle' ), get_the_author() ) ),
@@ -253,7 +253,7 @@ class TZWB_Recent_Posts_Widget extends WP_Widget {
 		<?php // Display Comments
 		if ( true == $settings['meta_comments'] and comments_open() ) : ?>
 		
-			<span class="tzwb-meta-comments">
+			<span class="tzwb-meta-comments meta-comments">
 				<?php comments_popup_link( esc_html__( 'No comments', 'themezee-widget-bundle' ), esc_html__( 'One comment','themezee-widget-bundle' ), esc_html__( '% comments','themezee-widget-bundle' ) ); ?>
 			</span>
 			
