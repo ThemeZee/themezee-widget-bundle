@@ -5,7 +5,7 @@ Plugin URI: https://themezee.com/plugins/widget-bundle/
 Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
 Author: ThemeZee
 Author URI: https://themezee.com/
-Version: 1.0.3
+Version: 1.0.4
 Text Domain: themezee-widget-bundle
 Domain Path: /languages/
 License: GPL v3
@@ -66,13 +66,16 @@ class ThemeZee_Widget_Bundle {
 		define( 'TZWB_NAME', 'ThemeZee Widget Bundle');
 
 		// Define Version Number
-		define( 'TZWB_VERSION', '1.0.3' );
+		define( 'TZWB_VERSION', '1.0.4' );
 		
 		// Define Plugin Name
 		define( 'TZWB_PRODUCT_ID', 41305);
 
 		// Define Update API URL
-		define( 'TZWB_STORE_API_URL', 'https://themezee.com' ); 
+		define( 'TZWB_STORE_API_URL', 'https://themezee.com' );
+		
+		// Define Plugin Name
+		define( 'TZWB_LICENSE', '58ac6f64c5d04a93b7b8dbbc7a257d45' );
 
 		// Plugin Folder Path
 		define( 'TZWB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -306,19 +309,19 @@ class ThemeZee_Widget_Bundle {
 	
 		global $pagenow;
 	
-		// Display only on Plugins page
-		if ( 'plugins.php' !== $pagenow  ) {
+		// Display only on Plugins and Updates page
+		if ( ! ( 'plugins.php' == $pagenow or 'update-core.php' == $pagenow ) ) {
 			return;
 		}
 		
 		// Get Settings
 		$options = TZWB_Settings::instance();
 		
-		if( '' == $options->get( 'license_key' ) ) : ?>
+		if( 'valid' <> $options->get( 'license_status' ) ) : ?>
 			
 			<div class="updated">
 				<p>
-					<?php printf( __( 'Please enter your license key for the %1$s plugin in order to receive updates and support. <a href="%2$s">Enter License Key</a>', 'themezee-widget-bundle' ),
+					<?php printf( __( 'Please activate your license for the %1$s plugin in order to receive updates and support. <a href="%2$s">Activate License</a>', 'themezee-widget-bundle' ),
 						TZWB_NAME,
 						admin_url( 'options-general.php?page=themezee-plugins&tab=widgets' ) ); 
 					?>
@@ -344,14 +347,12 @@ class ThemeZee_Widget_Bundle {
 		
 		$options = TZWB_Settings::instance();
 
-		if( $options->get( 'license_key' ) <> '' ) :
-			
-			$license_key = $options->get( 'license_key' );
+		if( 'valid' == $options->get( 'license_status' ) ) :
 			
 			// setup the updater
 			$tzwb_updater = new TZWB_Plugin_Updater( TZWB_STORE_API_URL, __FILE__, array(
 					'version' 	=> TZWB_VERSION,
-					'license' 	=> $license_key,
+					'license' 	=> TZWB_LICENSE,
 					'item_name' => TZWB_NAME,
 					'item_id'   => TZWB_PRODUCT_ID,
 					'author' 	=> 'ThemeZee'
