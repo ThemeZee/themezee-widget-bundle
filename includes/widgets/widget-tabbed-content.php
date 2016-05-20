@@ -20,13 +20,16 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		parent::__construct(
 			'tzwb-tabbed-content', // ID
 			esc_html__( 'Tabbed Content (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-tabbed-content', 'description' => esc_html__( 'Displays various content with tabs.', 'themezee-widget-bundle' ) ), // Args
-			array( 'width' => 470,  'id_base' => 'tzwb-tabbed-content' ) // Controls
+			array( 
+				'classname' => 'tzwb-tabbed-content', 
+				'description' => esc_html__( 'Displays various content with tabs.', 'themezee-widget-bundle' ),
+			) // Args
 		);
 		
 		// Enqueue Javascript for Tabs
-		if ( is_active_widget(false, false, $this->id_base) )
+		if ( is_active_widget( false, false, $this->id_base ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts') );
+		}
 		
 		// Delete Widget Cache on certain actions
 		add_action( 'save_post', array( $this, 'delete_widget_cache' ) );
@@ -475,15 +478,17 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 		</p>
 		
 		
-		<div style="background: #f5f5f5; padding: 3px 10px; margin-bottom: 10px;">
+		<div style="background: #fafafa; border-top: 1px solid #eaeaea; margin-bottom: 20px;">
 			
 		<?php // Display Tab Options
 		for( $i = 0; $i <= 3; $i++ ) : ?>
 					
-			<p>
-				<label for="<?php echo $this->get_field_id('tab_content-'.$i); ?>">
+			<p style="border-bottom: 1px solid #eaeaea; padding: 10px; margin: 0;">
+				
+				<label style="display: inline-block; min-width: 50px" for="<?php echo $this->get_field_id('tab_content-'.$i); ?>">
 					<?php printf( esc_html__( 'Tab %s:', 'themezee-widget-bundle' ), $i+1 ); ?>
 				</label>
+				
 				<select id="<?php echo $this->get_field_id('tab_content-'.$i); ?>" name="<?php echo $this->get_field_name('tab_content-'.$i); ?>">
 					<option value="0" <?php selected($settings['tab_content'][$i], 0); ?>></option>
 					<option value="1" <?php selected($settings['tab_content'][$i], 1); ?>><?php esc_html_e('Archives', 'themezee-widget-bundle'); ?></option>
@@ -495,9 +500,14 @@ class TZWB_Tabbed_Content_Widget extends WP_Widget {
 					<option value="7" <?php selected($settings['tab_content'][$i], 7); ?>><?php esc_html_e('Tag Cloud', 'themezee-widget-bundle'); ?></option>
 				</select>
 				
-				<label for="<?php echo $this->get_field_id('tab_titles-'.$i); ?>"><?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
-					<input id="<?php echo $this->get_field_id('tab_titles-'.$i); ?>" name="<?php echo $this->get_field_name('tab_titles-'.$i); ?>" type="text" value="<?php echo $settings['tab_titles'][$i]; ?>" />
-				</label>
+				<br/>
+				
+				<label style="display: inline-block; min-width: 50px" for="<?php echo $this->get_field_id('tab_titles-'.$i); ?>">
+					<?php esc_html_e('Title:', 'themezee-widget-bundle'); ?>
+				</label>	
+				
+				<input style="width: auto" id="<?php echo $this->get_field_id('tab_titles-'.$i); ?>" name="<?php echo $this->get_field_name('tab_titles-'.$i); ?>" type="text" value="<?php echo $settings['tab_titles'][$i]; ?>" />
+				
 			</p>
 						
 		<?php endfor; ?>

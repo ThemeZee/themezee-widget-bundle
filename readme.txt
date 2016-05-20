@@ -25,6 +25,11 @@ For detailed setup instructions, visit the official [Documentation](https://them
 
 == Changelog ==
 
+= 1.0.5 =
+
+* added selective refresh support in Customizer
+* improved styling of Tabbed Content widget settings
+
 = 1.0.4 =
 
 * added extra post meta classes
