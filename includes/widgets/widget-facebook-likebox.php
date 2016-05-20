@@ -20,7 +20,10 @@ class TZWB_Facebook_Likebox_Widget extends WP_Widget {
 		parent::__construct(
 			'tzwb-facebook-likebox', // ID
 			esc_html__( 'Facebook Like Box (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-facebook-likebox', 'description' => esc_html__( 'Display facebook like box.', 'themezee-widget-bundle' ) ) // Args
+			array( 
+				'classname' => 'tzwb-facebook-likebox', 
+				'description' => esc_html__( 'Display facebook like box.', 'themezee-widget-bundle' ),
+			) // Args
 		);
 
 	}

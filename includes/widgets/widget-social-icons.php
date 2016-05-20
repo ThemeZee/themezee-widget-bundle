@@ -20,7 +20,11 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		parent::__construct(
 			'tzwb-social-icons', // ID
 			esc_html__( 'Social Icons (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-social-icons', 'description' => esc_html__( 'Displays your Social Icons.', 'themezee-widget-bundle' ) ) // Args
+			array( 
+				'classname' => 'tzwb-social-icons', 
+				'description' => esc_html__( 'Displays your Social Icons.', 'themezee-widget-bundle' ),
+				'customize_selective_refresh' => true, 
+			) // Args
 		);
 		
 		// Delete Widget Cache on certain actions

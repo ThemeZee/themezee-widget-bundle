@@ -20,7 +20,11 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 		parent::__construct(
 			'tzwb-recent-comments', // ID
 			esc_html__( 'Recent Comments (ThemeZee)', 'themezee-widget-bundle' ), // Name
-			array( 'classname' => 'tzwb-recent-comments', 'description' => esc_html__( 'Displays latest comments with Gravatar.', 'themezee-widget-bundle' ) ) // Args
+			array( 
+				'classname' => 'tzwb-recent-comments', 
+				'description' => esc_html__( 'Displays latest comments with Gravatar.', 'themezee-widget-bundle' ),
+				'customize_selective_refresh' => true, 
+			) // Args
 		);
 		
 		// Delete Widget Cache on certain actions
