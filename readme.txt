@@ -2,16 +2,25 @@
 Author URI: https://themezee.com
 Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
-Requires at least: 4.1
-Tested up to: 4.4
-Stable tag: 1.0
+Tags: widget, recent posts, recent comments, social icons, facebook
+Requires at least: 4.4
+Tested up to: 4.8
+Stable tag: 1.0.6
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
 
 == Description ==
 
-The *ThemeZee Widget Bundle* is a collection of useful widgets, neatly bundled into a single plugin. This plugin has been designed specifically for ThemeZee WordPress themes but will also work with any theme. 
+The *ThemeZee Widget Bundle* is a collection of useful widgets, neatly bundled into a single plugin. This plugin has been designed specifically for ThemeZee WordPress themes but will also work with any theme.
+
+= Included Widgets =
+
+* Recent Posts with Thumbnails
+* Recent Comments with Gravatar
+* Tabbed Content
+* Social Icons Menu
+* Facebook Like Box
 
 = Documentation =
 
@@ -24,6 +33,11 @@ For detailed setup instructions, visit the official [Documentation](https://them
 3. For detailed setup instructions, visit the official [Documentation](https://themezee.com/docs/widget-bundle-documentation/) page
 
 == Changelog ==
+
+= 1.0.6 =
+
+* improved code formatting
+* removed EDD Updater class and license settings
 
 = 1.0.5 =
 

@@ -260,20 +260,20 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'themezee-widget-bundle' ); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $settings['title']; ?>" />
+				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $settings['title'] ); ?>" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php esc_html_e( 'Number of comments to show:', 'themezee-widget-bundle' ); ?>
-				<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $settings['number']; ?>" size="3" />
+				<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo absint( $settings['number'] ); ?>" size="3" />
 			</label>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'comment_length' ); ?>">
 				<?php esc_html_e( 'Excerpt length in number of characters:', 'themezee-widget-bundle' ); ?>
-				<input id="<?php echo $this->get_field_id( 'comment_length' ); ?>" name="<?php echo $this->get_field_name( 'comment_length' ); ?>" type="text" value="<?php echo $settings['comment_length']; ?>" size="5" />
+				<input id="<?php echo $this->get_field_id( 'comment_length' ); ?>" name="<?php echo $this->get_field_name( 'comment_length' ); ?>" type="text" value="<?php echo absint( $settings['comment_length'] ); ?>" size="5" />
 			</label>
 		</p>
 

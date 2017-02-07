@@ -6,7 +6,7 @@
  * Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
  * Author: ThemeZee
  * Author URI: https://themezee.com/
- * Version: 1.0.5
+ * Version: 1.0.6
  * Text Domain: themezee-widget-bundle
  * Domain Path: /languages/
  * License: GPL v3
