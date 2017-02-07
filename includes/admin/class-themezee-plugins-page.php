@@ -1,5 +1,5 @@
 <?php
-/***
+/**
  * ThemeZee Plugins page
  *
  * Registers and displays the ThemeZee Plugins Page
@@ -7,37 +7,38 @@
  * @package ThemeZee Widget Bundle
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) { exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-
-// Use class to avoid namespace collisions
+// Use class to avoid namespace collisions.
 if ( ! class_exists( 'ThemeZee_Plugins_Page' ) ) :
 
+	/**
+	 * ThemeZee Plugins Overview Class
+	 */
 	class ThemeZee_Plugins_Page {
 
 		/**
-	 * Setup the ThemeZee Plugins Settings class
-	 *
-	 * @return void
-	*/
+		 * Setup the ThemeZee Plugins Settings class
+		 *
+		 * @return void
+		 */
 		static function setup() {
 
-			/* Add overview page to admin menu */
+			// Add overview page to admin menu.
 			add_action( 'admin_menu', array( __CLASS__, 'add_plugins_page' ), 8 );
 
-			/* Enqueue Admin Page Styles */
+			// Enqueue Admin Page Styles.
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_styles' ) );
-
 		}
 
-
 		/**
-	 * Add Settings Page to Admin menu
-	 *
-	 * @return void
-	*/
+		 * Add Settings Page to Admin menu
+		 *
+		 * @return void
+		 */
 		static function add_plugins_page() {
 
 			add_options_page(
@@ -47,24 +48,23 @@ if ( ! class_exists( 'ThemeZee_Plugins_Page' ) ) :
 				'themezee-plugins',
 				array( __CLASS__, 'display_plugins_page' )
 			);
-
 		}
 
-
 		/**
-	 * Displays Plugins Settings Page
-	 *
-	 * @return void
-	*/
+		 * Displays Plugins Settings Page
+		 *
+		 * @return void
+		 */
 		static function display_plugins_page() {
 
 			$active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], ThemeZee_Plugins_Page::get_settings_tabs() ) ? $_GET['tab'] : 'overview';
 			?>
-		
+
 			<div id="themezee-plugins-wrap" class="wrap">
-			
+
 			<h2 class="nav-tab-wrapper">
-				<?php // Display Tabs
+				<?php
+				// Display Tabs.
 				foreach ( ThemeZee_Plugins_Page::get_settings_tabs() as $tab_id => $tab_name ) {
 
 					$tab_url = add_query_arg( array(
@@ -80,13 +80,14 @@ if ( ! class_exists( 'ThemeZee_Plugins_Page' ) ) :
 				}
 				?>
 				</h2>
-			
-				<div id="themezee-plugins-tab-<?php echo $active_tab; ?>" class="themezee-plugins-tab-content">
 
-				<?php // Display Tab Content
-				if ( 'overview' == $active_tab ) :
+				<div id="themezee-plugins-tab-<?php echo esc_attr( $active_tab ); ?>" class="themezee-plugins-tab-content">
 
-					ThemeZee_Plugins_Page::display_overview_page();
+					<?php
+					// Display Tab Content.
+					if ( 'overview' == $active_tab ) :
+
+						ThemeZee_Plugins_Page::display_overview_page();
 
 					else :
 
@@ -95,49 +96,50 @@ if ( ! class_exists( 'ThemeZee_Plugins_Page' ) ) :
 					endif;
 
 					?>
-				
+
 				</div>
 
 			</div>
-		
-		<?php
+
+			<?php
 		}
 
-
 		/**
-	 * Displays Plugins Overview Page
-	 *
-	 * @return void
-	*/
+		 * Displays Plugins Overview Page
+		 *
+		 * @return void
+		 */
 		static function display_overview_page() {
 
 			$plugin_link = '<a target="_blank" href="https://themezee.com/plugins/?utm_source=plugin-overview&utm_medium=teaser&utm_campaign=plugins" title="' . esc_html__( 'ThemeZee Plugins', 'themezee-widget-bundle' ) . '">' . esc_html__( 'plugins', 'themezee-widget-bundle' ) . '</a>';
 			?>
-		
-			<div id="themezee-plugins-overview">
-		
-			<h1 id="themezee-plugin-header"><?php esc_html_e( 'ThemeZee Plugins', 'themezee-widget-bundle' ); ?></h1>
-			<div class="themezee-plugins-intro">
-				<?php printf( esc_html__( 'You need more features and functionality? Extend your website with our affordable %s.', 'themezee-widget-bundle' ), $plugin_link ); ?>
-			</div>
-			<hr/>
 
-			<div id="themezee-plugins-list" class="themezee-plugins-clearfix">
-			
-				<?php do_action( 'themezee_plugins_overview_page' ); ?>
-				
+			<div id="themezee-plugins-overview">
+
+				<h1 id="themezee-plugin-header"><?php esc_html_e( 'ThemeZee Plugins', 'themezee-widget-bundle' ); ?></h1>
+
+				<div class="themezee-plugins-intro">
+					<?php printf( esc_html__( 'You need more features and functionality? Extend your website with our affordable %s.', 'themezee-widget-bundle' ), $plugin_link ); ?>
+				</div>
+
+				<hr/>
+
+				<div id="themezee-plugins-list" class="themezee-plugins-clearfix">
+
+					<?php do_action( 'themezee_plugins_overview_page' ); ?>
+
+				</div>
+
 			</div>
-			
-		</div>
-		<?php
+
+			<?php
 		}
 
-
 		/**
-	 * Retrieve settings tabs
-	 *
-	 * @return array $tabs
-	 */
+		 * Retrieve settings tabs
+		 *
+		 * @return array $tabs
+		 */
 		static function get_settings_tabs() {
 
 			$tabs                 = array();
@@ -146,27 +148,25 @@ if ( ! class_exists( 'ThemeZee_Plugins_Page' ) ) :
 			return apply_filters( 'themezee_plugins_settings_tabs', $tabs );
 		}
 
-
 		/**
-	 * Enqueue Admin Styles
-	 *
-	 * @return void
-	*/
+		 * Enqueue Admin Styles
+		 *
+		 * @param string $hook Hook suffix for the current admin page.
+		 * @return void
+		 */
 		static function enqueue_admin_styles( $hook ) {
 
-			// Embed stylesheet only on admin settings page
-			if ( 'settings_page_themezee-plugins' != $hook ) {
+			// Embed stylesheet only on admin settings page.
+			if ( 'settings_page_themezee-plugins' !== $hook ) {
 				return;
 			}
 
-			// Enqueue Admin CSS
+			// Enqueue Admin CSS.
 			wp_enqueue_style( 'themezee-plugins-stylesheet', TZWB_PLUGIN_URL . 'assets/css/themezee-plugins.css', array(), TZWB_VERSION );
-
 		}
-
 	}
 
-	// Run Class
+	// Run Class.
 	ThemeZee_Plugins_Page::setup();
 
 endif;

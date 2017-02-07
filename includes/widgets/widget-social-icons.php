@@ -1,5 +1,5 @@
 <?php
-/***
+/**
  * Social Icons Widget
  *
  * Display the latest posts from a selected category in a boxed layout.
@@ -7,6 +7,14 @@
  * @package ThemeZee Widget Bundle
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Social Icons Widget Class
+ */
 class TZWB_Social_Icons_Widget extends WP_Widget {
 
 	/**
@@ -18,21 +26,19 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	function __construct() {
 
 		parent::__construct(
-			'tzwb-social-icons', // ID
-			esc_html__( 'Social Icons (ThemeZee)', 'themezee-widget-bundle' ), // Name
+			'tzwb-social-icons', // ID.
+			esc_html__( 'Social Icons Menu (ThemeZee)', 'themezee-widget-bundle' ), // Name.
 			array(
 				'classname' => 'tzwb-social-icons',
-				'description' => esc_html__( 'Displays your Social Icons.', 'themezee-widget-bundle' ),
+				'description' => esc_html__( 'Displays a Social Icons Menu.', 'themezee-widget-bundle' ),
 				'customize_selective_refresh' => true,
-			) // Args
+			) // Args.
 		);
 
-		// Delete Widget Cache on certain actions
+		// Delete Widget Cache on certain actions.
 		add_action( 'wp_update_nav_menu', array( $this, 'delete_widget_cache' ) );
 		add_action( 'switch_theme', array( $this, 'delete_widget_cache' ) );
-
 	}
-
 
 	/**
 	 * Set default settings of the widget
@@ -42,14 +48,12 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	private function default_settings() {
 
 		$defaults = array(
-			'title'				=> '',
-			'menu'				=> 0,
+			'title' => '',
+			'menu'  => 0,
 		);
 
 		return $defaults;
-
 	}
-
 
 	/**
 	 * Reset widget cache object
@@ -62,21 +66,20 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 
 	}
 
-
 	/**
 	 * Main Function to display the widget
 	 *
 	 * @uses this->render()
 	 *
-	 * @param array $args Parameters from widget area created with register_sidebar()
-	 * @param array $instance Settings for this widget instance
+	 * @param array $args Parameters from widget area created with register_sidebar().
+	 * @param array $instance Settings for this widget instance.
 	 * @return void
 	 */
 	function widget( $args, $instance ) {
 
 		$cache = array();
 
-		// Get Widget Object Cache
+		// Get Widget Object Cache.
 		if ( ! $this->is_preview() ) {
 			$cache = wp_cache_get( 'tzwb_social_icons', 'widget' );
 		}
@@ -84,60 +87,58 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			$cache = array();
 		}
 
-		// Display Widget from Cache if exists
+		// Display Widget from Cache if exists.
 		if ( isset( $cache[ $this->id ] ) ) {
 			echo $cache[ $this->id ];
 			return;
 		}
 
-		// Start Output Buffering
+		// Start Output Buffering.
 		ob_start();
 
-		// Get Widget Settings
+		// Get Widget Settings.
 		$settings = wp_parse_args( $instance, $this->default_settings() );
 
-		// Add Widget Title Filter
+		// Add Widget Title Filter.
 		$widget_title = apply_filters( 'widget_title', $settings['title'], $settings, $this->id_base );
 
-		// Output
+		// Output.
 		echo $args['before_widget'];
 
-		// Display Title
+		// Display Title.
 		if ( ! empty( $widget_title ) ) { echo $args['before_title'] . $widget_title . $args['after_title']; }; ?>
-			
+
 		<div class="tzwb-content tzwb-clearfix">
-			
+
 			<?php echo $this->render( $settings ); ?>
-			
+
 		</div>
-			
+
 		<?php
 		echo $args['after_widget'];
 
-		// Set Cache
+		// Set Cache.
 		if ( ! $this->is_preview() ) {
 			$cache[ $this->id ] = ob_get_flush();
 			wp_cache_set( 'tzwb_social_icons', $cache, 'widget' );
 		} else {
 			ob_end_flush();
 		}
-
 	}
-
 
 	/**
 	 * Display the social icon menu
 	 *
-	 * @see https://codex.wordpress.org/Function_Reference/wp_nav_menu WordPress Codex
-	 * @param array $instance Settings for this widget instance
+	 * @see https://codex.wordpress.org/Function_Reference/wp_nav_menu WordPress Codex.
+	 * @param array $settings Settings for this widget instance.
 	 * @return void
 	 */
 	function render( $settings ) {
 
-		// Check if there is a social_icons menu
+		// Check if there is a social_icons menu.
 		if ( $settings['menu'] > 0 ) :
 
-			// Set Social Menu Arguments
+			// Set Social Menu Arguments.
 			$menu_args = array(
 				'menu' => (int) $settings['menu'],
 				'container' => false,
@@ -151,19 +152,17 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 				'depth' => 1,
 			);
 
-			// Display Social Icons Menu
+			// Display Social Icons Menu.
 			wp_nav_menu( $menu_args );
 
 		endif;
-
 	}
-
 
 	/**
 	 * Update Widget Settings
 	 *
-	 * @param array $new_instance Form Input for this widget instance
-	 * @param array $old_instance Old Settings for this widget instance
+	 * @param array $new_instance Form Input for this widget instance.
+	 * @param array $old_instance Old Settings for this widget instance.
 	 * @return array $instance New widget settings
 	 */
 	function update( $new_instance, $old_instance ) {
@@ -178,20 +177,18 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		return $instance;
 	}
 
-
 	/**
 	 * Display Widget Settings Form in the Backend
 	 *
-	 * @param array $instance Settings for this widget instance
+	 * @param array $instance Settings for this widget instance.
 	 * @return void
 	 */
 	function form( $instance ) {
 
-		// Get Widget Settings
+		// Get Widget Settings.
 		$settings = wp_parse_args( $instance, $this->default_settings() );
-
 		?>
-		
+
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'themezee-widget-bundle' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $settings['title']; ?>" />
@@ -202,7 +199,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'menu' ); ?>"><?php esc_html_e( 'Select Social Menu:', 'themezee-widget-bundle' ); ?></label><br/>
 			<select id="<?php echo $this->get_field_id( 'menu' ); ?>" name="<?php echo $this->get_field_name( 'menu' ); ?>">
 				<option value="0" <?php selected( $settings['menu'], 0, false ); ?>> </option>
-				<?php // Display Menu Select Options
+				<?php // Display Menu Select Options.
 					$nav_menus = wp_get_nav_menus( array( 'hide_empty' => true ) );
 
 				foreach ( $nav_menus as $nav_menu ) :
@@ -214,5 +211,4 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 
 		<?php
 	}
-
 }
