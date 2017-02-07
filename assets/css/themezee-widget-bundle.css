@@ -9,24 +9,24 @@
  * @package ThemeZee Widget Bundle
  */
 
- 
+
 /*--------------------------------------------------------------
 # General Styles
 ---------------------------------------------------------------- */
 
 /* Clearing Floats */
-.tzwb-clearfix:before, 
-.tzwb-clearfix:after {  
+.tzwb-clearfix:before,
+.tzwb-clearfix:after {
 	content: " ";
-	display: table;  
-}  
+	display: table;
+}
 
-.tzwb-clearfix:after {  
+.tzwb-clearfix:after {
 	clear: both;
-}  
+}
 
 .tzwb-clearfix {
-    *zoom: 1; /* For IE 6/7 only */  
+	*zoom: 1; /* For IE 6/7 only */
 }
 
 
@@ -143,12 +143,12 @@
 	background-color: #eee;
 }
 
-.tzwb-tabbed-content .tzwb-tabnavi li a:link, 
+.tzwb-tabbed-content .tzwb-tabnavi li a:link,
 .tzwb-tabbed-content .tzwb-tabnavi li a:visited  {
 	color: #333;
 }
 
-.tzwb-tabbed-content .tzwb-tabnavi li a:hover, 
+.tzwb-tabbed-content .tzwb-tabnavi li a:hover,
 .tzwb-tabbed-content .tzwb-tabnavi li a:active {
 	background-color: #ddd;
 	text-decoration: none;
