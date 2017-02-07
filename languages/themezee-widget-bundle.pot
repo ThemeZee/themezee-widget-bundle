@@ -1,8 +1,9 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ThemeZee Widget Bundle\n"
 "Report-Msgid-Bugs-To: https://themezee.com/\n"
-"POT-Creation-Date: 2015-12-29 14:56+0100\n"
+"POT-Creation-Date: 2017-02-07 17:06+0100\n"
 "PO-Revision-Date: 2015-12-29 14:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: ThemeZee <support@themezee.com>\n"
@@ -10,246 +11,161 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
 "_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
 "esc_html_x:1,2c\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: themezee-widget-bundle.php:268
-msgid "Settings"
-msgstr ""
-
-#: themezee-widget-bundle.php:287
-#, php-format
-msgid "Version %s"
-msgstr ""
-
-#: themezee-widget-bundle.php:291
-msgid "Plugin Settings"
-msgstr ""
-
-#: themezee-widget-bundle.php:292
-msgid "View Documentation"
-msgstr ""
-
-#: themezee-widget-bundle.php:321
-#, php-format
-msgid ""
-"Please enter your license key for the %1$s plugin in order to receive "
-"updates and support. <a href=\"%2$s\">Enter License Key</a>"
-msgstr ""
-
-#: includes/admin/class-themezee-plugins-page.php:43
-#: includes/admin/class-themezee-plugins-page.php:44
-#: includes/admin/class-themezee-plugins-page.php:113
-#: includes/admin/class-themezee-plugins-page.php:118
+#: includes/admin/class-themezee-plugins-page.php:45
+#: includes/admin/class-themezee-plugins-page.php:46
+#: includes/admin/class-themezee-plugins-page.php:114
+#: includes/admin/class-themezee-plugins-page.php:119
 msgid "ThemeZee Plugins"
 msgstr ""
 
-#: includes/admin/class-themezee-plugins-page.php:113
+#: includes/admin/class-themezee-plugins-page.php:114
 msgid "plugins"
 msgstr ""
 
-#: includes/admin/class-themezee-plugins-page.php:120
+#: includes/admin/class-themezee-plugins-page.php:122
 #, php-format
 msgid ""
 "You need more features and functionality? Extend your website with our "
-"affordable %s."
+"premium %s."
 msgstr ""
 
-#: includes/admin/class-themezee-plugins-page.php:143
+#: includes/admin/class-themezee-plugins-page.php:146
 msgid "Overview"
 msgstr ""
 
-#: includes/admin/class-tzwb-plugin-updater.php:177
-#, php-format
-msgid ""
-"There is a new version of %1$s available. <a target=\"_blank\" class="
-"\"thickbox\" href=\"%2$s\">View version %3$s details</a>."
-msgstr ""
-
-#: includes/admin/class-tzwb-plugin-updater.php:184
-#, php-format
-msgid ""
-"There is a new version of %1$s available. <a target=\"_blank\" class="
-"\"thickbox\" href=\"%2$s\">View version %3$s details</a> or <a href=\"%4$s"
-"\">update now</a>."
-msgstr ""
-
-#: includes/admin/class-tzwb-plugin-updater.php:324
-msgid "You do not have permission to install plugin updates"
-msgstr ""
-
-#: includes/admin/class-tzwb-plugin-updater.php:324
-msgid "Error"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings-page.php:42
-#: includes/settings/class-tzwb-settings-page.php:62
+#: includes/settings/class-tzwb-settings-page.php:46
+#: includes/settings/class-tzwb-settings-page.php:65
 msgid "Widget Bundle"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:132
+#: includes/settings/class-tzwb-settings.php:128
 msgid "Widgets"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:133
-msgid "License"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:173
+#: includes/settings/class-tzwb-settings.php:167
 msgid "Activate all the widgets you want to use here."
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:183
-#, php-format
-msgid ""
-"Please enter your license key. An active license key is needed for automatic "
-"plugin updates and <a href=\"%s\" target=\"_blank\">support</a>."
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:284
+#: includes/settings/class-tzwb-settings.php:254
 msgid "Facebook Likebox"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:285
+#: includes/settings/class-tzwb-settings.php:255
 msgid "Enable Facebook Like Box Widget"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:291
-#: includes/widgets/widget-tabbed-content.php:493
+#: includes/settings/class-tzwb-settings.php:261
+#: includes/widgets/widget-tabbed-content.php:478
 msgid "Recent Comments"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:292
+#: includes/settings/class-tzwb-settings.php:262
 msgid "Enable Recent Comments Widget"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:298
-#: includes/widgets/widget-tabbed-content.php:494
+#: includes/settings/class-tzwb-settings.php:268
+#: includes/widgets/widget-tabbed-content.php:479
 msgid "Recent Posts"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:299
+#: includes/settings/class-tzwb-settings.php:269
 msgid "Enable Recent Posts Widget"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:305
+#: includes/settings/class-tzwb-settings.php:275
 msgid "Social Icons"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:306
+#: includes/settings/class-tzwb-settings.php:276
 msgid "Enable Social Icons Widget"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:312
+#: includes/settings/class-tzwb-settings.php:282
 msgid "Tabbed Content"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:313
+#: includes/settings/class-tzwb-settings.php:283
 msgid "Enable Tabbed Content Widget"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:319
-msgid "License Key"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:445
-msgid "Deactivate License"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:446
-msgid "Your license is valid!"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:449
-msgid "Renew Your License"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:450
-msgid ""
-"Your license has expired, renew today to continue getting updates and "
-"support!"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:452
-#: includes/settings/class-tzwb-settings.php:455
+#: includes/settings/class-tzwb-settings.php:289
 msgid "Activate License"
 msgstr ""
 
-#: includes/settings/class-tzwb-settings.php:453
-msgid "Your license is invalid!"
-msgstr ""
-
-#: includes/settings/class-tzwb-settings.php:549
+#: includes/settings/class-tzwb-settings.php:454
 #, php-format
 msgid ""
 "The callback function used for the <strong>%s</strong> setting is missing."
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:22
+#: includes/widgets/widget-facebook-likebox.php:30
 msgid "Facebook Like Box (ThemeZee)"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:23
-msgid "Display facebook like box."
+#: includes/widgets/widget-facebook-likebox.php:33
+msgid "Displays a Like Box for your Facebook Page."
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:75
+#: includes/widgets/widget-facebook-likebox.php:82
 #, php-format
 msgid ""
 "It looks like your Facebook URL is empty or invalid. Please check it in your "
 "<a href=\"%s\">widget settings</a>."
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:181
+#: includes/widgets/widget-facebook-likebox.php:183
 #: includes/widgets/widget-recent-comments.php:262
-#: includes/widgets/widget-recent-posts.php:308
-#: includes/widgets/widget-social-icons.php:192
-#: includes/widgets/widget-tabbed-content.php:472
-#: includes/widgets/widget-tabbed-content.php:498
+#: includes/widgets/widget-recent-posts.php:307
+#: includes/widgets/widget-social-icons.php:193
+#: includes/widgets/widget-tabbed-content.php:455
+#: includes/widgets/widget-tabbed-content.php:486
 msgid "Title:"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:187
+#: includes/widgets/widget-facebook-likebox.php:189
 msgid "Facebook Page URL:"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:193
+#: includes/widgets/widget-facebook-likebox.php:195
 msgid "Height in pixels:"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:201
+#: includes/widgets/widget-facebook-likebox.php:203
 msgid "Use Small Header"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:208
+#: includes/widgets/widget-facebook-likebox.php:210
 msgid "Hide Cover Photo"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:215
+#: includes/widgets/widget-facebook-likebox.php:217
 msgid "Show Faces"
 msgstr ""
 
-#: includes/widgets/widget-facebook-likebox.php:222
+#: includes/widgets/widget-facebook-likebox.php:224
 msgid "Show Page Posts"
 msgstr ""
 
-#: includes/widgets/widget-recent-comments.php:22
+#: includes/widgets/widget-recent-comments.php:30
 msgid "Recent Comments (ThemeZee)"
 msgstr ""
 
-#: includes/widgets/widget-recent-comments.php:23
+#: includes/widgets/widget-recent-comments.php:33
 msgid "Displays latest comments with Gravatar."
 msgstr ""
 
-#: includes/widgets/widget-recent-comments.php:184
-#: includes/widgets/widget-tabbed-content.php:319
+#: includes/widgets/widget-recent-comments.php:188
+#: includes/widgets/widget-tabbed-content.php:323
 msgid " on"
 msgstr ""
 
@@ -273,33 +189,33 @@ msgstr ""
 msgid "Display comment date"
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:22
+#: includes/widgets/widget-recent-posts.php:30
 msgid "Recent Posts (ThemeZee)"
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:23
+#: includes/widgets/widget-recent-posts.php:33
 msgid "Displays recent posts."
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:246
+#: includes/widgets/widget-recent-posts.php:248
 #, php-format
 msgid "View all posts by %s"
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:257
+#: includes/widgets/widget-recent-posts.php:259
 msgid "No comments"
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:257
+#: includes/widgets/widget-recent-posts.php:259
 msgid "One comment"
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:257
+#: includes/widgets/widget-recent-posts.php:259
 #, php-format
 msgid "% comments"
 msgstr ""
 
-#: includes/widgets/widget-recent-posts.php:314
+#: includes/widgets/widget-recent-posts.php:313
 msgid "Select Category:"
 msgstr ""
 
@@ -347,69 +263,80 @@ msgstr ""
 msgid "Display post comments"
 msgstr ""
 
-#: includes/widgets/widget-social-icons.php:22
-msgid "Social Icons (ThemeZee)"
+#: includes/widgets/widget-social-icons.php:30
+msgid "Social Icons Menu (ThemeZee)"
 msgstr ""
 
-#: includes/widgets/widget-social-icons.php:23
-msgid "Displays your Social Icons."
+#: includes/widgets/widget-social-icons.php:33
+msgid "Displays a Social Icons Menu."
 msgstr ""
 
-#: includes/widgets/widget-social-icons.php:198
+#: includes/widgets/widget-social-icons.php:199
 msgid "Select Social Menu:"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:22
+#: includes/widgets/widget-tabbed-content.php:30
 msgid "Tabbed Content (ThemeZee)"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:23
+#: includes/widgets/widget-tabbed-content.php:33
 msgid "Displays various content with tabs."
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:344
-#, php-format
-msgctxt "widgets"
-msgid "%1$s on %2$s"
-msgstr ""
-
-#: includes/widgets/widget-tabbed-content.php:416
+#: includes/widgets/widget-tabbed-content.php:403
 msgid "Please select the Tab Content in the Widget Settings."
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:485
+#: includes/widgets/widget-tabbed-content.php:469
 #, php-format
 msgid "Tab %s:"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:489
+#: includes/widgets/widget-tabbed-content.php:474
 msgid "Archives"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:490
+#: includes/widgets/widget-tabbed-content.php:475
 msgid "Categories"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:491
+#: includes/widgets/widget-tabbed-content.php:476
 msgid "Pages"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:492
+#: includes/widgets/widget-tabbed-content.php:477
 msgid "Popular Posts"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:495
+#: includes/widgets/widget-tabbed-content.php:480
 msgid "Tag Cloud"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:507
+#: includes/widgets/widget-tabbed-content.php:497
 msgid "Settings for Recent/Popular Posts and Recent Comments"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:510
+#: includes/widgets/widget-tabbed-content.php:500
 msgid "Number of entries:"
 msgstr ""
 
-#: includes/widgets/widget-tabbed-content.php:518
+#: includes/widgets/widget-tabbed-content.php:508
 msgid "Show Thumbnails?"
+msgstr ""
+
+#: themezee-widget-bundle.php:239
+msgid "Settings"
+msgstr ""
+
+#: themezee-widget-bundle.php:257
+#, php-format
+msgid "Version %s"
+msgstr ""
+
+#: themezee-widget-bundle.php:261
+msgid "Plugin Settings"
+msgstr ""
+
+#: themezee-widget-bundle.php:262
+msgid "View Documentation"
 msgstr ""

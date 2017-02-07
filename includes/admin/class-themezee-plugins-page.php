@@ -119,7 +119,7 @@ if ( ! class_exists( 'ThemeZee_Plugins_Page' ) ) :
 				<h1 id="themezee-plugin-header"><?php esc_html_e( 'ThemeZee Plugins', 'themezee-widget-bundle' ); ?></h1>
 
 				<div class="themezee-plugins-intro">
-					<?php printf( esc_html__( 'You need more features and functionality? Extend your website with our affordable %s.', 'themezee-widget-bundle' ), $plugin_link ); ?>
+					<?php printf( esc_html__( 'You need more features and functionality? Extend your website with our premium %s.', 'themezee-widget-bundle' ), $plugin_link ); ?>
 				</div>
 
 				<hr/>
