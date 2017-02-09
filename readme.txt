@@ -32,6 +32,15 @@ For detailed setup instructions, visit the official [Documentation](https://them
 2. Go to Settings > ThemeZee Plugins > Widget Bundle and enable all the modules you need
 3. For detailed setup instructions, visit the official [Documentation](https://themezee.com/docs/widget-bundle-documentation/) page
 
+== Screenshots ==
+
+1. Plugin Settings
+2. Widget Overview
+3. Recent Posts Widget
+4. Recent Comments Widget
+5. Tabbed Content Widget
+6. Facebook Like Widget
+
 == Changelog ==
 
 = 1.0.6 =
