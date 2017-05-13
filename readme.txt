@@ -43,6 +43,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 
 == Changelog ==
 
+= 1.0.7 =
+
+* improved theme integration for custom image sizes
+
 = 1.0.6 =
 
 * improved code formatting

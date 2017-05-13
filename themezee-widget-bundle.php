@@ -6,7 +6,7 @@
  * Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
  * Author: ThemeZee
  * Author URI: https://themezee.com/
- * Version: 1.0.6
+ * Version: 1.0.7
  * Text Domain: themezee-widget-bundle
  * Domain Path: /languages/
  * License: GPL v3
@@ -62,7 +62,7 @@ class ThemeZee_Widget_Bundle {
 		define( 'TZWB_NAME', 'ThemeZee Widget Bundle' );
 
 		// Define Version Number.
-		define( 'TZWB_VERSION', '1.0.5' );
+		define( 'TZWB_VERSION', '1.0.7' );
 
 		// Plugin Folder Path.
 		define( 'TZWB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -220,12 +220,25 @@ class ThemeZee_Widget_Bundle {
 	 */
 	static function add_image_size() {
 
-		// Return early if theme handles image sizes.
+		// Check if theme defines custom image size.
 		if ( current_theme_supports( 'themezee-widget-bundle' ) ) :
-			return;
-		endif;
 
-		add_image_size( 'tzwb-thumbnail', 80, 80, true );
+			$theme_support = get_theme_support( 'themezee-widget-bundle' );
+
+			// Set custom image size.
+			if ( isset( $theme_support[0]['thumbnail_size'] ) && is_array( $theme_support[0]['thumbnail_size'] ) ) :
+
+				$thumbnail_size = $theme_support[0]['thumbnail_size'];
+				add_image_size( 'tzwb-thumbnail', $thumbnail_size[0], $thumbnail_size[1], true );
+
+			endif;
+
+		else :
+
+			// Set default image size.
+			add_image_size( 'tzwb-thumbnail', 80, 80, true );
+
+		endif;
 	}
 
 	/**
