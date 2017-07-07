@@ -5,7 +5,7 @@ Contributors: themezee
 Tags: widget, recent posts, recent comments, social icons, facebook
 Requires at least: 4.4
 Tested up to: 4.8
-Stable tag: 1.0.6
+Stable tag: 1.2
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
