@@ -35,6 +35,9 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			) // Args.
 		);
 
+		// Filter Social Menu to add SVG icons.
+		add_filter( 'walker_nav_menu_start_el',  array( $this, 'nav_menu_social_icons' ), 10, 4 );
+
 		// Delete Widget Cache on certain actions.
 		add_action( 'wp_update_nav_menu', array( $this, 'delete_widget_cache' ) );
 		add_action( 'switch_theme', array( $this, 'delete_widget_cache' ) );
@@ -156,6 +159,128 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			wp_nav_menu( $menu_args );
 
 		endif;
+	}
+
+	/**
+	 * Display SVG icons in social links menu.
+	 *
+	 * @param  string  $item_output The menu item output.
+	 * @param  WP_Post $item        Menu item object.
+	 * @param  int     $depth       Depth of the menu.
+	 * @param  array   $args        wp_nav_menu() arguments.
+	 * @return string  $item_output The menu item output with social icon.
+	 */
+	function nav_menu_social_icons( $item_output, $item, $depth, $args ) {
+
+		// Return early if theme adds no support for Widget Bundle.
+		if ( ! current_theme_supports( 'themezee-widget-bundle' ) ) :
+			return $item_output;
+		endif;
+
+		$theme_support = get_theme_support( 'themezee-widget-bundle' );
+
+		// Return early if theme adds no support for SVG Icons.
+		if ( ! isset( $theme_support[0]['svg_icons'] ) || false === $theme_support[0]['svg_icons'] ) :
+			return $item_output;
+		endif;
+
+		// Get supported social icons.
+		$social_icons = $this->supported_social_icons();
+
+		// Get Social Menu.
+		$widget_options_all = get_option( $this->option_name );
+		$options = $widget_options_all[ $this->number ];
+		$social_menu = $options['menu'];
+
+		// Change SVG icon inside social links menu if there is supported URL.
+		if ( $social_menu === $args->menu ) {
+			$icon = 'star';
+			foreach ( $social_icons as $attr => $value ) {
+				if ( false !== strpos( $item_output, $attr ) ) {
+					$icon = esc_attr( $value );
+				}
+			}
+			$item_output = str_replace( $args->link_after, '</span>' . $this->get_svg( $icon ), $item_output );
+		}
+
+		return $item_output;
+	}
+
+	/**
+	 * Return SVG markup.
+	 *
+	 * @param string $icon SVG icon id.
+	 * @return string $svg SVG markup.
+	 */
+	function get_svg( $icon = null ) {
+		// Return early if no icon was defined.
+		if ( empty( $icon ) ) {
+			return;
+		}
+
+		// Create SVG markup.
+		$svg = '<svg class="icon icon-' . esc_attr( $icon ) . '" aria-hidden="true" role="img">';
+		$svg .= ' <use xlink:href="' . TZWB_PLUGIN_URL . 'assets/icons/social-icons.svg#icon-' . esc_html( $icon ) . '"></use> ';
+		$svg .= '</svg>';
+
+		return $svg;
+	}
+
+	/**
+	 * Returns an array of supported social links (URL and icon name).
+	 *
+	 * @return array $social_links_icons
+	 */
+	function supported_social_icons() {
+		// Supported social links icons.
+		$supported_social_icons = array(
+			'500px.com'       => '500px',
+			'amazon'          => 'amazon',
+			'apple'           => 'apple',
+			'bandcamp.com'    => 'bandcamp',
+			'behance.net'     => 'behance',
+			'bitbucket.org'   => 'bitbucket',
+			'codepen.io'      => 'codepen',
+			'deviantart.com'  => 'deviantart',
+			'digg.com'        => 'digg',
+			'dribbble.com'    => 'dribbble',
+			'dropbox.com'     => 'dropbox',
+			'etsy.com'        => 'etsy',
+			'facebook.com'    => 'facebook',
+			'feed'            => 'feed',
+			'flickr.com'      => 'flickr',
+			'foursquare.com'  => 'foursquare',
+			'plus.google.com' => 'google-plus',
+			'github.com'      => 'github',
+			'instagram.com'   => 'instagram',
+			'linkedin.com'    => 'linkedin',
+			'mailto:'         => 'envelope-o',
+			'medium.com'      => 'medium',
+			'meetup.com'      => 'meetup',
+			'pinterest.com'   => 'pinterest-p',
+			'getpocket.com'   => 'get-pocket',
+			'reddit.com'      => 'reddit-alien',
+			'skype.com'       => 'skype',
+			'skype:'          => 'skype',
+			'slideshare.net'  => 'slideshare',
+			'snapchat.com'    => 'snapchat-ghost',
+			'soundcloud.com'  => 'soundcloud',
+			'spotify.com'     => 'spotify',
+			'stumbleupon.com' => 'stumbleupon',
+			'tumblr.com'      => 'tumblr',
+			'twitch.tv'       => 'twitch',
+			'twitter.com'     => 'twitter',
+			'vimeo.com'       => 'vimeo',
+			'vine.co'         => 'vine',
+			'vk.com'          => 'vk',
+			'wordpress.org'   => 'wordpress',
+			'wordpress.com'   => 'wordpress',
+			'xing.com'        => 'xing',
+			'yelp.com'        => 'yelp',
+			'youtube.com'     => 'youtube',
+		);
+
+		return $supported_social_icons;
 	}
 
 	/**

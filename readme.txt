@@ -43,6 +43,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 
 == Changelog ==
 
+= 1.2 =
+
+* added support for SVG Icons in Social Icons Widget
+
 = 1.1 =
 
 * improved theme integration for custom image sizes
@@ -78,3 +82,15 @@ For detailed setup instructions, visit the official [Documentation](https://them
 = 1.0 =
 
 * Initial Release
+
+== Ressources ==
+
+The ThemeZee Widget Bundle plugin includes the following third-party resources:
+
+1. Genericons Icon Font - http://genericons.com
+License: Distributed under the terms of the GPLv2 (https://www.gnu.org/licenses/gpl-2.0.html)
+Copyright: 2015 Automattic, Inc., https://automattic.com/
+
+2. Social Icons Subset from Font Awesome - http://fontawesome.io/
+License: Distributed under the terms of the SIL OFL 1.1 (scripts.sil.org/OFL)
+Copyright: 2017 Dave Gandy, http://fontawesome.io/
