@@ -3,17 +3,17 @@
  *
  * Plugin Name: ThemeZee Widget Bundle
  * Plugin URI: https://themezee.com/plugins/widget-bundle/
- * Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Facebook Likebox, Tabbed Content, Social Icons and more.
+ * Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Tabbed Content, Social Icons and more.
  * Author: ThemeZee
  * Author URI: https://themezee.com/
- * Version: 1.2
+ * Version: 1.3
  * Text Domain: themezee-widget-bundle
  * Domain Path: /languages/
  * License: GPL v3
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
  * @package ThemeZee Widget Bundle
- * Copyright(C) 2017, ThemeZee.com - support@themezee.com
+ * Copyright(C) 2018, ThemeZee.com - support@themezee.com
  */
 
 // Exit if accessed directly.
@@ -100,7 +100,6 @@ class ThemeZee_Widget_Bundle {
 		require_once TZWB_PLUGIN_DIR . '/includes/settings/class-tzwb-settings-page.php';
 
 		// Include Widget Classes.
-		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-facebook-likebox.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-recent-comments.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-recent-posts.php';
 		require_once TZWB_PLUGIN_DIR . '/includes/widgets/widget-social-icons.php';
@@ -146,10 +145,6 @@ class ThemeZee_Widget_Bundle {
 		$options = $instance->get_all();
 
 		// Register Widgets if enabled.
-		if ( true == $options['facebook_likebox'] ) :
-			register_widget( 'TZWB_Facebook_Likebox_Widget' );
-		endif;
-
 		if ( true == $options['recent_comments'] ) :
 			register_widget( 'TZWB_Recent_Comments_Widget' );
 		endif;
@@ -180,8 +175,7 @@ class ThemeZee_Widget_Bundle {
 		endif;
 
 		// Load stylesheet only if widgets are active.
-		if ( is_active_widget( 'TZWB_Facebook_Likebox_Widget', false, 'tzwb-facebook-likebox' )
-		or is_active_widget( 'TZWB_Recent_Comments_Widget', false, 'tzwb-recent-comments' )
+		if ( is_active_widget( 'TZWB_Recent_Comments_Widget', false, 'tzwb-recent-comments' )
 		or is_active_widget( 'TZWB_Recent_Posts_Widget', false, 'tzwb-recent-posts' )
 		or is_active_widget( 'TZWB_Social_Icons_Widget', false, 'tzwb-social-icons' )
 		or is_active_widget( 'TZWB_Tabbed_Content_Widget', false, 'tzwb-tabbed-content' )

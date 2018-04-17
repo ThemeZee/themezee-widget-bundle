@@ -4,8 +4,8 @@ Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
 Tags: widget, recent posts, recent comments, social icons, facebook
 Requires at least: 4.4
-Tested up to: 4.8
-Stable tag: 1.2
+Tested up to: 5.0
+Stable tag: 1.3
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
@@ -20,7 +20,6 @@ The *ThemeZee Widget Bundle* is a collection of useful widgets, neatly bundled i
 * Recent Comments with Gravatar
 * Tabbed Content
 * Social Icons Menu
-* Facebook Like Box
 
 = Documentation =
 
@@ -39,9 +38,12 @@ For detailed setup instructions, visit the official [Documentation](https://them
 3. Recent Posts Widget
 4. Recent Comments Widget
 5. Tabbed Content Widget
-6. Facebook Like Widget
 
 == Changelog ==
+
+= 1.3 =
+
+* removed Facebook Like Box widget for GDPR compliance
 
 = 1.2 =
 

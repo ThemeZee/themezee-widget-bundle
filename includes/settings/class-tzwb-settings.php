@@ -250,13 +250,6 @@ if ( ! class_exists( 'TZWB_Settings' ) ) :
 		function get_registered_settings() {
 
 			$settings = array(
-				'facebook_likebox' => array(
-					'name' => esc_html__( 'Facebook Likebox', 'themezee-widget-bundle' ),
-					'desc' => esc_html__( 'Enable Facebook Like Box Widget', 'themezee-widget-bundle' ),
-					'section' => 'widgets',
-					'type' => 'checkbox',
-					'default' => true,
-				),
 				'recent_comments' => array(
 					'name' => esc_html__( 'Recent Comments', 'themezee-widget-bundle' ),
 					'desc' => esc_html__( 'Enable Recent Comments Widget', 'themezee-widget-bundle' ),
