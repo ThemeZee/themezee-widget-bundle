@@ -29,14 +29,14 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			'tzwb-social-icons', // ID.
 			esc_html__( 'Social Icons Menu (ThemeZee)', 'themezee-widget-bundle' ), // Name.
 			array(
-				'classname' => 'tzwb-social-icons',
-				'description' => esc_html__( 'Displays a Social Icons Menu.', 'themezee-widget-bundle' ),
+				'classname'                   => 'tzwb-social-icons',
+				'description'                 => esc_html__( 'Displays a Social Icons Menu.', 'themezee-widget-bundle' ),
 				'customize_selective_refresh' => true,
 			) // Args.
 		);
 
 		// Filter Social Menu to add SVG icons.
-		add_filter( 'walker_nav_menu_start_el',  array( $this, 'nav_menu_social_icons' ), 10, 4 );
+		add_filter( 'walker_nav_menu_start_el', array( $this, 'nav_menu_social_icons' ), 10, 4 );
 
 		// Delete Widget Cache on certain actions.
 		add_action( 'wp_update_nav_menu', array( $this, 'delete_widget_cache' ) );
@@ -109,7 +109,10 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		echo $args['before_widget'];
 
 		// Display Title.
-		if ( ! empty( $widget_title ) ) { echo $args['before_title'] . $widget_title . $args['after_title']; }; ?>
+		if ( ! empty( $widget_title ) ) {
+			echo $args['before_title'] . $widget_title . $args['after_title'];
+		};
+		?>
 
 		<div class="tzwb-content tzwb-clearfix">
 
@@ -143,16 +146,16 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 
 			// Set Social Menu Arguments.
 			$menu_args = array(
-				'menu' => (int) $settings['menu'],
-				'container' => false,
-				'menu_class' => 'tzwb-social-icons-menu social-icons-menu menu',
-				'echo' => true,
+				'menu'        => (int) $settings['menu'],
+				'container'   => false,
+				'menu_class'  => 'tzwb-social-icons-menu social-icons-menu menu',
+				'echo'        => true,
 				'fallback_cb' => '',
-				'before' => '',
-				'after' => '',
+				'before'      => '',
+				'after'       => '',
 				'link_before' => '<span class="screen-reader-text">',
-				'link_after' => '</span>',
-				'depth' => 1,
+				'link_after'  => '</span>',
+				'depth'       => 1,
 			);
 
 			// Display Social Icons Menu.
@@ -187,13 +190,17 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		// Get supported social icons.
 		$social_icons = $this->supported_social_icons();
 
-		// Get Social Menu.
-		$widget_options_all = get_option( $this->option_name );
-		$options = $widget_options_all[ $this->number ];
-		$social_menu = $options['menu'];
+		// Get all Social Icon widgets from the database. $this->option_name gives us the widget name (widget_tzwb-social-icons).
+		$social_icon_widgets = get_option( $this->option_name );
+
+		// Get widget options from current widget. $this->number gives us the widget instance of the current widget.
+		$widget_options = isset( $social_icon_widgets[ $this->number ] ) ? $social_icon_widgets[ $this->number ] : null;
+
+		// Get social menu id which is selected in the widget options.
+		$social_menu_id = isset( $widget_options['menu'] ) ? (int) $widget_options['menu'] : 0;
 
 		// Change SVG icon inside social links menu if there is supported URL.
-		if ( $social_menu === $args->menu ) {
+		if ( $social_menu_id === $args->menu ) {
 			$icon = 'star';
 			foreach ( $social_icons as $attr => $value ) {
 				if ( false !== strpos( $item_output, $attr ) ) {
@@ -219,7 +226,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		}
 
 		// Create SVG markup.
-		$svg = '<svg class="icon icon-' . esc_attr( $icon ) . '" aria-hidden="true" role="img">';
+		$svg  = '<svg class="icon icon-' . esc_attr( $icon ) . '" aria-hidden="true" role="img">';
 		$svg .= ' <use xlink:href="' . TZWB_PLUGIN_URL . 'assets/icons/social-icons.svg#icon-' . esc_html( $icon ) . '"></use> ';
 		$svg .= '</svg>';
 
@@ -292,9 +299,9 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 */
 	function update( $new_instance, $old_instance ) {
 
-		$instance = $old_instance;
+		$instance          = $old_instance;
 		$instance['title'] = esc_attr( $new_instance['title'] );
-		$instance['menu'] = (int) $new_instance['menu'];
+		$instance['menu']  = (int) $new_instance['menu'];
 		$instance['style'] = esc_attr( $new_instance['style'] );
 
 		$this->delete_widget_cache();
@@ -324,12 +331,13 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'menu' ); ?>"><?php esc_html_e( 'Select Social Menu:', 'themezee-widget-bundle' ); ?></label><br/>
 			<select id="<?php echo $this->get_field_id( 'menu' ); ?>" name="<?php echo $this->get_field_name( 'menu' ); ?>">
 				<option value="0" <?php selected( $settings['menu'], 0, false ); ?>> </option>
-				<?php // Display Menu Select Options.
-					$nav_menus = wp_get_nav_menus( array( 'hide_empty' => true ) );
+				<?php
+				// Display Menu Select Options.
+				$nav_menus = wp_get_nav_menus( array( 'hide_empty' => true ) );
 
 				foreach ( $nav_menus as $nav_menu ) :
 					printf( '<option value="%s" %s>%s</option>', $nav_menu->term_id, selected( $settings['menu'], $nav_menu->term_id, false ), $nav_menu->name );
-					endforeach;
+				endforeach;
 				?>
 			</select>
 		</p>

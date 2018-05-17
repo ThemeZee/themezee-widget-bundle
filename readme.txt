@@ -5,7 +5,7 @@ Contributors: themezee
 Tags: widget, recent posts, recent comments, social icons, facebook
 Requires at least: 4.4
 Tested up to: 5.0
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
@@ -40,6 +40,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 5. Tabbed Content Widget
 
 == Changelog ==
+
+= 1.3.1 =
+
+* fixed undefined offset warning
 
 = 1.3 =
 
