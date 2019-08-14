@@ -2,9 +2,9 @@
 Author URI: https://themezee.com
 Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
-Tags: widget, recent posts, recent comments, social icons, facebook
+Tags: Widget, ThemeZee, Recent Posts, Recent Comments, Social Icons, Tab Widget
 Requires at least: 4.4
-Tested up to: 5.0
+Tested up to: 5.3
 Stable tag: 1.3.1
 License: GPLv2 or later
 
