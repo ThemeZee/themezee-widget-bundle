@@ -4,8 +4,8 @@ Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
 Tags: Widget, ThemeZee, Recent Posts, Recent Comments, Social Icons, Tab Widget
 Requires at least: 4.4
-Tested up to: 5.3
-Stable tag: 1.3.1
+Tested up to: 5.4
+Stable tag: 1.3.2
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
@@ -40,6 +40,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 5. Tabbed Content Widget
 
 == Changelog ==
+
+= 1.3.2 =
+
+* fixed missing localization of comment date
 
 = 1.3.1 =
 

@@ -214,7 +214,7 @@ class TZWB_Recent_Comments_Widget extends WP_Widget {
 					$time_format = get_option( 'time_format' );
 				?>
 
-					<div class="tzwb-comment-date"><?php echo date( $date_format . ' ' . $time_format , strtotime( $comment->comment_date ) ); ?></div>
+					<div class="tzwb-comment-date"><?php echo date_i18n( $date_format . ' ' . $time_format, strtotime( $comment->comment_date ) ); ?></div>
 
 				<?php endif; ?>
 
