@@ -5,7 +5,7 @@ Contributors: themezee
 Tags: Widget, ThemeZee, Recent Posts, Recent Comments, Social Icons, Tab Widget
 Requires at least: 4.4
 Tested up to: 5.4
-Stable tag: 1.3.2
+Stable tag: 1.4
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
@@ -40,6 +40,11 @@ For detailed setup instructions, visit the official [Documentation](https://them
 5. Tabbed Content Widget
 
 == Changelog ==
+
+= 1.4 =
+
+* updated social icons to Font Awesome v5.12
+* added Telegram and WhatsApp icons
 
 = 1.3.2 =
 
@@ -101,6 +106,6 @@ The ThemeZee Widget Bundle plugin includes the following third-party resources:
 License: Distributed under the terms of the GPLv2 (https://www.gnu.org/licenses/gpl-2.0.html)
 Copyright: 2015 Automattic, Inc., https://automattic.com/
 
-2. Social Icons Subset from Font Awesome - http://fontawesome.io/
-License: Distributed under the terms of the SIL OFL 1.1 (scripts.sil.org/OFL)
-Copyright: 2017 Dave Gandy, http://fontawesome.io/
+2. Font Awesome (for our social icons subset) - https://github.com/FortAwesome/Font-Awesome
+License: Distributed under the terms of the CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
+Copyright: Fonticons, Inc, https://fontawesome.com/
