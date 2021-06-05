@@ -64,9 +64,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 * @return void
 	 */
 	public function delete_widget_cache() {
-
 		wp_cache_delete( 'tzwb_social_icons', 'widget' );
-
 	}
 
 	/**
@@ -79,7 +77,6 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 * @return void
 	 */
 	function widget( $args, $instance ) {
-
 		$cache = array();
 
 		// Get Widget Object Cache.
@@ -174,18 +171,6 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 	 * @return string  $item_output The menu item output with social icon.
 	 */
 	function nav_menu_social_icons( $item_output, $item, $depth, $args ) {
-
-		// Return early if theme adds no support for Widget Bundle.
-		if ( ! current_theme_supports( 'themezee-widget-bundle' ) ) :
-			return $item_output;
-		endif;
-
-		$theme_support = get_theme_support( 'themezee-widget-bundle' );
-
-		// Return early if theme adds no support for SVG Icons.
-		if ( ! isset( $theme_support[0]['svg_icons'] ) || false === $theme_support[0]['svg_icons'] ) :
-			return $item_output;
-		endif;
 
 		// Get supported social icons.
 		$social_icons = $this->supported_social_icons();
