@@ -3,9 +3,9 @@ Author URI: https://themezee.com
 Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
 Tags: Widget, ThemeZee, Recent Posts, Recent Comments, Social Icons, Tab Widget
-Requires at least: 4.4
-Tested up to: 5.4
-Stable tag: 1.4
+Requires at least: 5.2
+Tested up to: 5.8
+Stable tag: 1.5
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
@@ -40,6 +40,11 @@ For detailed setup instructions, visit the official [Documentation](https://them
 5. Tabbed Content Widget
 
 == Changelog ==
+
+= 1.5 =
+
+* updated social icons widget to use SVG icons
+* removed Genericons icon font
 
 = 1.4 =
 
@@ -102,10 +107,6 @@ For detailed setup instructions, visit the official [Documentation](https://them
 
 The ThemeZee Widget Bundle plugin includes the following third-party resources:
 
-1. Genericons Icon Font - http://genericons.com
-License: Distributed under the terms of the GPLv2 (https://www.gnu.org/licenses/gpl-2.0.html)
-Copyright: 2015 Automattic, Inc., https://automattic.com/
-
-2. Font Awesome (for our social icons subset) - https://github.com/FortAwesome/Font-Awesome
+Font Awesome (for our social icons subset) - https://github.com/FortAwesome/Font-Awesome
 License: Distributed under the terms of the CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
 Copyright: Fonticons, Inc, https://fontawesome.com/
