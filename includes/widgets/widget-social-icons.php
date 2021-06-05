@@ -192,7 +192,12 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 					$icon = esc_attr( $value );
 				}
 			}
-			$item_output = str_replace( $args->link_after, '</span>' . $this->get_svg( $icon ), $item_output );
+
+			// Get SVG.
+			$svg = apply_filters( 'tzwb_get_social_svg', self::get_svg( $icon ), $item_output );
+
+			// Add SVG to menu item.
+			$item_output = str_replace( $args->link_after, $args->link_after . $svg, $item_output );
 		}
 
 		return $item_output;
@@ -249,6 +254,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			'mailto:'         => 'envelope',
 			'medium.com'      => 'medium-m',
 			'meetup.com'      => 'meetup',
+			'patreon'         => 'patreon',
 			'pinterest'       => 'pinterest-p',
 			'getpocket.com'   => 'get-pocket',
 			'reddit.com'      => 'reddit-alien',
@@ -258,6 +264,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			'snapchat.com'    => 'snapchat',
 			'soundcloud.com'  => 'soundcloud',
 			'spotify.com'     => 'spotify',
+			'strava'          => 'strava',
 			'stumbleupon.com' => 'stumbleupon',
 			'telegram'        => 'telegram',
 			't.me'            => 'telegram',
@@ -276,7 +283,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			'youtube.com'     => 'youtube',
 		);
 
-		return $supported_social_icons;
+		return apply_filters( 'tzwb_supported_social_icons', $supported_social_icons );
 	}
 
 	/**
