@@ -41,6 +41,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 
 == Changelog ==
 
+= 1.5.1 =
+
+* only load stylesheet if needed
+
 = 1.5 =
 
 * updated social icons widget to use SVG icons
