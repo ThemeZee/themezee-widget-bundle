@@ -4,8 +4,8 @@ Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
 Tags: Widget, ThemeZee, Recent Posts, Recent Comments, Social Icons, Tab Widget
 Requires at least: 5.2
-Tested up to: 5.8
-Stable tag: 1.5
+Tested up to: 6.0
+Stable tag: 1.5.2
 License: GPLv2 or later
 
 A collection of useful widgets, neatly bundled into a single plugin.
@@ -40,6 +40,10 @@ For detailed setup instructions, visit the official [Documentation](https://them
 5. Tabbed Content Widget
 
 == Changelog ==
+
+= 1.5.2 =
+
+* added Steam and Discord to Social Icons widget
 
 = 1.5.1 =
 
