@@ -126,6 +126,7 @@ if ( ! class_exists( 'TZWB_Settings' ) ) :
 
 			// Add Sections.
 			add_settings_section( 'tzwb_settings_widgets', esc_html__( 'Widgets', 'themezee-widget-bundle' ), array( $this, 'widget_section_intro' ), 'tzwb_settings' );
+			add_settings_section( 'tzwb_settings_modules', esc_html__( 'Modules', 'themezee-widget-bundle' ), array( $this, 'module_section_intro' ), 'tzwb_settings' );
 
 			// Add Settings.
 			foreach ( $this->get_registered_settings() as $key => $option ) :
@@ -165,6 +166,15 @@ if ( ! class_exists( 'TZWB_Settings' ) ) :
 		 */
 		function widget_section_intro() {
 			esc_html_e( 'Activate all the widgets you want to use here.', 'themezee-widget-bundle' );
+		}
+
+		/**
+		 * Module Section Intro
+		 *
+		 * @return void
+		*/
+		function module_section_intro() {
+			esc_html_e( 'Activate all the modules you want to use.', 'themezee-widget-bundle' );
 		}
 
 		/**
@@ -278,11 +288,12 @@ if ( ! class_exists( 'TZWB_Settings' ) ) :
 					'type' => 'checkbox',
 					'default' => true,
 				),
-				'activate_license' => array(
-					'name' => esc_html__( 'Activate License', 'themezee-widget-bundle' ),
-					'section' => 'license',
-					'type' => 'license',
-					'default' => '',
+				'widget_visibility' => array(
+					'name'    => esc_html__( 'Widget Visibility', 'themezee-widget-bundle' ),
+					'desc'    => esc_html__( 'Add "Visibility" tab to widget settings to set conditions where the widget should be displayed', 'themezee-widget-bundle' ),
+					'section' => 'modules',
+					'type'    => 'checkbox',
+					'default' => false,
 				),
 			);
 

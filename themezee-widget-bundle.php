@@ -126,6 +126,9 @@ class ThemeZee_Widget_Bundle {
 	 */
 	static function setup_actions() {
 
+		// Include active modules
+		add_action( 'init', array( __CLASS__, 'modules' ), 11 );
+
 		// Register all widgets.
 		add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
 
@@ -143,6 +146,24 @@ class ThemeZee_Widget_Bundle {
 
 		// Add Widget Bundle Box to Plugin Overview Page.
 		add_action( 'themezee_plugins_overview_page', array( __CLASS__, 'plugin_overview_page' ) );
+	}
+
+	/**
+	 * Include active Modules
+	 *
+	 * @return void
+	 */
+	static function modules() {
+
+		// Get Plugin Options
+		$options = TZWB_Settings::instance();
+
+		// Include Widget Visibility class unless it is already activated with Jetpack or Toolkit plugin.
+		if ( true === $options->get( 'widget_visibility' ) and ! class_exists( 'Jetpack_Widget_Conditions' ) and ! class_exists( 'TZTK_Widget_Visibility' ) ) :
+
+			require TZWB_PLUGIN_DIR . '/includes/modules/class-tzwb-widget-visibility.php';
+
+		endif;
 	}
 
 	/**
