@@ -340,7 +340,7 @@ class ThemeZee_Widget_Bundle {
 		}
 
 		if ( isset( $_GET['tzwb_admin_notice_transient'] ) ) {
-			set_transient( 'tzwb_admin_notice_' . $_GET['tzwb_admin_notice_transient'], 1, DAY_IN_SECONDS * 30 );
+			set_transient( 'tzwb_admin_notice_' . $_GET['tzwb_admin_notice_transient'], 1, DAY_IN_SECONDS * 90 );
 			wp_redirect( remove_query_arg( array( 'tzwb_admin_notice_action', 'tzwb_admin_notice_transient', 'tzwb_admin_notice_dismiss_nonce' ) ) );
 			exit;
 		}
