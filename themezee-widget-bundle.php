@@ -49,6 +49,18 @@ class ThemeZee_Widget_Bundle {
 
 		// Setup Action Hooks.
 		self::setup_actions();
+
+		// Disables the block editor from managing widgets in the Gutenberg plugin.
+		add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
+
+		// Disables the block editor from managing widgets.
+		add_filter( 'use_widgets_block_editor', '__return_false' );
+
+		// Add Admin Notice on widgets screen.
+		add_action( 'admin_notices', array( __CLASS__, 'widgets_admin_notice' ) );
+
+		// Dismiss Notice.
+		add_action( 'init', array( __CLASS__, 'dismiss_notice' ) );
 	}
 
 	/**
@@ -267,6 +279,50 @@ class ThemeZee_Widget_Bundle {
 		</dl>
 
 		<?php
+	}
+
+	/**
+	 * Display admin notice on widgets screen.
+	 *
+	 * @return void
+	 */
+	static function widgets_admin_notice() {
+		global $pagenow;
+
+		if ( in_array( $pagenow, array( 'widgets.php' ) ) && ! isset( $_GET['page'] ) && ! get_transient( 'tzwb_admin_notice_dismissed' ) && current_user_can( 'manage_options' ) ) : ?>
+
+			<div class="notice notice-info">
+				<p>
+					<?php esc_html_e( 'ThemeZee Widget Bundle is not compatible with Blocks and therefore shows the Classic Widgets Editor screen.', 'themezee-widget-bundle' ); ?>
+					<a href="<?php echo wp_nonce_url( add_query_arg( array( 'tzwb_admin_notice_action' => 'dismiss_notice', 'tzwb_admin_notice_transient' => 'dismissed' ) ), 'tzwb_admin_notice_dismiss', 'tzwb_admin_notice_dismiss_nonce' ); ?>"><?php _e( 'Dismiss Notice', 'themezee-widget-bundle' ); ?></a>
+				</p>
+			</div>
+
+		<?php
+		endif;
+	}
+
+	/**
+	 * Dismiss admin notices when Dismiss links are clicked
+	 *
+	 * @return void
+	 */
+	static function dismiss_notice() {
+
+		// Return early if tzwb_admin_notice_action was not fired.
+		if ( ! isset( $_REQUEST['tzwb_admin_notice_action'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_GET['tzwb_admin_notice_dismiss_nonce'] ) || ! wp_verify_nonce( $_GET['tzwb_admin_notice_dismiss_nonce'], 'tzwb_admin_notice_dismiss' ) ) {
+			wp_die( __( 'Security check failed', 'themezee-widget-bundle' ), __( 'Error', 'themezee-widget-bundle' ), array( 'response' => 403 ) );
+		}
+
+		if ( isset( $_GET['tzwb_admin_notice_transient'] ) ) {
+			set_transient( 'tzwb_admin_notice_' . $_GET['tzwb_admin_notice_transient'], 1, DAY_IN_SECONDS * 30 );
+			wp_redirect( remove_query_arg( array( 'tzwb_admin_notice_action', 'tzwb_admin_notice_transient', 'tzwb_admin_notice_dismiss_nonce' ) ) );
+			exit;
+		}
 	}
 }
 
