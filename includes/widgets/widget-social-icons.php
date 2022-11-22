@@ -188,7 +188,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 		if ( $social_menu_id === $args->menu ) {
 			$icon = 'star';
 			foreach ( $social_icons as $attr => $value ) {
-				if ( false !== strpos( $item_output, $attr ) ) {
+				if ( false !== stripos( $item_output, $attr ) ) {
 					$icon = esc_attr( $value );
 				}
 			}
@@ -217,7 +217,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 
 		// Create SVG markup.
 		$svg  = '<svg class="icon icon-' . esc_attr( $icon ) . '" aria-hidden="true" role="img">';
-		$svg .= ' <use xlink:href="' . TZWB_PLUGIN_URL . 'assets/icons/social-icons.svg#icon-' . esc_html( $icon ) . '"></use> ';
+		$svg .= ' <use xlink:href="' . TZWB_PLUGIN_URL . 'assets/icons/social-icons.svg?ver=20221122#icon-' . esc_html( $icon ) . '"></use> ';
 		$svg .= '</svg>';
 
 		return $svg;
@@ -253,6 +253,7 @@ class TZWB_Social_Icons_Widget extends WP_Widget {
 			'instagram.com'   => 'instagram',
 			'linkedin.com'    => 'linkedin',
 			'mailto:'         => 'envelope',
+			'mastodon'        => 'mastodon',
 			'medium.com'      => 'medium-m',
 			'meetup.com'      => 'meetup',
 			'patreon'         => 'patreon',
