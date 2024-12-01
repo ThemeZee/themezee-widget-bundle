@@ -1,0 +1,17 @@
+{
+    "name": "themezee/themezee-widget-bundle",
+    "type": "wordpress-plugin",
+    "description": "A collection of useful widgets, neatly bundled into a single plugin.",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "ThemeZee",
+            "email": "contact@themezee.com",
+            "homepage": "https://themezee.com/",
+            "role": "Company"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    }
+}
