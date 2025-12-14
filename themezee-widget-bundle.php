@@ -6,14 +6,14 @@
  * Description: A collection of our most popular widgets, neatly bundled into a single plugin. The Plugin includes advanced widgets for Recent Posts, Recent Comments, Tabbed Content, Social Icons and more.
  * Author: ThemeZee
  * Author URI: https://themezee.com/
- * Version: 1.6
+ * Version: 1.6.1
  * Text Domain: themezee-widget-bundle
  * Domain Path: /languages/
  * License: GNU General Public License v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package ThemeZee Widget Bundle
- * Copyright(C) 2022, ThemeZee.com - support@themezee.com
+ * Copyright(C) 2025, ThemeZee.com - support@themezee.com
  */
 
 // Exit if accessed directly.
@@ -74,7 +74,7 @@ class ThemeZee_Widget_Bundle {
 		define( 'TZWB_NAME', 'ThemeZee Widget Bundle' );
 
 		// Define Version Number.
-		define( 'TZWB_VERSION', '1.5.2' );
+		define( 'TZWB_VERSION', '1.6.1' );
 
 		// Plugin Folder Path.
 		define( 'TZWB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
