@@ -2,7 +2,7 @@
 Author URI: https://themezee.com
 Plugin URI: https://themezee.com/plugins/widget-bundle/
 Contributors: themezee
-Tags: Widget, ThemeZee, Recent Posts, Recent Comments, Social Icons, Tab Widget
+Tags: Widget, ThemeZee, Recent Posts, Social Icons, Tab Widget
 Requires at least: 5.2
 Tested up to: 6.9
 Stable tag: 1.6.1
